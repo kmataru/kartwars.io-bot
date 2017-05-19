@@ -16,6 +16,7 @@ Welcome to what soon will be the home for the `kartwars.io` bot!
 
 * Easy installable
 * Easy customizable
+* Unlock all skins
 * Multiple tactics
 * Strong documentation
 * Visual debugging
