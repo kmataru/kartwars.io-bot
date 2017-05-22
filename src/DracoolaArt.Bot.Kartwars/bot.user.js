@@ -5,7 +5,7 @@ The MIT License (MIT)
 */
 // ==UserScript==
 // @name         kartwars.io Bot
-// @namespace    https://github.com/kmataru/kartwars.io-bot/
+// @namespace    https://github.com/kmataru/kartwars.io-bot/raw/pre-release/src/DracoolaArt.Bot.Kartwars/
 // @version      0.7.475
 // @description  kartwars.io Bot
 // @author       Adrian Paul Nutiu
@@ -15,7 +15,7 @@ The MIT License (MIT)
 // @supportURL   https://github.com/kmataru/kartwars.io-bot/issues
 // @require      https://gist.githubusercontent.com/eligrey/384583/raw/96dd5cd2fd6b752aa3ec0630a003e7a920313d1a/object-watch.js
 // @require      https://cdn.rawgit.com/stacktracejs/stacktrace.js/master/dist/stacktrace.min.js
-// @require      kartwars.io-bot/Logging.js
+// @require      lib/Logging.js
 // @grant        none
 // ==/UserScript==
 /// <reference path="kartwars.io-bot/_references.ts" />
