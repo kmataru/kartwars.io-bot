@@ -23,8 +23,6 @@ window.BOT_DEBUG_SCRIPTS = false;
 window.GM_info = GM_info;
 // tslint:disable-next-line:no-unused-expression
 !function (window, document) {
-	var baseURL = 'https://github.com/kmataru/kartwars.io-bot/raw/pre-release/src/DracoolaArt.Bot.Kartwars/';
-	var baseScriptPath = baseURL + "lib/";
 	function initLoader(baseURL, baseScriptPath) {
 		var remoteScript = document.createElement('script');
 		remoteScript.src = baseScriptPath + "Loader.js?time=" + (+new Date());
@@ -49,6 +47,17 @@ window.GM_info = GM_info;
 		};
 		document.head.appendChild(remoteLink);
 	}
-	loadStylesheet(baseScriptPath + "Main.min.css");
-	initLoader(baseURL, baseScriptPath);
+	//
+	//
+	$.ajax({
+		url: "https://api.github.com/repos/kmataru/kartwars.io-bot/git/refs/heads/pre-release",
+		cache: false,
+		dataType: "jsonp"
+	}).done(function (response) {
+		var sha = response["data"]["object"]["sha"];
+		var baseURL = "https://cdn.rawgit.com/kmataru/kartwars.io-bot/" + sha + "/src/DracoolaArt.Bot.Kartwars/";
+		var baseScriptPath = baseURL + "lib/";
+		loadStylesheet(baseScriptPath + "Main.min.css");
+		initLoader(baseURL, baseScriptPath);
+	}).fail(function () { });
 }(window, document);
