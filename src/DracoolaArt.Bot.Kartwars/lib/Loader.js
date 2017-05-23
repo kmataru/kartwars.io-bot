@@ -4,7 +4,6 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        //window.BOT_DEBUG_SCRIPTS = false;
         /**
          * Smart Loader.
          */
@@ -12,14 +11,14 @@ var DracoolaArt;
             function Loader(baseURL, baseScriptPath) {
                 this.baseURL = baseURL;
                 this.baseScriptPath = baseScriptPath;
+                window.botSettings.baseURL = baseURL;
                 if (!Loader.scripts2Load) {
-                    if (window.BOT_DEBUG_SCRIPTS) {
+                    if (window.botSettings.LOAD_DEBUG_SCRIPTS) {
                         Loader.scripts2Load = [];
                     }
                     else {
-                        // TODO : Review
                         Loader.scripts2Load = [
-							baseURL + "../../build/kartwars.io-bot.min.js",
+                            baseURL + "../../build/kartwars.io-bot.min.js",
                         ];
                     }
                 }
@@ -27,6 +26,7 @@ var DracoolaArt;
             Loader.prototype.boot = function () {
                 var scripts2Load = Loader.scripts2Load;
                 var self = this;
+                // Experimental
                 var loadRequireJs = false;
                 var time = (+new Date());
                 // READ @ https://www.npmjs.com/package/definitely-typed-requirejs
@@ -51,7 +51,7 @@ var DracoolaArt;
                                     loadScriptEx();
                                 }
                                 else {
-                                    (window.botFactory = new DracoolaArt.KartwarsBot.BotFactory(self.baseURL)).boot();
+                                    (window.botFactory = new DracoolaArt.KartwarsBot.BotFactory()).boot();
                                 }
                             }, 0);
                         }
