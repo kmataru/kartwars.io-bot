@@ -46,7 +46,7 @@ If you are on chrome, download the [TamperMonkey](https://chrome.google.com/webs
 
 On other browsers, use the [GreaseMonkey](https://addons.mozilla.org/en-GB/firefox/addon/greasemonkey/) extension.
 
-Once installed, click on [this](https://github.com/kmataru/kartwars.io-bot/raw/master/src/DracoolaArt.Bot.Kartwars/bot.user.js), and choose **Install**.
+Once installed, click on [this](https://github.com/kmataru/kartwars.io-bot/raw/pre-release/src/DracoolaArt.Bot.Kartwars/bot.user.js), and choose **Install**.
 
 Go to [kartwars.io](http://kartwars.io/), and enjoy !
 
