@@ -23,3 +23,5 @@ Welcome to what soon will be the home for the `kartwars.io` bot!
 * Real time customization through dat.GUI
 
 <b style="font-size: 2em">Coming soon !!</b>
+
+<meta name="google-site-verification" content="qwHbXcMOD6clqtKzI-AyOcEL9nMT-t56ZNqdXJpSlyM" />
