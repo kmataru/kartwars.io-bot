@@ -1,5 +1,5 @@
 ﻿<p align="center">
-    <img src="./images/logo.png" height="130">
+    <img src="./images/logo.png" height="150">
 </p>
 
 <p align="center">
@@ -16,12 +16,12 @@
 ##### Welcome to the kartwars.io bot!
 
 ## Table of Contents
-- [Goals](https://github.com/kmataru/kartwars.io-bot#goals)
-- [Features](https://github.com/kmataru/kartwars.io-bot#features)
-- [Installation instructions](https://github.com/kmataru/kartwars.io-bot#installation-instructions)
-- [Hotkeys](https://github.com/kmataru/kartwars.io-bot#hotkeys)
-- [Directory Contents](https://github.com/kmataru/kartwars.io-bot#directory-contents)
-- [Thanks](https://github.com/kmataru/kartwars.io-bot#thanks)
+- [Goals](#goals)
+- [Features](#features)
+- [Installation instructions](#installation-instructions)
+- [Hotkeys](#hotkeys)
+- [Directory Contents](#directory-contents)
+- [Thanks](#thanks)
 
 ## Goals
 
