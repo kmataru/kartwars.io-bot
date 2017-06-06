@@ -62,6 +62,7 @@ The MIT License (MIT)
             var sha = response['data']['object']['sha'];
             var baseURL = "https://cdn.rawgit.com/kmataru/kartwars.io-bot/" + sha + "/src/DracoolaArt.Bot.Kartwars/";
             var baseScriptPath = baseURL + "lib/";
+            var baseStylePath = baseURL + "style/";
             loadStylesheet(baseStylePath + "Main.min.css");
             initLoader(baseURL, baseScriptPath);
         }).fail(function () { });
