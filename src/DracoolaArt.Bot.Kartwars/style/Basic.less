@@ -1,0 +1,267 @@
+﻿@-moz-keyframes blink {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Firefox */
+@-webkit-keyframes blink {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Webkit */
+@-ms-keyframes blink {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+/* IE */
+@keyframes blink {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+.btn-play.btn-none {
+	display: none;
+}
+
+.btn-play.btn-show + .btn-play.btn-loading-bot {
+	display: none;
+}
+
+.login-modal > .modal-wrapper .btn-play.btn-loading-bot {
+	touch-action: none;
+	user-select: none;
+	cursor: default;
+	background: repeating-linear-gradient( 45deg, #FF004B, #FF004B 10px, darken(#FF004B, 10%) 10px, darken(#FF004B, 10%) 20px )
+}
+
+#keyboardBtn {
+	display: none;
+}
+
+.nsi {
+	position: fixed;
+	color: #C0C0C0;
+	font-size: 14px;
+	z-index: 999;
+	border-radius: 5px;
+	padding: 5px;
+
+	&.pref {
+		left: 10px;
+		top: 130px;
+		width: 260px;
+		height: 210px;
+	}
+
+	&.bot {
+		left: 10px;
+		top: 230px;
+		width: 150px;
+		height: 85px;
+	}
+
+	&.stats {
+		left: 10px;
+		top: 280px;
+		width: 450px;
+		height: 210px;
+		z-index: 998;
+	}
+
+	&.server {
+		right: 5px;
+		bottom: 5px;
+		width: 160px;
+		height: 14px;
+	}
+
+	&.rage {
+		visibility: hidden;
+		width: 100%;
+		text-align: center;
+		top: 75px;
+		/* Opera and prob css3 final iteration */
+		img {
+			height: 100px;
+			-moz-transition: all 1s ease-in-out;
+			-webkit-transition: all 1s ease-in-out;
+			-o-transition: all 1s ease-in-out;
+			-ms-transition: all 1s ease-in-out;
+			transition: all 1s ease-in-out;
+			/* order: name, direction, duration, iteration-count, timing-function */
+			-moz-animation: blink normal 1.25s infinite ease-in-out; /* Firefox */
+			-webkit-animation: blink normal 1.25s infinite ease-in-out; /* Webkit */
+			-ms-animation: blink normal 1.25s infinite ease-in-out; /* IE */
+			animation: blink normal 1.25s infinite ease-in-out; /* Opera and prob css3 final iteration */
+		}
+	}
+
+	&.fizzy {
+		left: -185px;
+		/*top: 450px;*/
+		//width: ~"calc(100% - 20px)";
+		width: 600px;
+	}
+}
+
+// Reset dat.GUI style
+.dg .c {
+	.slider {
+		box-shadow: initial;
+		padding: initial;
+		overflow: initial;
+		border-radius: 0;
+
+		.slider-fg {
+			padding: initial;
+			margin-left: initial;
+			padding-right: initial;
+			border-radius: 0;
+
+			&:after {
+				all: initial;
+			}
+		}
+	}
+
+	input[type=text] {
+		font-size: calc(40px / 3);
+		line-height: 0;
+	}
+
+	select {
+		color: black;
+		font-size: calc(40px / 3);
+
+		option {
+			background: white;
+			color: black;
+		}
+	}
+}
+
+// A lighter theme for dat gui: http://brm.io/dat-gui-light-theme/
+@color_1: #555;
+@background_color_1: #ccc;
+@background_color_2: #ddd;
+
+.dg.ac.light-theme {
+	.dg {
+		color: @color_1;
+		text-shadow: none !important;
+
+		&.main {
+			&.taller-than-window {
+				.close-button {
+					border-top: 1px solid #ddd;
+				}
+			}
+
+			.close-button {
+				background-color: @background_color_1;
+
+				&:hover {
+					background-color: @background_color_2;
+				}
+			}
+
+			&::-webkit-scrollbar {
+				background: #fafafa;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background: #bbb;
+			}
+		}
+
+		li {
+			&:not(.folder) {
+				background: #fafafa;
+				border-bottom: 1px solid #ddd;
+			}
+		}
+
+		li.save-row {
+			.button {
+				text-shadow: none !important;
+			}
+		}
+
+		li.title {
+			background: #e8e8e8 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;
+		}
+
+		.cr.function {
+			&:hover {
+				background: #fff;
+			}
+		}
+
+		.cr.boolean {
+			&:hover {
+				background: #fff;
+			}
+		}
+
+		.c {
+			input[type=text] {
+				background: #e9e9e9;
+
+				&:hover {
+					background: #eee;
+				}
+
+				&:focus {
+					background: #eee;
+					color: @color_1;
+				}
+			}
+
+			.slider {
+				background: #e9e9e9;
+
+				&:hover {
+					background: #eee;
+				}
+			}
+		}
+	}
+}

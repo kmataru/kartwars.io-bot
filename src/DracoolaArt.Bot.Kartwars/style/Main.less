@@ -1,0 +1,13 @@
+﻿.gFontImportFa () {
+	@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+}
+
+.gFontImport (@name, @weights, @subsets) {
+	@import url('http://fonts.googleapis.com/css?family=@{name}:@{weights}&subset=@{subsets}');
+}
+
+//.gFontImport("Roboto+Slab",400,latin);
+.gFontImportFa ();
+
+@import "Basic.less";
+@import "ContextMenu2.less";

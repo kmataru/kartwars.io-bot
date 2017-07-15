@@ -1,0 +1,192 @@
+﻿/*
+	Copyright Hadar Weiss
+	https://codepen.io/hadarweiss/pen/WvEXeK
+*/
+/*
+body {
+	overflow: hidden;
+	background: -webkit-linear-gradient(left, #fc354c, #0abfbc);
+	background: linear-gradient(to right, #fc354c, #0abfbc);
+}
+
+.info {
+	color: @color_1;
+	text-align: center;
+	font-family: 'Baloo', cursive;
+
+	span {
+		color: black;
+	}
+}
+*/
+/*
+	@for @i from 0 through @item-count - 1 {
+		.menu-item:nth-child(#{@i + 1}) a {
+			transform: rotate(-360deg / @item-count * @i);
+		}
+	}
+
+	@for @i from 0 through @item-count - 1 {
+		.menu-item:nth-child(#{@i + 1}) {
+			transform: rotate(360deg / @item-count * @i) translateX(-@item-size - 30px);
+		}
+	}
+*/
+body {
+  overflow: hidden;
+  background: -webkit-linear-gradient(left, #fc354c, #0abfbc);
+  background: linear-gradient(to right, #fc354c, #0abfbc);
+}
+.info {
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  font-family: 'Baloo', cursive;
+}
+.info span {
+  color: black;
+}
+.menu-wrapper {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  user-select: none;
+  touch-action: none;
+}
+.menu-toggler {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+  opacity: 0;
+  cursor: pointer;
+}
+.menu-toggler:hover + label,
+.menu-toggler:hover + label:before,
+.menu-toggler:hover + label:after {
+  background: white;
+}
+.menu-toggler:checked + label {
+  background: transparent;
+}
+.menu-toggler:checked + label:before,
+.menu-toggler:checked + label:after {
+  top: 0;
+  width: 40px;
+  transform-origin: 50% 50%;
+}
+.menu-toggler:checked + label:before {
+  transform: rotate(45deg);
+}
+.menu-toggler:checked + label:after {
+  transform: rotate(-45deg);
+}
+.menu-toggler:checked ~ ul .menu-item {
+  opacity: 1;
+}
+.menu-toggler:checked ~ ul .menu-item:nth-child(1) {
+  transform: rotate(0deg) translateX(-110px);
+}
+.menu-toggler:checked ~ ul .menu-item:nth-child(2) {
+  transform: rotate(72deg) translateX(-110px);
+}
+.menu-toggler:checked ~ ul .menu-item:nth-child(3) {
+  transform: rotate(144deg) translateX(-110px);
+}
+.menu-toggler:checked ~ ul .menu-item:nth-child(4) {
+  transform: rotate(216deg) translateX(-110px);
+}
+.menu-toggler:checked ~ ul .menu-item:nth-child(5) {
+  transform: rotate(288deg) translateX(-110px);
+}
+.menu-toggler:checked ~ ul .menu-item a {
+  pointer-events: auto;
+}
+.menu-toggler + label {
+  width: 40px;
+  height: 5px;
+  z-index: 1;
+  border-radius: 2.5px;
+  background: rgba(255, 255, 255, 0.7);
+  transition: transform 0.5s, top 0.5s;
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
+.menu-toggler + label:before,
+.menu-toggler + label:after {
+  width: 40px;
+  height: 5px;
+  display: block;
+  z-index: 1;
+  border-radius: 2.5px;
+  background: rgba(255, 255, 255, 0.7);
+  transition: transform 0.5s, top 0.5s;
+  content: "";
+  position: absolute;
+  left: 0;
+}
+.menu-toggler + label:before {
+  top: 10px;
+}
+.menu-toggler + label:after {
+  top: -10px;
+}
+.menu-item:nth-child(1) a {
+  transform: rotate(0deg);
+}
+.menu-item:nth-child(2) a {
+  transform: rotate(-72deg);
+}
+.menu-item:nth-child(3) a {
+  transform: rotate(-144deg);
+}
+.menu-item:nth-child(4) a {
+  transform: rotate(-216deg);
+}
+.menu-item:nth-child(5) a {
+  transform: rotate(-288deg);
+}
+.menu-item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  width: 80px;
+  height: 80px;
+  display: block;
+  opacity: 0;
+  transition: 0.5s;
+}
+.menu-item a {
+  display: block;
+  width: inherit;
+  height: inherit;
+  line-height: 80px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  text-align: center;
+  text-decoration: none;
+  font-size: 40px;
+  pointer-events: none;
+  transition: .2s;
+}
+.menu-item a:hover {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  color: white;
+  background: rgba(255, 255, 255, 0.3);
+  font-size: 44.44444444px;
+}

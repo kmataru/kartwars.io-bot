@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+
+	<script src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js"></script>
+	<script src="../bower_components/victor/build/victor.min.js"></script>
+
+	<style>
+		.results {
+			position: fixed;
+			right: 0;
+			top: 0;
+			width: 768px;
+			height: 1366px;
+			border: 1px solid #c3c3c3;
+		}
+
+		#results {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+
+	<title>Polygon Designer Alpha</title>
+</head>
+<body>
+	<!-- http://scripts.local.com/html/PolygonDesigner.htm -->
+	<canvas id="c" width="768" height="1366"
+			style="border:1px solid #c3c3c3;">
+		Your browser does not support the canvas element.
+	</canvas>
+
+	<div class="results">
+		<textarea id="results">NaN</textarea>
+	</div>
+
+	<script>
+		let defaultCarCollisionDesign = [
+			new Victor(-0.5, 5.5),
+			new Victor(-1, 3.5),
+			new Victor(-1, 2),
+			new Victor(-1.5, 1.5),
+			new Victor(-3, 1),
+			new Victor(-3, -1.25),
+			new Victor(-1, -1),
+			new Victor(-1.25, -2.25),
+
+			new Victor(0, -1.75),
+
+			new Victor(1.25, -2.25),
+			new Victor(1, -1),
+			new Victor(3, -1.25),
+			new Victor(3, 1),
+			new Victor(1.5, 1.5),
+			new Victor(1, 2),
+			new Victor(1, 3.5),
+			new Victor(0.5, 5.5),
+		];
+	</script>
+
+	<!-- Polyfill -->
+	<script>
+		Array.prototype.min = function (property) {
+			if (property) {
+				var min = this[0][property];
+				for (var i = 0; i < this.length; i++)
+					if (this[i][property] < min)
+						min = this[i][property];
+				return min;
+			}
+
+			var min = this[0];
+			for (var i = 0; i < this.length; i++)
+				if (this[i] < min)
+					min = this[i];
+			return min;
+		};
+
+		Array.prototype.max = function (property) {
+			if (property) {
+				var max = this[0][property];
+				for (var i = 0; i < this.length; i++)
+					if (this[i][property] > max)
+						max = this[i][property];
+				return max;
+			}
+
+			var max = this[0];
+			for (var i = 0; i < this.length; i++)
+				if (this[i] > max)
+					max = this[i];
+			return max;
+		};
+
+		if (!String.prototype.format) {
+			String.prototype.format = function () {
+				var args = arguments;
+				return this.replace(/{(\d+)}/g, function (match, number) {
+					return typeof args[number] != 'undefined'
+						? args[number]
+						: match;
+				});
+			};
+		}
+	</script>
+
+	<!-- Draw grids -->
+	<script>
+		var canvas = new fabric.Canvas('c', { selection: false });
+		//var grid = 25;
+
+		let ration = canvas.width / canvas.height;
+
+		let baseGrid = 40;
+		var grid = {
+			width: baseGrid,
+			height: baseGrid / ration
+		};
+
+		// create grid
+
+		let halfWidth = canvas.width / 2;
+		let halfHeight = canvas.height / 2;
+
+		let dpiPerWGrid = canvas.width / grid.width;
+		let dpiPerHGrid = canvas.height / grid.height;
+
+		let divisionsPerHalfWidth = Math.floor(halfWidth / dpiPerWGrid);
+		let divisionsPerHalfHeight = Math.floor(halfHeight / dpiPerHGrid);
+
+		var dpiGrid = {
+			width: dpiPerWGrid,
+			height: dpiPerHGrid
+		}
+
+		let offset = {
+			width: halfWidth - divisionsPerHalfWidth * dpiPerWGrid,
+			height: halfHeight - divisionsPerHalfHeight * dpiPerHGrid
+		};
+
+		// thin lines
+		for (var i = 0; i < (canvas.width / dpiGrid.width * 2); i++) {
+			let newX = offset.width + (i * dpiPerWGrid);
+			canvas.add(new fabric.Line([newX, 0, newX, canvas.height], { stroke: '#ccc', selectable: false }));
+		}
+
+		for (var i = 0; i < (canvas.height / dpiGrid.height * 2); i++) {
+			let newY = offset.height + (i * dpiPerHGrid);
+			canvas.add(new fabric.Line([0, newY, canvas.width, newY], { stroke: '#ccc', selectable: false }))
+		}
+
+		// thin+ lines
+		for (var i = 0; i < (canvas.width / dpiGrid.width * 2); i += 4) {
+			let newX = offset.width + (i * dpiPerWGrid);
+			canvas.add(new fabric.Line([newX, 0, newX, canvas.height], { strokeWidth: 2, stroke: '#000', selectable: false }));
+		}
+
+		for (var i = 0; i < (canvas.width / dpiGrid.height * 2); i += 4) {
+			// TODO : Review
+			let newY = offset.height + ((i - 1) * dpiPerHGrid);
+			canvas.add(new fabric.Line([0, newY, canvas.width, newY], { strokeWidth: 2, stroke: '#000', selectable: false }));
+		}
+
+		// red lines
+		canvas.add(new fabric.Line([halfWidth, 0, halfWidth, canvas.height], { strokeWidth: 3, stroke: '#f00', selectable: false }));
+		canvas.add(new fabric.Line([0, halfHeight, canvas.width, halfHeight], { strokeWidth: 3, stroke: '#f00', selectable: false }))
+	</script>
+
+	<!-- Functions -->
+	<script>
+		function getCenteredCoordinates__(point) {
+			let w = dpiGrid.width;
+			let h = dpiGrid.height;
+
+			return {
+				left: Math.round(point.left / w) * w,
+				top: Math.floor(point.top / h) * h + (h / 2)
+			}
+		}
+
+		function getCenteredCoordinates(point) {
+			let w = dpiGrid.width;
+			let h = dpiGrid.height;
+
+			//x: halfWidth + thisElement.x * (dpiGrid.width * 4) - (dpiGrid.width / 2),
+			//y: halfHeight - thisElement.y * (dpiGrid.height * 4) + (dpiGrid.height / 2)
+
+			return {
+				left: Math.round(point.left / w) * w - (w / 2),
+				top: Math.floor(point.top / h) * h
+			}
+		}
+
+		let dots = [];
+
+		function addDot(pos) {
+			//let goodPos = getCenteredCoordinates({
+			//	left: pos.x,
+			//	top: pos.y
+			//});
+
+			let goodPos = {
+				left: pos.x - (dpiGrid.width / 2),
+				top: pos.y - (dpiGrid.height / 2)
+			};
+
+			let currentObjectToAdd = new fabric.Circle({
+				left: goodPos.left,
+				top: goodPos.top,
+				radius: dpiGrid.width / 2,
+				//fill: '#9f9',
+				fill: '#f00',
+				originX: 'left',
+				originY: 'top',
+				centeredRotation: true,
+				lockRotation: true,
+				lockScalingX: true,
+				lockScalingY: true,
+			});
+
+			currentObjectToAdd.setControlsVisibility({
+				mt: false,
+				mb: false,
+				ml: false,
+				mr: false,
+				bl: false,
+				br: false,
+				tl: false,
+				tr: false,
+				mtr: false,
+			});
+
+			dots.push(currentObjectToAdd);
+
+			canvas.add(currentObjectToAdd);
+		}
+
+		function addPlayer() {
+			let rect = new fabric.Rect({
+				left: halfWidth - 50 / 2,
+				top: halfHeight - 50 / 2,
+				width: 50,
+				height: 50,
+				fill: '#faa',
+				originX: 'left',
+				originY: 'top',
+				centeredRotation: true,
+				lockRotation: true,
+				lockMovementX: true,
+				lockMovementY: true,
+				lockScalingX: true,
+				lockScalingY: true,
+			});
+
+			rect.setControlsVisibility({
+				mt: false,
+				mb: false,
+				ml: false,
+				mr: false,
+				bl: false,
+				br: false,
+				tl: false,
+				tr: false,
+				mtr: false,
+			});
+
+			canvas.add(rect);
+		}
+
+		function round(x) {
+			return Math.round(x * 100) / 100;
+		}
+
+		function updatePoly() {
+			let points = [];
+
+			for (let idx = 0, ll = dots.length; idx < ll; idx++) {
+				let thisElement = dots[idx];
+
+				let thisPos = {
+					x: (thisElement.left + (dpiGrid.width / 2)),
+					y: (thisElement.top + (dpiGrid.height / 2))
+				};
+
+				points.push(thisPos);
+			}
+
+			let polygonLeft = points.min('x');
+			let polygonTop = points.min('y');
+
+			let index = canvas._objects.indexOf(polygon);
+
+			if (polygon) {
+				polygon.remove();
+			}
+
+			polygon = new fabric.Polygon(points, {
+				left: polygonLeft,
+				top: polygonTop,
+				fill: 'rgba(128, 0, 128, 0.5)',
+				selectable: false
+			});
+
+			canvas.add(polygon);
+
+			polygon.moveTo(index);
+		}
+
+		function generateCode() {
+			let content = `	let defaultCarCollisionDesign: Victor[] = [
+{0}	];
+`;
+
+			let vectorTemplate = `		new Victor({0}, {1}),\n`;
+			let vectors = '';
+
+			for (let idx = 0, ll = dots.length; idx < ll; idx++) {
+				let thisDot = dots[idx];
+
+				let newPos = {
+					x: round(((thisDot.left + (dpiGrid.width / 2)) - halfWidth) / (dpiGrid.width * 4)),
+					y: round((halfHeight - (thisDot.top + (dpiGrid.height / 2))) / (dpiGrid.height * 4))
+				};
+
+				if (newPos.y % 0.25 != 0) {
+					newPos.y -= 0.02;
+				}
+
+				vectors += vectorTemplate.format(newPos.x, newPos.y);
+			}
+
+			let result = content.format(vectors);
+
+			document.getElementById('results').value = result;
+		}
+	</script>
+
+	<!-- Populate -->
+	<script>
+		//
+		// Add dots
+		let points = [];
+
+		for (let idx = 0, ll = defaultCarCollisionDesign.length; idx < ll; idx++) {
+			let thisElement = defaultCarCollisionDesign[idx];
+
+			let thisPos = {
+				x: halfWidth + thisElement.x * (dpiGrid.width * 4),// - (dpiGrid.width / 2),
+				y: halfHeight - thisElement.y * (dpiGrid.height * 4) //- (dpiGrid.height / 2)
+			};
+
+			//console.log(thisElement, thisPos);
+
+			points.push(thisPos);
+
+			//addDot(thisPos);
+		}
+
+		let polygonLeft = points.min('x'); //+ (dpiGrid.width / 2);
+		let polygonTop = points.min('y'); //+ (dpiGrid.height / 2);
+
+		var polygon = new fabric.Polygon(points, {
+			left: polygonLeft,
+			top: polygonTop,
+			fill: 'rgba(128, 0, 128, 0.75)',
+			selectable: false
+		});
+
+		canvas.add(polygon);
+
+		for (let idx = 0, ll = points.length; idx < ll; idx++) {
+			let thisElement = points[idx];
+
+			addDot(thisElement);
+		}
+
+		addPlayer();
+
+		generateCode();
+	</script>
+
+	<!-- Events -->
+	<script>
+		// snap to grid
+
+		let selectedEventTriggered = false;
+
+		canvas.on('after:render', function () {
+			generateCode();
+		});
+
+		canvas.on('object:selected', function (options) {
+			selectedEventTriggered = true;
+		});
+
+		canvas.on('object:moving', function (options) {
+			let newCoordinates = getCenteredCoordinates(options.target);
+
+			options.target.set(newCoordinates);
+
+			generateCode();
+
+			updatePoly();
+		});
+
+		canvas.observe("mouse:down", function (event) {
+			return;
+
+			if (selectedEventTriggered || canvas.getActiveObject()) {
+				selectedEventTriggered = false;
+
+				return;
+			}
+
+			var pos = canvas.getPointer(event.e);
+			addDot(pos);
+		});
+
+		fabric.util.addListener(window, 'keyup', function (e) {
+			if (e.keyCode === 46) {
+				canvas.getActiveObject().remove();
+			}
+		});
+	</script>
+</body>
+</html>

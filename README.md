@@ -75,5 +75,3 @@ The following libraries / open-source projects were used in the development of K
 * [TypeScript](https://www.typescriptlang.org/)
 * [typedoc](http://typedoc.org/)
 * [node.js](http://nodejs.org/)
-
-<b style="font-size: 2em">More Coming soon !!</b>

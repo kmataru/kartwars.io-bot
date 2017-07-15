@@ -4,6 +4,9 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
+        /*
+        window.botSettings.LOAD_DEBUG_SCRIPTS = false;
+        //*/
         /**
          * Smart Loader.
          */
@@ -14,7 +17,72 @@ var DracoolaArt;
                 window.botSettings.baseURL = baseURL;
                 if (!Loader.scripts2Load) {
                     if (window.botSettings.LOAD_DEBUG_SCRIPTS) {
-                        Loader.scripts2Load = [];
+                        Loader.scripts2Load = [
+                            //`https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js`,
+                            baseURL + "dist/MethodDecorations/bound.js",
+                            baseURL + "bower_components/density-clustering/dist/clustering.min.js",
+                            baseURL + "bower_components/victor/build/victor.min.js",
+                            baseURL + "node_modules/dat.gui/build/dat.gui.js",
+                            baseURL + "dist/lib/FizzyText/FizzyText.js",
+                            baseURL + "dist/lib/kd-tree-javascript/kdTree.js",
+                            baseScriptPath + "Logging.js",
+                            baseScriptPath + "MethodDecorations/intercept.js",
+                            baseScriptPath + "MethodDecorations/registers.js",
+                            baseScriptPath + "MethodDecorations/sealed.js",
+                            baseScriptPath + "MethodDecorations/trace.js",
+                            baseScriptPath + "Polyfills.js",
+                            baseScriptPath + "Enums.js",
+                            baseScriptPath + "Data/CollectedGameData.js",
+                            baseScriptPath + "Structures.js",
+                            baseScriptPath + "Manager/Time/Timer.js",
+                            baseScriptPath + "Manager/Time/TimerFrame.js",
+                            baseScriptPath + "GameWrapper.js",
+                            baseScriptPath + "Utils/Functions.js",
+                            baseScriptPath + "Utils/ArrayUtils.js",
+                            baseScriptPath + "Utils/MathUtils.js",
+                            baseScriptPath + "Utils/GeometryIntersectionsUtils.js",
+                            baseScriptPath + "Utils/CanvasUtilsBase.js",
+                            baseScriptPath + "Utils/CanvasUtils.js",
+                            baseScriptPath + "WebSocket.js",
+                            baseScriptPath + "Tactics/Fight/__.js",
+                            baseScriptPath + "Tactics/Fight/ChaseClosest.js",
+                            baseScriptPath + "Tactics/Fight/ShootWhenInRange.js",
+                            baseScriptPath + "Tactics/Resource/__.js",
+                            baseScriptPath + "Tactics/Resource/FindClosestResourceBase.js",
+                            baseScriptPath + "Tactics/Resource/Food/__.js",
+                            baseScriptPath + "Tactics/Resource/Food/FindClosest.js",
+                            baseScriptPath + "Tactics/Resource/Food/FindClosestClusterOptions.js",
+                            baseScriptPath + "Tactics/Resource/Food/FindClosestCluster.js",
+                            baseScriptPath + "Tactics/Resource/Weapon/__.js",
+                            baseScriptPath + "Tactics/Resource/Weapon/FindClosest.js",
+                            baseScriptPath + "Strategy/Behaviour.js",
+                            baseScriptPath + "Strategy/__.js",
+                            baseScriptPath + "Strategy/BotStrategyBase.js",
+                            baseScriptPath + "Strategy/Default.js",
+                            baseScriptPath + "Strategy/Tests/CalculateTorqueBotStrategy.js",
+                            baseScriptPath + "Strategy/Tests/PursuitBotStrategy.js",
+                            baseScriptPath + "Strategy/Tests/PursuitAndShootBotStrategy.js",
+                            baseScriptPath + "Strategy/Tests/DrawEnemiesBotStrategy.js",
+                            baseScriptPath + "Strategy/Tests/InterconnectFoodBotStrategy.js",
+                            baseScriptPath + "Design/Circle/WarCarDesigns.js",
+                            baseScriptPath + "Design/Circle/WeaponDesigns.js",
+                            baseScriptPath + "Design/Polygon/WarCarDesigns.js",
+                            baseScriptPath + "Manager/Collision/__.js",
+                            baseScriptPath + "Manager/Collision/CollisionBaseManager.js",
+                            baseScriptPath + "Manager/Collision/CollisionCourseManager.js",
+                            baseScriptPath + "Manager/Collision/AdvancedCollisionCourseManager.js",
+                            //`${baseScriptPath}Manager/Collision/UberCollisionCourseManager.js`,
+                            baseScriptPath + "BotOptions.js",
+                            baseScriptPath + "BotBase.js",
+                            baseScriptPath + "Bot.js",
+                            baseScriptPath + "Utils/Interface/ContextMenu.js",
+                            baseScriptPath + "Utils/ScoreHolster.js",
+                            baseScriptPath + "Utils/Interface/Interface.js",
+                            baseScriptPath + "Utils/Interface/DeveloperInterface.js",
+                            baseScriptPath + "Utils/Interface/DatGUI.js",
+                            baseScriptPath + "Experimental/ExternalGraph.js",
+                            baseScriptPath + "Factory.js"
+                        ];
                     }
                     else {
                         Loader.scripts2Load = [

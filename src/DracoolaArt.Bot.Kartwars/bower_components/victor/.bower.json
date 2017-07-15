@@ -1,0 +1,42 @@
+{
+  "name": "victor",
+  "main": "build/victor.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/maxkueng/victor.git"
+  },
+  "version": "1.1.0",
+  "homepage": "https://github.com/maxkueng/victor",
+  "authors": [
+    "Max Kueng (http://maxkueng.com/)",
+    "George Crabtree (http://georgecrabtree.com/)"
+  ],
+  "description": "A JavaScript 2D vector class for common vector operations",
+  "keywords": [
+    "vector",
+    "2d"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "documentation",
+    "artwork",
+    "index.js",
+    "**/*.json",
+    "**/*.md"
+  ],
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.0",
+    "commit": "8383f436d63f6741e5529b09a39e7fb2b7f1dbfb"
+  },
+  "_source": "https://github.com/maxkueng/victor.git",
+  "_target": "~1.1.0",
+  "_originalSource": "victor",
+  "_direct": true
+}

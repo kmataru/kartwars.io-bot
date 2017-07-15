@@ -1,0 +1,7 @@
+{
+  "name": "kartwars.io-bot",
+  "dependencies": {
+    "density-clustering": "v1.3.0",
+    "victor": "~1.1.0"
+  }
+}

@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DracoolaArt.Bot.Kartwars", "DracoolaArt.Bot.Kartwars\DracoolaArt.Bot.Kartwars.csproj", "{379A38D7-07D2-43A8-9E0A-E1FD2B68A8D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{41B4B265-4875-44C8-AE40-49672D962E82}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DracoolaArt.Bot.Kartwars.NodeStuff", "DracoolaArt.Bot.Kartwars.NodeStuff\DracoolaArt.Bot.Kartwars.NodeStuff.csproj", "{C455E30C-074D-4CA6-97BB-DB3BA61B0DD4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MD", "MD", "{313C0EF3-A82A-4E18-936C-79CEDFA9DDAC}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+		..\WARNING.md = ..\WARNING.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{379A38D7-07D2-43A8-9E0A-E1FD2B68A8D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{379A38D7-07D2-43A8-9E0A-E1FD2B68A8D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{379A38D7-07D2-43A8-9E0A-E1FD2B68A8D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{379A38D7-07D2-43A8-9E0A-E1FD2B68A8D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C455E30C-074D-4CA6-97BB-DB3BA61B0DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C455E30C-074D-4CA6-97BB-DB3BA61B0DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C455E30C-074D-4CA6-97BB-DB3BA61B0DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C455E30C-074D-4CA6-97BB-DB3BA61B0DD4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{313C0EF3-A82A-4E18-936C-79CEDFA9DDAC} = {41B4B265-4875-44C8-AE40-49672D962E82}
+	EndGlobalSection
+EndGlobal

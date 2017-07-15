@@ -1,0 +1,18 @@
+﻿[
+  {
+    "outputFile": "style/Main.css",
+    "inputFile": "style/Main.less"
+  },
+  {
+    "outputFile": "style/ContextMenu.css",
+    "inputFile": "style/ContextMenu.less"
+  },
+  {
+    "outputFile": "style/ContextMenu2.css",
+    "inputFile": "style/ContextMenu2.less"
+  },
+  {
+    "outputFile": "style/Basic.css",
+    "inputFile": "style/Basic.less"
+  }
+]

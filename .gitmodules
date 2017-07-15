@@ -1,0 +1,9 @@
+[submodule "steer.js"]
+	path = steer.js
+	url = https://github.com/amoyeh/steer.js.git
+[submodule "blocks.js"]
+	path = blocks.js
+	url = https://github.com/Gregwar/blocks.js.git
+[submodule "core-decorators.js"]
+	path = core-decorators.js
+	url = https://github.com/jayphelps/core-decorators.js.git

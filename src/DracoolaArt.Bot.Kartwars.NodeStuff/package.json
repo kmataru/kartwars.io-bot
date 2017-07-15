@@ -1,0 +1,20 @@
+{
+  "name": "myproject",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@types/jquery": "^2.0.41",
+    "dat.gui": "^0.6.1",
+    "definitely-typed-requirejs": "^1.0.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-tslint": "^8.0.0",
+    "gulp-typedoc": "^2.0.2",
+    "gulp-uglify": "^2.1.2",
+    "map-stream": "0.0.7",
+    "reflect-metadata": "^0.1.9",
+    "tslint": "^5.2.0",
+    "typedoc": "^0.6.0"
+  }
+}
