@@ -5246,17 +5246,16 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        var emulatedConsole;
-        var lastLogId = (-Infinity).toString();
-        //
-        // Restore console.
         !function (window, document) {
+            var emulatedConsole;
+            var lastLogId = (-Infinity).toString();
+            // Restore console.
             jQuery(document).ready(function () {
                 emulatedConsole = jQuery('<iframe>').hide().appendTo('body')[0].contentWindow.console;
             });
-        }(window, document);
-        window.log = function () {
-            if (window.logDebugging) {
+            // Anti polution console logger.
+            window.log = function () {
+                // if (window.logDebugging) {
                 var stackFramesProcessor = function (stackframes) {
                     var stringifiedStack = stackframes.map(function (sf) {
                         return sf.toString();
@@ -5268,38 +5267,37 @@ var DracoolaArt;
                     lastLogId = thisId;
                     emulatedConsole.log.apply(emulatedConsole, arguments);
                 }
-            }
-        };
-        // Inspired by PIXI
-        // TODO : Review
-        window.autobotSaidHello = false;
-        window.autobotSayHello = function () {
-            if (window.autobotSaidHello) {
-                return;
-            }
-            var url = 'https://github.com/kmataru/kartwars.io-bot/';
-            var me = "\n ____  __.               __                      \n|    |/ _| _____ _____ _/  |______ _______ __ __ \n|      <  /     \\\\__  \\\\   __\\__  \\\\_  __ \\  |  \\\n|    |  \\|  Y Y  \\/ __ \\|  |  / __ \\|  | \\/  |  /\n|____|__ \\__|_|  (____  /__| (____  /__|  |____/ \n        \\/     \\/     \\/          \\/             \n";
-            if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-                var args = [
-                    me + "\n %c %c %c kartwars.io-bot " + window.GM_info.script.version + "  %c  %c  " + url + "  %c %c \uD83D\uDE97%c\uD83D\uDE97%c\uD83D\uDE97 \n\n",
-                    'background: #087E8B; padding:5px 0;',
-                    'background: #087E8B; padding:5px 0;',
-                    'color: #087E8B; background: #030307; padding:5px 0;',
-                    'background: #087E8B; padding:5px 0;',
-                    'color: #0B3954; background: #BFD7EA; padding:5px 0;',
-                    'background: #087E8B; padding:5px 0;',
-                    'color: #C81D25; background: #fff; padding:5px 0;',
-                    'color: #C81D25; background: #fff; padding:5px 0;',
-                    'color: #C81D25; background: #fff; padding:5px 0;',
-                ];
-                window.log.apply(emulatedConsole, args);
-            }
-            else if (window.log) {
-                // window.log(`kartwars.io-bot ${window.GM_info.script.version} - ${url}`);
-                window.log(me + "\nkartwars.io-bot " + window.GM_info.script.version + " - " + url);
-            }
-            window.autobotSaidHello = true;
-        };
+                // }
+            };
+            // Inspired by PIXI
+            window.autobotSaidHello = false;
+            window.autobotSayHello = function () {
+                if (window.autobotSaidHello) {
+                    return;
+                }
+                var url = 'https://github.com/kmataru/kartwars.io-bot/';
+                var me = "\n ____  __.               __                      \n|    |/ _| _____ _____ _/  |______ _______ __ __ \n|      <  /     \\\\__  \\\\   __\\__  \\\\_  __ \\  |  \\\n|    |  \\|  Y Y  \\/ __ \\|  |  / __ \\|  | \\/  |  /\n|____|__ \\__|_|  (____  /__| (____  /__|  |____/ \n        \\/     \\/     \\/          \\/             \n";
+                if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+                    var args = [
+                        me + "\n %c %c %c kartwars.io-bot " + window.GM_info.script.version + "  %c  %c  " + url + "  %c %c \uD83D\uDE97%c\uD83D\uDE97%c\uD83D\uDE97 \n\n",
+                        'background: #087E8B; padding:5px 0;',
+                        'background: #087E8B; padding:5px 0;',
+                        'color: #087E8B; background: #030307; padding:5px 0;',
+                        'background: #087E8B; padding:5px 0;',
+                        'color: #0B3954; background: #BFD7EA; padding:5px 0;',
+                        'background: #087E8B; padding:5px 0;',
+                        'color: #C81D25; background: #fff; padding:5px 0;',
+                        'color: #C81D25; background: #fff; padding:5px 0;',
+                        'color: #C81D25; background: #fff; padding:5px 0;',
+                    ];
+                    emulatedConsole.log.apply(emulatedConsole, args);
+                }
+                else if (emulatedConsole.log) {
+                    emulatedConsole.log(me + "\nkartwars.io-bot " + window.GM_info.script.version + " - " + url);
+                }
+                window.autobotSaidHello = true;
+            };
+        }(window, document);
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -5447,65 +5445,62 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 !function (window) {
-	if (!Object.prototype.watch) {
-		Object.defineProperty(Object.prototype, "watch", {
-			enumerable: false,
-			configurable: true,
-			writable: false,
-			value: function (prop, handler) {
-				var oldval = this[prop], newval = oldval, getter = function () {
-					return newval;
-				}, setter = function (val) {
-					oldval = newval;
-					return newval = handler.call(this, prop, oldval, val);
-				};
-				if (delete this[prop]) {
-					Object.defineProperty(this, prop, {
-						get: getter,
-						set: setter,
-						enumerable: true,
-						configurable: true
-					});
-				}
-			}
-		});
-	}
-
-	if (!Object.prototype.unwatch) {
-		Object.defineProperty(Object.prototype, "unwatch", {
-			enumerable: false,
-			configurable: true,
-			writable: false,
-			value: function (prop) {
-				var val = this[prop];
-				delete this[prop];
-				this[prop] = val;
-			}
-		});
-	}
-
-	String.prototype.hashCode = function () {
-		var hash = 0;
-		if (this.length == 0)
-			return hash;
-		for (i = 0; i < this.length; i++) {
-			char = this.charCodeAt(i);
-			hash = ((hash << 5) - hash) + char;
-			hash = hash & hash;
-		}
-		return hash;
-	};
-
-	if (!String.prototype.format) {
-		String.prototype.format = function () {
-			var args = arguments;
-			return this.replace(/{(\d+)}/g, function (match, number) {
-				return typeof args[number] != 'undefined'
-					? args[number]
-					: match;
-			});
-		};
-	}
+    if (!Object.prototype.watch) {
+        Object.defineProperty(Object.prototype, "watch", {
+            enumerable: false,
+            configurable: true,
+            writable: false,
+            value: function (prop, handler) {
+                var oldval = this[prop], newval = oldval, getter = function () {
+                    return newval;
+                }, setter = function (val) {
+                    oldval = newval;
+                    return newval = handler.call(this, prop, oldval, val);
+                };
+                if (delete this[prop]) {
+                    Object.defineProperty(this, prop, {
+                        get: getter,
+                        set: setter,
+                        enumerable: true,
+                        configurable: true
+                    });
+                }
+            }
+        });
+    }
+    if (!Object.prototype.unwatch) {
+        Object.defineProperty(Object.prototype, "unwatch", {
+            enumerable: false,
+            configurable: true,
+            writable: false,
+            value: function (prop) {
+                var val = this[prop];
+                delete this[prop];
+                this[prop] = val;
+            }
+        });
+    }
+    String.prototype.hashCode = function () {
+        var hash = 0;
+        if (this.length == 0)
+            return hash;
+        for (i = 0; i < this.length; i++) {
+            char = this.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return hash;
+    };
+    if (!String.prototype.format) {
+        String.prototype.format = function () {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function (match, number) {
+                return typeof args[number] != 'undefined'
+                    ? args[number]
+                    : match;
+            });
+        };
+    }
 }(window);
 
 var DracoolaArt;
@@ -5607,596 +5602,616 @@ var DracoolaArt;
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        var CarWeaponData = (function () {
-            function CarWeaponData(weaponType) {
-                this.weaponFired = false;
-                this.weaponType = weaponType;
-            }
-            Object.defineProperty(CarWeaponData.prototype, "previousWeaponType", {
-                get: function () {
-                    return this._previousWeaponType;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(CarWeaponData.prototype, "weaponType", {
-                get: function () {
-                    return this._weaponType;
-                },
-                set: function (value) {
-                    if (this._weaponType == value) {
-                        return;
-                    }
-                    if (value == KartwarsBot.CarWeapon.None) {
-                        this.weaponFired = false;
-                    }
-                    this._previousWeaponType = this._weaponType;
-                    var thisWeaponType = this._weaponType = value;
-                    this._magnitude = KartwarsBot.Data.weaponsMagnitudes[thisWeaponType];
-                    //
-                    // isLethalWeapon
-                    switch (thisWeaponType) {
-                        case KartwarsBot.CarWeapon.None:
-                        case KartwarsBot.CarWeapon.Cloak:
-                        case KartwarsBot.CarWeapon.Magnet:
-                            {
-                                this._isLethalWeapon = false;
-                            }
-                            break;
-                        default:
-                            {
-                                this._isLethalWeapon = true;
-                            }
-                            break;
-                    }
-                    //
-                    // triggerLocation
-                    switch (thisWeaponType) {
-                        case KartwarsBot.CarWeapon.Cloak:
-                        case KartwarsBot.CarWeapon.Magnet:
-                        case KartwarsBot.CarWeapon.Shield:
-                        case KartwarsBot.CarWeapon.BigBang:
-                            {
-                                this._triggerLocation = KartwarsBot.CarWeaponTrigger.Self;
-                            }
-                            break;
-                        case KartwarsBot.CarWeapon.FastRocket:
-                        case KartwarsBot.CarWeapon.ThreeFastRockets:
-                        case KartwarsBot.CarWeapon.TeleRocket:
-                        case KartwarsBot.CarWeapon.ThreeTeleRocket:
-                        case KartwarsBot.CarWeapon.Flashes:
-                        case KartwarsBot.CarWeapon.HugeBash:
-                            {
-                                this._triggerLocation = KartwarsBot.CarWeaponTrigger.Front;
-                            }
-                            break;
-                        case KartwarsBot.CarWeapon.Mine:
-                        case KartwarsBot.CarWeapon.ThreeMines:
-                            {
-                                this._triggerLocation = KartwarsBot.CarWeaponTrigger.Behind;
-                            }
-                            break;
-                        default:
-                            {
-                                this._triggerLocation = KartwarsBot.CarWeaponTrigger.NotSet;
-                            }
-                            break;
-                    }
-                    //
-                    // speed
-                    switch (thisWeaponType) {
-                        case KartwarsBot.CarWeapon.Cloak:
-                        case KartwarsBot.CarWeapon.Mine:
-                        case KartwarsBot.CarWeapon.ThreeMines:
-                        case KartwarsBot.CarWeapon.BigBang:
-                        case KartwarsBot.CarWeapon.Shield:
-                        case KartwarsBot.CarWeapon.Magnet:
-                            {
-                                this._speed = KartwarsBot.CarWeaponSpeed.NoSpeed;
-                            }
-                            break;
-                        case KartwarsBot.CarWeapon.TeleRocket:
-                        case KartwarsBot.CarWeapon.ThreeTeleRocket:
-                        case KartwarsBot.CarWeapon.HugeBash:
-                            {
-                                this._speed = KartwarsBot.CarWeaponSpeed.MediumSpeed;
-                            }
-                            break;
-                        case KartwarsBot.CarWeapon.FastRocket:
-                        case KartwarsBot.CarWeapon.ThreeFastRockets:
-                        case KartwarsBot.CarWeapon.Flashes:
-                            {
-                                this._speed = KartwarsBot.CarWeaponSpeed.HighSpeed;
-                            }
-                            break;
-                        default:
-                            {
-                                this._speed = KartwarsBot.CarWeaponSpeed.NotSet;
-                            }
-                            break;
-                    }
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(CarWeaponData.prototype, "isLethalWeapon", {
-                get: function () {
-                    return this._isLethalWeapon;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(CarWeaponData.prototype, "triggerLocation", {
-                get: function () {
-                    return this._triggerLocation;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(CarWeaponData.prototype, "speed", {
-                get: function () {
-                    return this._speed;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(CarWeaponData.prototype, "magnitude", {
-                get: function () {
-                    return this._magnitude;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return CarWeaponData;
-        }());
-        KartwarsBot.CarWeaponData = CarWeaponData;
-        var Point2D = (function () {
-            function Point2D(x, y) {
-                if (x) {
-                    this.x = x;
+        var Structures;
+        (function (Structures) {
+            var CarWeaponData = (function () {
+                function CarWeaponData(weaponType) {
+                    this.weaponFired = false;
+                    this.weaponType = weaponType;
                 }
-                else {
-                    this.x = 0;
+                Object.defineProperty(CarWeaponData.prototype, "previousWeaponType", {
+                    get: function () {
+                        return this._previousWeaponType;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(CarWeaponData.prototype, "weaponType", {
+                    get: function () {
+                        return this._weaponType;
+                    },
+                    set: function (value) {
+                        if (this._weaponType == value) {
+                            return;
+                        }
+                        if (value == KartwarsBot.CarWeapon.None) {
+                            this.weaponFired = false;
+                        }
+                        this._previousWeaponType = this._weaponType;
+                        var thisWeaponType = this._weaponType = value;
+                        this._magnitude = KartwarsBot.Data.weaponsMagnitudes[thisWeaponType];
+                        //
+                        // isLethalWeapon
+                        switch (thisWeaponType) {
+                            case KartwarsBot.CarWeapon.None:
+                            case KartwarsBot.CarWeapon.Cloak:
+                            case KartwarsBot.CarWeapon.Magnet:
+                                {
+                                    this._isLethalWeapon = false;
+                                }
+                                break;
+                            default:
+                                {
+                                    this._isLethalWeapon = true;
+                                }
+                                break;
+                        }
+                        //
+                        // triggerLocation
+                        switch (thisWeaponType) {
+                            case KartwarsBot.CarWeapon.Cloak:
+                            case KartwarsBot.CarWeapon.Magnet:
+                            case KartwarsBot.CarWeapon.Shield:
+                            case KartwarsBot.CarWeapon.BigBang:
+                                {
+                                    this._triggerLocation = KartwarsBot.CarWeaponTrigger.Self;
+                                }
+                                break;
+                            case KartwarsBot.CarWeapon.FastRocket:
+                            case KartwarsBot.CarWeapon.ThreeFastRockets:
+                            case KartwarsBot.CarWeapon.TeleRocket:
+                            case KartwarsBot.CarWeapon.ThreeTeleRocket:
+                            case KartwarsBot.CarWeapon.Flashes:
+                            case KartwarsBot.CarWeapon.HugeBash:
+                                {
+                                    this._triggerLocation = KartwarsBot.CarWeaponTrigger.Front;
+                                }
+                                break;
+                            case KartwarsBot.CarWeapon.Mine:
+                            case KartwarsBot.CarWeapon.ThreeMines:
+                                {
+                                    this._triggerLocation = KartwarsBot.CarWeaponTrigger.Behind;
+                                }
+                                break;
+                            default:
+                                {
+                                    this._triggerLocation = KartwarsBot.CarWeaponTrigger.NotSet;
+                                }
+                                break;
+                        }
+                        //
+                        // speed
+                        switch (thisWeaponType) {
+                            case KartwarsBot.CarWeapon.Cloak:
+                            case KartwarsBot.CarWeapon.Mine:
+                            case KartwarsBot.CarWeapon.ThreeMines:
+                            case KartwarsBot.CarWeapon.BigBang:
+                            case KartwarsBot.CarWeapon.Shield:
+                            case KartwarsBot.CarWeapon.Magnet:
+                                {
+                                    this._speed = KartwarsBot.CarWeaponSpeed.NoSpeed;
+                                }
+                                break;
+                            case KartwarsBot.CarWeapon.TeleRocket:
+                            case KartwarsBot.CarWeapon.ThreeTeleRocket:
+                            case KartwarsBot.CarWeapon.HugeBash:
+                                {
+                                    this._speed = KartwarsBot.CarWeaponSpeed.MediumSpeed;
+                                }
+                                break;
+                            case KartwarsBot.CarWeapon.FastRocket:
+                            case KartwarsBot.CarWeapon.ThreeFastRockets:
+                            case KartwarsBot.CarWeapon.Flashes:
+                                {
+                                    this._speed = KartwarsBot.CarWeaponSpeed.HighSpeed;
+                                }
+                                break;
+                            default:
+                                {
+                                    this._speed = KartwarsBot.CarWeaponSpeed.NotSet;
+                                }
+                                break;
+                        }
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(CarWeaponData.prototype, "isLethalWeapon", {
+                    get: function () {
+                        return this._isLethalWeapon;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(CarWeaponData.prototype, "triggerLocation", {
+                    get: function () {
+                        return this._triggerLocation;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(CarWeaponData.prototype, "speed", {
+                    get: function () {
+                        return this._speed;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(CarWeaponData.prototype, "magnitude", {
+                    get: function () {
+                        return this._magnitude;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return CarWeaponData;
+            }());
+            Structures.CarWeaponData = CarWeaponData;
+            var Point2D = (function () {
+                function Point2D(x, y) {
+                    if (x) {
+                        this.x = x;
+                    }
+                    else {
+                        this.x = 0;
+                    }
+                    if (y) {
+                        this.y = y;
+                    }
+                    else {
+                        this.y = 0;
+                    }
                 }
-                if (y) {
-                    this.y = y;
+                Point2D.prototype.lerp = function (that, t) {
+                    return new Point2D(this.x + (that.x - this.x) * t, this.y + (that.y - this.y) * t);
+                };
+                Point2D.prototype.min = function (that) {
+                    return new Point2D(Math.min(this.x, that.x), Math.min(this.y, that.y));
+                };
+                Point2D.prototype.max = function (that) {
+                    return new Point2D(Math.max(this.x, that.x), Math.max(this.y, that.y));
+                };
+                return Point2D;
+            }());
+            Structures.Point2D = Point2D;
+            //type Point2D = Victor;
+            //const Point2D = <{ new (x: number, y: number): Point2D; }>Victor;
+            // TODO : Review
+            var BotPoint2D = (function (_super) {
+                __extends(BotPoint2D, _super);
+                function BotPoint2D(x, y, ang) {
+                    var _this = _super.call(this, x, y) || this;
+                    _this.ang = 0.0;
+                    _this.ang = ang;
+                    return _this;
                 }
-                else {
-                    this.y = 0;
+                BotPoint2D.fromPoint2D = function (point) {
+                    return new BotPoint2D(point.x, point.y);
+                };
+                return BotPoint2D;
+            }(Point2D));
+            Structures.BotPoint2D = BotPoint2D;
+            // TODO : Review
+            var Bot2Point2D = (function (_super) {
+                __extends(Bot2Point2D, _super);
+                function Bot2Point2D(x, y, sz, da, ang, distance, resourceId) {
+                    var _this = _super.call(this, x, y) || this;
+                    _this.sz = sz;
+                    _this.da = da;
+                    _this.ang = ang;
+                    _this.distance = distance;
+                    _this.resourceId = resourceId;
+                    return _this;
                 }
-            }
-            Point2D.prototype.lerp = function (that, t) {
-                return new Point2D(this.x + (that.x - this.x) * t, this.y + (that.y - this.y) * t);
-            };
-            Point2D.prototype.min = function (that) {
-                return new Point2D(Math.min(this.x, that.x), Math.min(this.y, that.y));
-            };
-            Point2D.prototype.max = function (that) {
-                return new Point2D(Math.max(this.x, that.x), Math.max(this.y, that.y));
-            };
-            return Point2D;
-        }());
-        KartwarsBot.Point2D = Point2D;
-        //type Point2D = Victor;
-        //const Point2D = <{ new (x: number, y: number): Point2D; }>Victor;
-        // TODO : Review
-        var BotPoint2D = (function (_super) {
-            __extends(BotPoint2D, _super);
-            function BotPoint2D(x, y, ang) {
-                var _this = _super.call(this, x, y) || this;
-                _this.ang = 0.0;
-                _this.ang = ang;
-                return _this;
-            }
-            BotPoint2D.fromPoint2D = function (point) {
-                return new BotPoint2D(point.x, point.y);
-            };
-            return BotPoint2D;
-        }(Point2D));
-        KartwarsBot.BotPoint2D = BotPoint2D;
-        // TODO : Review
-        var Bot2Point2D = (function (_super) {
-            __extends(Bot2Point2D, _super);
-            function Bot2Point2D(x, y, sz, da, ang, distance, resourceId) {
-                var _this = _super.call(this, x, y) || this;
-                _this.sz = sz;
-                _this.da = da;
-                _this.ang = ang;
-                _this.distance = distance;
-                _this.resourceId = resourceId;
-                return _this;
-            }
-            return Bot2Point2D;
-        }(Point2D));
-        KartwarsBot.Bot2Point2D = Bot2Point2D;
-        var CollisionElement = (function (_super) {
-            __extends(CollisionElement, _super);
-            function CollisionElement(x, y, ang, shapeType, dangerType, radius, /*isHead: boolean,*/ distance) {
-                var _this = _super.call(this, x, y) || this;
-                _this.ang = ang;
-                _this.shapeType = shapeType;
-                _this.dangerType = dangerType;
-                _this.radius = radius;
-                //this.isHead = isHead;
-                if (distance) {
+                return Bot2Point2D;
+            }(Point2D));
+            Structures.Bot2Point2D = Bot2Point2D;
+            var CollisionElement = (function (_super) {
+                __extends(CollisionElement, _super);
+                function CollisionElement(x, y, ang, shapeType, dangerType, radius, /*isHead: boolean,*/ distance) {
+                    var _this = _super.call(this, x, y) || this;
+                    _this.ang = ang;
+                    _this.shapeType = shapeType;
+                    _this.dangerType = dangerType;
+                    _this.radius = radius;
+                    //this.isHead = isHead;
+                    if (distance) {
+                        _this.distance2 = distance;
+                    }
+                    else {
+                        _this.distance2 = Infinity;
+                    }
+                    return _this;
+                }
+                return CollisionElement;
+            }(Point2D));
+            Structures.CollisionElement = CollisionElement;
+            var CollisionAngle = (function (_super) {
+                __extends(CollisionAngle, _super);
+                function CollisionAngle(x, y, ang, dangerType, distance, radius, aIndex) {
+                    var _this = _super.call(this, x, y) || this;
+                    _this.ang = ang;
+                    _this.dangerType = dangerType;
                     _this.distance2 = distance;
+                    _this.radius = radius;
+                    _this.aIndex = aIndex;
+                    return _this;
                 }
-                else {
-                    _this.distance2 = Infinity;
+                return CollisionAngle;
+            }(Point2D));
+            Structures.CollisionAngle = CollisionAngle;
+            var CollisionDataRespons = (function () {
+                function CollisionDataRespons(collisionElements, collisionAngles) {
+                    this.collisionElements = collisionElements;
+                    this.collisionAngles = collisionAngles;
                 }
-                return _this;
-            }
-            return CollisionElement;
-        }(Point2D));
-        KartwarsBot.CollisionElement = CollisionElement;
-        var CollisionAngle = (function (_super) {
-            __extends(CollisionAngle, _super);
-            function CollisionAngle(x, y, ang, dangerType, distance, radius, aIndex) {
-                var _this = _super.call(this, x, y) || this;
-                _this.ang = ang;
-                _this.dangerType = dangerType;
-                _this.distance2 = distance;
-                _this.radius = radius;
-                _this.aIndex = aIndex;
-                return _this;
-            }
-            return CollisionAngle;
-        }(Point2D));
-        KartwarsBot.CollisionAngle = CollisionAngle;
-        var CollisionDataRespons = (function () {
-            function CollisionDataRespons(collisionElements, collisionAngles) {
-                this.collisionElements = collisionElements;
-                this.collisionAngles = collisionAngles;
-            }
-            return CollisionDataRespons;
-        }());
-        KartwarsBot.CollisionDataRespons = CollisionDataRespons;
-        var FoodAngle = (function (_super) {
-            __extends(FoodAngle, _super);
-            function FoodAngle() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            return FoodAngle;
-        }(Point2D));
-        KartwarsBot.FoodAngle = FoodAngle;
-        var OpenAngle = (function () {
-            function OpenAngle() {
-            }
-            return OpenAngle;
-        }());
-        KartwarsBot.OpenAngle = OpenAngle;
-        var Bounds = (function () {
-            function Bounds(width, height) {
-                this.width = width;
-                this.height = height;
-            }
-            return Bounds;
-        }());
-        KartwarsBot.Bounds = Bounds;
-        var Line = (function () {
-            // Constructor for vector type
-            function Line(point1, point2) {
-                this.point1 = point1;
-                this.point2 = point2;
-            }
-            return Line;
-        }());
-        KartwarsBot.Line = Line;
-        var Rect = (function (_super) {
-            __extends(Rect, _super);
-            // Constructor for rect type
-            function Rect(x, y, width, height, rotation) {
-                var _this = _super.call(this, width, height) || this;
-                _this.x = x;
-                _this.y = y;
-                if (undefined != rotation) {
-                    _this.rotation = rotation;
+                return CollisionDataRespons;
+            }());
+            Structures.CollisionDataRespons = CollisionDataRespons;
+            var FoodAngle = (function (_super) {
+                __extends(FoodAngle, _super);
+                function FoodAngle() {
+                    return _super !== null && _super.apply(this, arguments) || this;
                 }
-                else {
-                    rotation = 0.0;
+                return FoodAngle;
+            }(Point2D));
+            Structures.FoodAngle = FoodAngle;
+            var OpenAngle = (function () {
+                function OpenAngle() {
                 }
-                return _this;
-            }
-            return Rect;
-        }(Bounds));
-        KartwarsBot.Rect = Rect;
-        var Polygon = (function (_super) {
-            __extends(Polygon, _super);
-            function Polygon(x, y, geometry) {
-                var _this = _super.call(this, x, y) || this;
-                _this._minX = Infinity;
-                _this._minY = Infinity;
-                _this._maxX = -Infinity;
-                _this._maxY = -Infinity;
-                _this.geometry = geometry;
-                _this.processGeometry();
-                return _this;
-            }
-            Polygon.prototype.processGeometry = function () {
-                var geometry = this.geometry;
-                for (var p = 1, l = geometry.length; p < l; p++) {
-                    if (geometry[p].x < this._minX) {
-                        this._minX = geometry[p].x;
+                return OpenAngle;
+            }());
+            Structures.OpenAngle = OpenAngle;
+            var Bounds = (function () {
+                function Bounds(width, height) {
+                    this.width = width;
+                    this.height = height;
+                }
+                return Bounds;
+            }());
+            Structures.Bounds = Bounds;
+            var Line = (function () {
+                // Constructor for vector type
+                function Line(point1, point2) {
+                    this.point1 = point1;
+                    this.point2 = point2;
+                }
+                return Line;
+            }());
+            Structures.Line = Line;
+            var Rect = (function (_super) {
+                __extends(Rect, _super);
+                // Constructor for rect type
+                function Rect(x, y, width, height, rotation) {
+                    var _this = _super.call(this, width, height) || this;
+                    _this.x = x;
+                    _this.y = y;
+                    if (undefined != rotation) {
+                        _this.rotation = rotation;
                     }
-                    if (geometry[p].x > this._maxX) {
-                        this._maxX = geometry[p].x;
+                    else {
+                        rotation = 0.0;
                     }
-                    if (geometry[p].y < this._minY) {
-                        this._minY = geometry[p].y;
-                    }
-                    if (geometry[p].y > this._maxY) {
-                        this._maxY = geometry[p].y;
-                    }
+                    return _this;
                 }
-            };
-            Object.defineProperty(Polygon.prototype, "geometryAsPoint2DArray", {
-                get: function () {
-                    if (!this._geometryAsPoint2DArray) {
-                        this._geometryAsPoint2DArray = this.geometry.map(function (element) {
-                            return new Point2D(element.x, element.y);
+                return Rect;
+            }(Bounds));
+            Structures.Rect = Rect;
+            var Polygon = (function (_super) {
+                __extends(Polygon, _super);
+                function Polygon(x, y, geometry) {
+                    var _this = _super.call(this, x, y) || this;
+                    _this._minX = Infinity;
+                    _this._minY = Infinity;
+                    _this._maxX = -Infinity;
+                    _this._maxY = -Infinity;
+                    _this.geometry = geometry;
+                    _this.processGeometry();
+                    return _this;
+                }
+                Polygon.prototype.processGeometry = function () {
+                    var geometry = this.geometry;
+                    for (var p = 1, l = geometry.length; p < l; p++) {
+                        if (geometry[p].x < this._minX) {
+                            this._minX = geometry[p].x;
+                        }
+                        if (geometry[p].x > this._maxX) {
+                            this._maxX = geometry[p].x;
+                        }
+                        if (geometry[p].y < this._minY) {
+                            this._minY = geometry[p].y;
+                        }
+                        if (geometry[p].y > this._maxY) {
+                            this._maxY = geometry[p].y;
+                        }
+                    }
+                };
+                Object.defineProperty(Polygon.prototype, "geometryAsPoint2DArray", {
+                    get: function () {
+                        if (!this._geometryAsPoint2DArray) {
+                            this._geometryAsPoint2DArray = this.geometry.map(function (element) {
+                                return new Point2D(element.x, element.y);
+                            });
+                        }
+                        return this._geometryAsPoint2DArray;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Polygon.prototype, "minX", {
+                    get: function () {
+                        return this._minX;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Polygon.prototype, "minY", {
+                    get: function () {
+                        return this._minY;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Polygon.prototype, "maxX", {
+                    get: function () {
+                        return this._maxX;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Polygon.prototype, "maxY", {
+                    get: function () {
+                        return this._maxY;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return Polygon;
+            }(Point2D));
+            Structures.Polygon = Polygon;
+            var Circle = (function (_super) {
+                __extends(Circle, _super);
+                // Constructor for circle type
+                function Circle(x, y, radius) {
+                    var _this = _super.call(this, x, y) || this;
+                    _this.radius = radius;
+                    return _this;
+                }
+                return Circle;
+            }(Point2D));
+            Structures.Circle = Circle;
+            var Cluster = (function (_super) {
+                __extends(Cluster, _super);
+                // Constructor for circle type
+                function Cluster(circle, data) {
+                    var _this = _super.call(this, circle.x, circle.y, circle.radius) || this;
+                    _this.elements = [];
+                    if (undefined != data) {
+                        var $this_1 = _this;
+                        data.forEach(function (element) {
+                            element.distanceToCenterOfCluster = KartwarsBot.Utils.MathUtils.getDistance($this_1, element);
                         });
+                        _this.elements = data;
                     }
-                    return this._geometryAsPoint2DArray;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(Polygon.prototype, "minX", {
-                get: function () {
-                    return this._minX;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(Polygon.prototype, "minY", {
-                get: function () {
-                    return this._minY;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(Polygon.prototype, "maxX", {
-                get: function () {
-                    return this._maxX;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(Polygon.prototype, "maxY", {
-                get: function () {
-                    return this._maxY;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return Polygon;
-        }(Point2D));
-        KartwarsBot.Polygon = Polygon;
-        var Circle = (function (_super) {
-            __extends(Circle, _super);
-            // Constructor for circle type
-            function Circle(x, y, radius) {
-                var _this = _super.call(this, x, y) || this;
-                _this.radius = radius;
-                return _this;
-            }
-            return Circle;
-        }(Point2D));
-        KartwarsBot.Circle = Circle;
-        var Cluster = (function (_super) {
-            __extends(Cluster, _super);
-            // Constructor for circle type
-            function Cluster(circle, data) {
-                var _this = _super.call(this, circle.x, circle.y, circle.radius) || this;
-                _this.elements = [];
-                if (undefined != data) {
-                    var $this_1 = _this;
-                    data.forEach(function (element) {
-                        element.distanceToCenterOfCluster = KartwarsBot.MathUtils.getDistance($this_1, element);
-                    });
-                    _this.elements = data;
+                    return _this;
                 }
-                return _this;
-            }
-            Object.defineProperty(Cluster.prototype, "score", {
-                get: function () {
-                    return (Math.pow(this.distance, 2) / this.elements.length);
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(Cluster.prototype, "highRadius", {
-                get: function () {
-                    return (this.radius * Cluster.radiusMultiplier);
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return Cluster;
-        }(Circle));
-        // TODO : Review
-        Cluster.radiusMultiplier = 1.4;
-        KartwarsBot.Cluster = Cluster;
-        var ClusterWrapper = (function () {
-            function ClusterWrapper() {
-                this._foodClusters = [];
-            }
-            Object.defineProperty(ClusterWrapper.prototype, "foodClusters", {
-                get: function () {
-                    return this._foodClusters;
-                },
-                set: function (value) {
-                    /*
-                    value.sort(function (a, b) {
-                        return b.score - a.score;
-                    });
-                    */
-                    value.sort(function (a, b) {
-                        return a.distance - b.distance;
-                    });
-                    this._foodClusters = value;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            ClusterWrapper.prototype.getBestCluster = function () {
-                return this._foodClusters[0];
-            };
-            return ClusterWrapper;
-        }());
-        KartwarsBot.ClusterWrapper = ClusterWrapper;
-        var ShapesIntersectionsResult = (function () {
-            function ShapesIntersectionsResult(status) {
-                this.status = KartwarsBot.ShapesIntersectionStatus.NoIntersection;
-                this.points = [];
-                if (status != undefined) {
-                    this.status = status;
+                Object.defineProperty(Cluster.prototype, "score", {
+                    get: function () {
+                        return (Math.pow(this.distance, 2) / this.elements.length);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Cluster.prototype, "highRadius", {
+                    get: function () {
+                        return (this.radius * Cluster.radiusMultiplier);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return Cluster;
+            }(Circle));
+            // TODO : Review
+            Cluster.radiusMultiplier = 1.4;
+            Structures.Cluster = Cluster;
+            var ClusterWrapper = (function () {
+                function ClusterWrapper() {
+                    this._foodClusters = [];
                 }
-            }
-            Object.defineProperty(ShapesIntersectionsResult.prototype, "length", {
-                get: function () {
-                    return this.points.length;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            ShapesIntersectionsResult.prototype.addPoint = function (point) {
-                this.points.push(point);
-            };
-            ShapesIntersectionsResult.prototype.addPoints = function (points) {
-                this.points = this.points.concat(points);
-            };
-            return ShapesIntersectionsResult;
-        }());
-        KartwarsBot.ShapesIntersectionsResult = ShapesIntersectionsResult;
-        var ActivityResult = (function () {
-            function ActivityResult(isValid, goalCoordinates, customData, accelerate, speed) {
-                if (customData === void 0) { customData = null; }
-                if (accelerate === void 0) { accelerate = KartwarsBot.AccelerationFlag.NotDefined; }
-                this._isValid = isValid;
-                this._goalCoordinates = goalCoordinates;
-                this._acceleration = accelerate;
-                this._speed = speed;
-                this._customData = customData;
-            }
-            ActivityResult.CreateValidResponse = function (goalCoordinates, accelerate, speed) {
-                if (accelerate === void 0) { accelerate = KartwarsBot.AccelerationFlag.NotDefined; }
-                return new ActivityResult(true, goalCoordinates, undefined, accelerate, speed);
-            };
-            ActivityResult.CreateInvalidResponse = function () {
-                return new ActivityResult(false);
-            };
-            ActivityResult.CreateCustomResponse = function (customData) {
-                return new ActivityResult(true, undefined, customData);
-            };
-            ActivityResult.Transfer = function (activityResult, goalCoordinates, customData, accelerate, speed) {
-                var newActivityResult = new ActivityResult(activityResult._isValid, activityResult._goalCoordinates, activityResult._customData, activityResult._acceleration, activityResult._speed);
-                //newActivityResult._isValid = isValid;
-                if (goalCoordinates != null) {
-                    newActivityResult._goalCoordinates = goalCoordinates;
+                Object.defineProperty(ClusterWrapper.prototype, "foodClusters", {
+                    get: function () {
+                        return this._foodClusters;
+                    },
+                    set: function (value) {
+                        /*
+                        value.sort(function (a, b) {
+                            return b.score - a.score;
+                        });
+                        */
+                        value.sort(function (a, b) {
+                            return a.distance - b.distance;
+                        });
+                        this._foodClusters = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                ClusterWrapper.prototype.getBestCluster = function () {
+                    return this._foodClusters[0];
+                };
+                return ClusterWrapper;
+            }());
+            Structures.ClusterWrapper = ClusterWrapper;
+            var ShapesIntersectionsResult = (function () {
+                function ShapesIntersectionsResult(status) {
+                    this.status = KartwarsBot.ShapesIntersectionStatus.NoIntersection;
+                    this.points = [];
+                    if (status != undefined) {
+                        this.status = status;
+                    }
                 }
-                if (accelerate != null) {
-                    newActivityResult._acceleration = accelerate;
+                Object.defineProperty(ShapesIntersectionsResult.prototype, "length", {
+                    get: function () {
+                        return this.points.length;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                ShapesIntersectionsResult.prototype.addPoint = function (point) {
+                    this.points.push(point);
+                };
+                ShapesIntersectionsResult.prototype.addPoints = function (points) {
+                    this.points = this.points.concat(points);
+                };
+                return ShapesIntersectionsResult;
+            }());
+            Structures.ShapesIntersectionsResult = ShapesIntersectionsResult;
+            var ActivityResult = (function () {
+                function ActivityResult(isValid, goalCoordinates, customData, accelerate, speed) {
+                    if (customData === void 0) { customData = null; }
+                    if (accelerate === void 0) { accelerate = KartwarsBot.AccelerationFlag.NotDefined; }
+                    this._isValid = isValid;
+                    this._goalCoordinates = goalCoordinates;
+                    this._acceleration = accelerate;
+                    this._speed = speed;
+                    this._customData = customData;
                 }
-                if (speed != null) {
-                    newActivityResult._speed = speed;
-                }
-                if (customData != null) {
-                    newActivityResult._customData = customData;
-                }
-                return newActivityResult;
-            };
-            Object.defineProperty(ActivityResult.prototype, "isValid", {
-                get: function () {
-                    return this._isValid;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(ActivityResult.prototype, "goalCoordinates", {
-                get: function () {
-                    return this._goalCoordinates;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(ActivityResult.prototype, "acceleration", {
-                get: function () {
-                    return this._acceleration;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(ActivityResult.prototype, "speed", {
-                // TODO : Maybe calculate speed here inside, based on player's position and goalCoordinates.
-                get: function () {
-                    return this._speed;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(ActivityResult.prototype, "customData", {
-                get: function () {
-                    return this._customData;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return ActivityResult;
-        }());
-        KartwarsBot.ActivityResult = ActivityResult;
-        var GoalData = (function () {
-            function GoalData() {
-                this._isValid = false;
-                this._isInTunnel = false;
-                this._state = KartwarsBot.GoalState.Invalid;
-                this.coordinates = new Point2D();
-                // !`state` property
-                //
-            }
-            Object.defineProperty(GoalData.prototype, "isInTunnel", {
-                //
-                // `isInTunnel` property
-                get: function () {
-                    return this._isInTunnel;
-                },
-                set: function (value) {
+                ActivityResult.CreateValidResponse = function (goalCoordinates, accelerate, speed) {
+                    if (accelerate === void 0) { accelerate = KartwarsBot.AccelerationFlag.NotDefined; }
+                    return new ActivityResult(true, goalCoordinates, undefined, accelerate, speed);
+                };
+                ActivityResult.CreateInvalidResponse = function () {
+                    return new ActivityResult(false);
+                };
+                ActivityResult.CreateCustomResponse = function (customData) {
+                    return new ActivityResult(true, undefined, customData);
+                };
+                ActivityResult.Transfer = function (activityResult, goalCoordinates, customData, accelerate, speed) {
+                    var newActivityResult = new ActivityResult(activityResult._isValid, activityResult._goalCoordinates, activityResult._customData, activityResult._acceleration, activityResult._speed);
+                    //newActivityResult._isValid = isValid;
+                    if (goalCoordinates != null) {
+                        newActivityResult._goalCoordinates = goalCoordinates;
+                    }
+                    if (accelerate != null) {
+                        newActivityResult._acceleration = accelerate;
+                    }
+                    if (speed != null) {
+                        newActivityResult._speed = speed;
+                    }
+                    if (customData != null) {
+                        newActivityResult._customData = customData;
+                    }
+                    return newActivityResult;
+                };
+                Object.defineProperty(ActivityResult.prototype, "isValid", {
+                    get: function () {
+                        return this._isValid;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(ActivityResult.prototype, "goalCoordinates", {
+                    get: function () {
+                        return this._goalCoordinates;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(ActivityResult.prototype, "acceleration", {
+                    get: function () {
+                        return this._acceleration;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(ActivityResult.prototype, "speed", {
+                    // TODO : Maybe calculate speed here inside, based on player's position and goalCoordinates.
+                    get: function () {
+                        return this._speed;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(ActivityResult.prototype, "customData", {
+                    get: function () {
+                        return this._customData;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return ActivityResult;
+            }());
+            Structures.ActivityResult = ActivityResult;
+            var GoalData = (function () {
+                function GoalData() {
                     this._isValid = false;
-                    this._isInTunnel = value;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(GoalData.prototype, "state", {
-                // !`isInTunnel` property
-                //
-                //
-                // `state` property
-                get: function () {
-                    if (this._isValid) {
-                        return this._state;
-                    }
-                    return KartwarsBot.GoalState.Invalid;
-                },
-                set: function (value) {
-                    this._state = value;
-                    this._isValid = true;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return GoalData;
-        }());
-        KartwarsBot.GoalData = GoalData;
+                    this._isInTunnel = false;
+                    this._state = KartwarsBot.GoalState.Invalid;
+                    this.coordinates = new Point2D();
+                    // !`state` property
+                    //
+                }
+                Object.defineProperty(GoalData.prototype, "isInTunnel", {
+                    //
+                    // `isInTunnel` property
+                    get: function () {
+                        return this._isInTunnel;
+                    },
+                    set: function (value) {
+                        this._isValid = false;
+                        this._isInTunnel = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(GoalData.prototype, "state", {
+                    // !`isInTunnel` property
+                    //
+                    //
+                    // `state` property
+                    get: function () {
+                        if (this._isValid) {
+                            return this._state;
+                        }
+                        return KartwarsBot.GoalState.Invalid;
+                    },
+                    set: function (value) {
+                        this._state = value;
+                        this._isValid = true;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return GoalData;
+            }());
+            Structures.GoalData = GoalData;
+            var Score = (function () {
+                function Score(playTime, top3Time, hexagons, kills, score, maxStreak) {
+                    this.playTime = playTime;
+                    this.top3Time = top3Time;
+                    this.hexagons = hexagons;
+                    this.kills = kills;
+                    this.score = score;
+                    this.maxStreak = maxStreak;
+                }
+                return Score;
+            }());
+            Structures.Score = Score;
+        })(Structures = KartwarsBot.Structures || (KartwarsBot.Structures = {}));
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -6319,7 +6334,6 @@ var DracoolaArt;
             };
             return GameWrapperInputMouse;
         }());
-        KartwarsBot.GameWrapperInputMouse = GameWrapperInputMouse;
         var GameWrapperInputCanvas = (function () {
             // Constructor
             function GameWrapperInputCanvas(gameWrapper) {
@@ -6386,7 +6400,6 @@ var DracoolaArt;
             };
             return GameWrapperInputCanvas;
         }());
-        KartwarsBot.GameWrapperInputCanvas = GameWrapperInputCanvas;
         var GameWrapperUtil = (function () {
             // Constructor
             function GameWrapperUtil(gameWrapper) {
@@ -6425,7 +6438,6 @@ var DracoolaArt;
         __decorate([
             KartwarsBot.MethodDecoration.bound
         ], GameWrapperUtil.prototype, "delayedConnect", null);
-        KartwarsBot.GameWrapperUtil = GameWrapperUtil;
         var GameWrapperPlayer = (function () {
             // Constructor
             function GameWrapperPlayer(gameWrapper) {
@@ -6461,7 +6473,6 @@ var DracoolaArt;
             };
             return GameWrapperPlayer;
         }());
-        KartwarsBot.GameWrapperPlayer = GameWrapperPlayer;
         var GameWrapperItems = (function () {
             // Constructor
             function GameWrapperItems(gameWrapper) {
@@ -6519,7 +6530,7 @@ var DracoolaArt;
                     element.y = position.y;
                     var isValid = $this.gameWrapper.util.hasValidSprite(element);
                     if (isValid) {
-                        element.distance = KartwarsBot.MathUtils.getDistance(position, playerPosition);
+                        element.distance = KartwarsBot.Utils.MathUtils.getDistance(position, playerPosition);
                     }
                     return isValid;
                 });
@@ -6532,8 +6543,8 @@ var DracoolaArt;
                         var element = object;
                         var position = element.img.position;
                         if (element.velocity == undefined) {
-                            element.lastPosition = new KartwarsBot.Point2D(position.x, position.y);
-                            element.velocity = new KartwarsBot.Point2D(0, 0);
+                            element.lastPosition = new KartwarsBot.Structures.Point2D(position.x, position.y);
+                            element.velocity = new KartwarsBot.Structures.Point2D(0, 0);
                         }
                         else {
                             element.velocity.x = (position.x - element.lastPosition.x);
@@ -6541,6 +6552,15 @@ var DracoolaArt;
                             element.lastPosition.x = position.x;
                             element.lastPosition.y = position.y;
                             element.magnitude = Math.sqrt(Math.pow(element.velocity.x, 2) + Math.pow(element.velocity.y, 2));
+                            //
+                            // Used for collecting weapon's Magnitude Data
+                            /*
+                            //img.texture.crop
+                            if (object instanceof window.MisilTele) {
+                                window.log((+new Date()), `ID = ${element.id}; Magnitude = ${element.magnitude}`);
+                            }
+                            //*/
+                            //
                         }
                         return newValue;
                     });
@@ -6590,6 +6610,7 @@ var DracoolaArt;
                                 delete (ignoreList[localSpriteIdx]);
                             }
                         }
+                        //}
                     }
                     if (doContinue || !(element instanceof type) || (!hasValidSprite)) {
                         delete (clonedElements[localSpriteIdx]);
@@ -6598,7 +6619,7 @@ var DracoolaArt;
                     var x = element.img.position.x, y = element.img.position.y;
                     element.x = x;
                     element.y = y;
-                    element.distance = KartwarsBot.MathUtils.getDistance(element, playerPosition);
+                    element.distance = KartwarsBot.Utils.MathUtils.getDistance(element, playerPosition);
                     this._ensureVelocityIsDefined(element);
                     if (skipId && (element.id == skipId)) {
                         delete (clonedElements[localSpriteIdx]);
@@ -6607,14 +6628,13 @@ var DracoolaArt;
                     results[count++] = element;
                 }
                 if (count > 0) {
-                    results.sort(KartwarsBot.ArrayUtils.sortDistance);
+                    results.sort(KartwarsBot.Utils.ArrayUtils.sortDistance);
                 }
                 return results;
             };
             return GameWrapperItems;
         }());
         GameWrapperItems.isItemCacherActive = false;
-        KartwarsBot.GameWrapperItems = GameWrapperItems;
         var GameWrapperWorld = (function () {
             // Constructor
             function GameWrapperWorld(gameWrapper) {
@@ -6623,7 +6643,7 @@ var DracoolaArt;
             GameWrapperWorld.prototype.getWorkingBounds = function () {
                 var worldBounds = window.game.world.bounds;
                 var offset = GameWrapperWorld.offset;
-                return new KartwarsBot.Rect(offset, offset, worldBounds.width - offset, worldBounds.height - offset);
+                return new KartwarsBot.Structures.Rect(offset, offset, worldBounds.width - offset, worldBounds.height - offset);
             };
             // gameWrapper.world.getSectorSquaredWidth()
             GameWrapperWorld.prototype.getSectorSquaredWidth = function () {
@@ -6632,7 +6652,6 @@ var DracoolaArt;
             return GameWrapperWorld;
         }());
         GameWrapperWorld.offset = 1500 + 250;
-        KartwarsBot.GameWrapperWorld = GameWrapperWorld;
         /**
          * Game variables Wrapper.
          */
@@ -6669,7 +6688,6 @@ var DracoolaArt;
     (function (KartwarsBot) {
         var varExtractor1 = new RegExp("(.*)");
         var varExtractor2 = new RegExp("([^.]*)[;]?}");
-        // EXPERIMENTAL
         // READ @ http://stackoverflow.com/questions/29191451/get-name-of-variable-in-typescript/29205712
         // TODO : Review
         function nameof(getVar) {
@@ -6696,52 +6714,55 @@ var DracoolaArt;
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
-/// <reference path="_references.ts" />
+/// <reference path="../_references.ts" />
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        /**
-         * Array utils.
-         */
-        var ArrayUtils = (function () {
-            function ArrayUtils() {
-            }
+        var Utils;
+        (function (Utils) {
             /**
-             * Sorting by 'score' property descending.
-             * @param a
-             * @param b
+             * Array utils.
              */
-            ArrayUtils.sortScore = function (a, b) {
-                return b.score - a.score;
-            };
-            /**
-             * Sorting by 'sz' property descending.
-             * @param a
-             * @param b
-             */
-            ArrayUtils.sortSz = function (a, b) {
-                return b.sz - a.sz;
-            };
-            /**
-             * Sorting by 'distance' property ascending.
-             * @param a
-             * @param b
-             */
-            ArrayUtils.sortDistance = function (a, b) {
-                return a.distance - b.distance;
-            };
-            /**
-             * Sorting by 'distance2' property ascending.
-             * @param a
-             * @param b
-             */
-            ArrayUtils.sortDistance2 = function (a, b) {
-                return a.distance2 - b.distance2;
-            };
-            return ArrayUtils;
-        }());
-        KartwarsBot.ArrayUtils = ArrayUtils;
+            var ArrayUtils = (function () {
+                function ArrayUtils() {
+                }
+                /**
+                 * Sorting by 'score' property descending.
+                 * @param a
+                 * @param b
+                 */
+                ArrayUtils.sortScore = function (a, b) {
+                    return b.score - a.score;
+                };
+                /**
+                 * Sorting by 'sz' property descending.
+                 * @param a
+                 * @param b
+                 */
+                ArrayUtils.sortSz = function (a, b) {
+                    return b.sz - a.sz;
+                };
+                /**
+                 * Sorting by 'distance' property ascending.
+                 * @param a
+                 * @param b
+                 */
+                ArrayUtils.sortDistance = function (a, b) {
+                    return a.distance - b.distance;
+                };
+                /**
+                 * Sorting by 'distance2' property ascending.
+                 * @param a
+                 * @param b
+                 */
+                ArrayUtils.sortDistance2 = function (a, b) {
+                    return a.distance2 - b.distance2;
+                };
+                return ArrayUtils;
+            }());
+            Utils.ArrayUtils = ArrayUtils;
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -6749,1302 +6770,1325 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        /**
-         * Math utils.
-         */
-        var MathUtils = (function () {
-            function MathUtils() {
-            }
+        var Utils;
+        (function (Utils) {
             /**
-             * Get the smallest angle between two angles (0-pi)
-             * @param a1
-             * @param a2
+             * Math utils.
              */
-            MathUtils.angleBetween = function (a1, a2) {
-                var r1 = 0.0;
-                var r2 = 0.0;
-                r1 = (a1 - a2) % Math.PI;
-                r2 = (a2 - a1) % Math.PI;
-                return r1 < r2 ? -r1 : r2;
-            };
-            /**
-             * Get clusters based on the given resources.
-             * @param elements
-             * @param sectorSize
-             * @param minimumElementsPerCluster
-             */
-            // READ : http://stackoverflow.com/questions/356035/algorithm-for-detecting-clusters-of-dots
-            MathUtils.get2DElementsDensity = function (elements, sectorSize, minimumElementsPerCluster) {
-                var dataset = elements.map(function (el) {
-                    return [el.x, el.y];
-                });
-                var mapScanner = new DBSCAN();
-                var clusters = mapScanner.run(dataset, sectorSize, minimumElementsPerCluster);
-                return clusters;
-            };
-            MathUtils.arcPoint = function (x, y, radius, angle) {
-                return new KartwarsBot.Point2D(x + Math.cos(angle) * radius, y + Math.sin(angle) * radius);
-            };
-            /**
-             * Fast atan2
-             * @param y
-             * @param x
-             */
-            MathUtils.fastAtan2 = function (y, x) {
-                var QPI = Math.PI / 4;
-                var TQPI = 3 * Math.PI / 4;
-                var r = 0.0;
-                var angle = 0.0;
-                var abs_y = Math.abs(y) + 1e-10;
-                if (x < 0) {
-                    r = (x + abs_y) / (abs_y - x);
-                    angle = TQPI;
+            var MathUtils = (function () {
+                function MathUtils() {
                 }
-                else {
-                    r = (x - abs_y) / (x + abs_y);
-                    angle = QPI;
-                }
-                angle += (0.1963 * r * r - 0.9817) * r;
-                if (y < 0) {
-                    return -angle;
-                }
-                return angle;
-            };
-            /**
-             * Given the start and end of a line, is point left.
-             * @param start
-             * @param end
-             * @param point
-             */
-            MathUtils.isLeft = function (start, end, point) {
-                return ((end.x - start.x) * (point.y - start.y) -
-                    (end.y - start.y) * (point.x - start.x)) > 0;
-            };
-            /**
-             * Given the start and end of a line, is point right.
-             * @param start
-             * @param end
-             * @param point
-             */
-            MathUtils.isRight = function (start, end, point) {
-                return !MathUtils.isLeft(start, end, point);
-            };
-            /**
-             * Get distance
-             * @param point1
-             * @param point2
-             */
-            MathUtils.getDistance = function (point1, point2) {
-                var x1 = point1.x, y1 = point1.y, x2 = point2.x, y2 = point2.y;
-                var distance2 = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-                return distance2;
-            };
-            /**
-            * Get distance squared
-            * @param point1
-            * @param point2
-            */
-            MathUtils.getDistance2 = function (point1, point2) {
-                var x1 = point1.x, y1 = point1.y, x2 = point2.x, y2 = point2.y;
-                var distance2 = Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
-                return distance2;
-            };
-            /**
-             * Return unit vector in the direction of the argument
-             * @param v
-             */
-            /*
-            public static unitVector(v) {
-                let l = Math.sqrt(v.x * v.x + v.y * v.y);
-                if (l > 0) {
-                    return {
-                        x: v.x / l,
-                        y: v.y / l
-                    };
-                } else {
-                    return {
-                        x: 0,
-                        y: 0
-                    };
-                }
-            }
-            */
-            /*
-            public static cross(o, a, b) {
-                return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
-            }
-        
-            public static convexHullSort(a, b) {
-                return a.x == b.x ? a.y - b.y : a.x - b.x;
-            }
-            */
-            /*
-            public static convexHull(points) {
-                points.sort(MathUtils.convexHullSort);
-        
-                let lower = [];
-                for (let i = 0, l = points.length; i < l; i++) {
-                    while (lower.length >= 2 && MathUtils.cross(
-                        lower[lower.length - 2], lower[lower.length - 1], points[i]) <= 0) {
-                        lower.pop();
-                    }
-                    lower.push(points[i]);
-                }
-        
-                let upper = [];
-                for (let i = points.length - 1; i >= 0; i--) {
-                    while (upper.length >= 2 && MathUtils.cross(
-                        upper[upper.length - 2], upper[upper.length - 1], points[i]) <= 0) {
-                        upper.pop();
-                    }
-                    upper.push(points[i]);
-                }
-        
-                upper.pop();
-                lower.pop();
-                return lower.concat(upper);
-            }
-            */
-            MathUtils.fromRadiansToDegrees = function (radians) {
-                //convert from radians to degrees
-                //let degrees = radians * (180 / Math.PI);
-                var degrees = (360 + (radians * (180 / Math.PI))) % 360;
-                return degrees;
-            };
-            MathUtils.fromDegreesToRadians = function (degrees) {
-                var radians = degrees * (Math.PI / 180);
-                if (radians > Math.PI) {
-                    radians = Math.PI - radians;
-                }
-                return radians;
-            };
-            MathUtils.medianAngle = function (a, b) {
-                a = a % 360;
-                b = b % 360;
-                var sum = a + b;
-                if (sum > 360 && sum < 540) {
-                    sum = sum % 180;
-                }
-                return sum / 2;
-            };
-            /**
-             * Predicts the Goal Coordinates for a given enemy/sprite at which it might intersect with the player.
-             * @param source
-             * @param target
-             */
-            MathUtils.predictIntersection = function (source, target) {
-                var sourceVector = new Victor(source.x, source.y), targetVector = new Victor(target.x, target.y), targetSpeed = target.magnitude;
-                var targetVelocity = new Victor(target.velocity.x, target.velocity.y);
-                var offset = targetVector.clone().subtract(sourceVector);
-                var distanceDelta = offset.magnitude() / targetSpeed;
-                var targetAverageVelocity = targetVelocity.clone().multiplyScalar(distanceDelta);
-                var futureAt = targetVelocity.clone().add(targetAverageVelocity);
-                var result = targetVector.add(futureAt);
-                return new KartwarsBot.Point2D(result.x, result.y);
-            };
-            // README : http://stackoverflow.com/questions/2248876/2d-game-fire-at-a-moving-target-by-predicting-intersection-of-projectile-and-u
-            /**
-             * Return the firing solution for a projectile starting at 'sourcePoint' with
-             * velocity 'v', to hit a target, 'dst'.
-             *
-             * @param Object source position of shooter
-             * @param Object target position & velocity of target
-             * @param Number projectileVelocity speed of projectile
-             * @return Object Coordinate at which to fire (and where intercept occurs)
-             *
-             * E.g.
-             * >>> intercept({x:2, y:4}, {x:5, y:7, vx: 2, vy:1}, 5)
-             * = {x: 8, y: 8.5}
-             */
-            MathUtils.predictIntersectionEx = function (source, target, projectileVelocity) {
-                var tx = target.x - source.x, ty = target.y - source.y, tvx = target.velocity.x, tvy = target.velocity.y;
-                // Get quadratic equation components
-                var a = tvx * tvx + tvy * tvy - projectileVelocity * projectileVelocity;
-                var b = 2 * (tvx * tx + tvy * ty);
-                var c = tx * tx + ty * ty;
-                // Solve quadratic
-                var ts = MathUtils.quad(a, b, c);
-                // Find smallest positive solution
-                var sol = null;
-                if (ts) {
-                    var t0 = ts[0], t1 = ts[1];
-                    var t = Math.min(t0, t1);
-                    if (t < 0)
-                        t = Math.max(t0, t1);
-                    if (t > 0) {
-                        sol = new KartwarsBot.Point2D(target.x + target.velocity.x * t, target.y + target.velocity.y * t);
-                    }
-                }
-                return sol;
-            };
-            /**
-             * Return solutions for quadratic
-             */
-            MathUtils.quad = function (a, b, c) {
-                var sol = null;
-                if (Math.abs(a) < 1e-6) {
-                    if (Math.abs(b) < 1e-6) {
-                        sol = Math.abs(c) < 1e-6 ? [0, 0] : null;
+                /**
+                 * Get the smallest angle between two angles (0-pi)
+                 * @param a1
+                 * @param a2
+                 */
+                MathUtils.angleBetween = function (a1, a2) {
+                    var r1 = 0.0;
+                    var r2 = 0.0;
+                    r1 = (a1 - a2) % Math.PI;
+                    r2 = (a2 - a1) % Math.PI;
+                    return r1 < r2 ? -r1 : r2;
+                };
+                /**
+                 * Get clusters based on the given resources.
+                 * @param elements
+                 * @param sectorSize
+                 * @param minimumElementsPerCluster
+                 */
+                // READ : http://stackoverflow.com/questions/356035/algorithm-for-detecting-clusters-of-dots
+                MathUtils.get2DElementsDensity = function (elements, sectorSize, minimumElementsPerCluster) {
+                    var dataset = elements.map(function (el) {
+                        return [el.x, el.y];
+                    });
+                    var mapScanner = new DBSCAN();
+                    var clusters = mapScanner.run(dataset, sectorSize, minimumElementsPerCluster);
+                    return clusters;
+                };
+                MathUtils.arcPoint = function (x, y, radius, angle) {
+                    return new KartwarsBot.Structures.Point2D(x + Math.cos(angle) * radius, y + Math.sin(angle) * radius);
+                };
+                /**
+                 * Fast atan2
+                 * @param y
+                 * @param x
+                 */
+                MathUtils.fastAtan2 = function (y, x) {
+                    var QPI = Math.PI / 4;
+                    var TQPI = 3 * Math.PI / 4;
+                    var r = 0.0;
+                    var angle = 0.0;
+                    var abs_y = Math.abs(y) + 1e-10;
+                    if (x < 0) {
+                        r = (x + abs_y) / (abs_y - x);
+                        angle = TQPI;
                     }
                     else {
-                        sol = [-c / b, -c / b];
+                        r = (x - abs_y) / (x + abs_y);
+                        angle = QPI;
+                    }
+                    angle += (0.1963 * r * r - 0.9817) * r;
+                    if (y < 0) {
+                        return -angle;
+                    }
+                    return angle;
+                };
+                /**
+                 * Given the start and end of a line, is point left.
+                 * @param start
+                 * @param end
+                 * @param point
+                 */
+                MathUtils.isLeft = function (start, end, point) {
+                    return ((end.x - start.x) * (point.y - start.y) -
+                        (end.y - start.y) * (point.x - start.x)) > 0;
+                };
+                /**
+                 * Given the start and end of a line, is point right.
+                 * @param start
+                 * @param end
+                 * @param point
+                 */
+                MathUtils.isRight = function (start, end, point) {
+                    return !MathUtils.isLeft(start, end, point);
+                };
+                /**
+                 * Get distance
+                 * @param point1
+                 * @param point2
+                 */
+                MathUtils.getDistance = function (point1, point2) {
+                    var x1 = point1.x, y1 = point1.y, x2 = point2.x, y2 = point2.y;
+                    var distance2 = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+                    return distance2;
+                };
+                /**
+                * Get distance squared
+                * @param point1
+                * @param point2
+                */
+                MathUtils.getDistance2 = function (point1, point2) {
+                    var x1 = point1.x, y1 = point1.y, x2 = point2.x, y2 = point2.y;
+                    var distance2 = Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
+                    return distance2;
+                };
+                /**
+                 * Return unit vector in the direction of the argument
+                 * @param v
+                 */
+                /*
+                public static unitVector(v) {
+                    let l = Math.sqrt(v.x * v.x + v.y * v.y);
+                    if (l > 0) {
+                        return {
+                            x: v.x / l,
+                            y: v.y / l
+                        };
+                    } else {
+                        return {
+                            x: 0,
+                            y: 0
+                        };
                     }
                 }
-                else {
-                    var disc = b * b - 4 * a * c;
-                    if (disc >= 0) {
-                        disc = Math.sqrt(disc);
-                        a = 2 * a;
-                        sol = [(-b - disc) / a, (-b + disc) / a];
+                */
+                /*
+                public static cross(o, a, b) {
+                    return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+                }
+            
+                public static convexHullSort(a, b) {
+                    return a.x == b.x ? a.y - b.y : a.x - b.x;
+                }
+                */
+                /*
+                public static convexHull(points) {
+                    points.sort(MathUtils.convexHullSort);
+            
+                    let lower = [];
+                    for (let i = 0, l = points.length; i < l; i++) {
+                        while (lower.length >= 2 && MathUtils.cross(
+                            lower[lower.length - 2], lower[lower.length - 1], points[i]) <= 0) {
+                            lower.pop();
+                        }
+                        lower.push(points[i]);
                     }
+            
+                    let upper = [];
+                    for (let i = points.length - 1; i >= 0; i--) {
+                        while (upper.length >= 2 && MathUtils.cross(
+                            upper[upper.length - 2], upper[upper.length - 1], points[i]) <= 0) {
+                            upper.pop();
+                        }
+                        upper.push(points[i]);
+                    }
+            
+                    upper.pop();
+                    lower.pop();
+                    return lower.concat(upper);
                 }
-                return sol;
-            };
-            return MathUtils;
-        }());
-        KartwarsBot.MathUtils = MathUtils;
-    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
-})(DracoolaArt || (DracoolaArt = {}));
-
-var DracoolaArt;
-(function (DracoolaArt) {
-    var KartwarsBot;
-    (function (KartwarsBot) {
-        /**
-         * Some methods are based on Kevin Lindsey's work
-         *
-         * copyright 2002, Kevin Lindsey
-         */
-        var GeometryIntersectionsUtils = (function () {
-            function GeometryIntersectionsUtils() {
-            }
-            /**
-             * Check if circle and line intersects.
-             * @param c
-             * @param r
-             * @param a1
-             * @param a2
-             */
-            GeometryIntersectionsUtils.intersectCircleLine = function (c, r, a1, a2) {
-                var result;
-                var a = (a2.x - a1.x) * (a2.x - a1.x) +
-                    (a2.y - a1.y) * (a2.y - a1.y);
-                var b = 2 * ((a2.x - a1.x) * (a1.x - c.x) +
-                    (a2.y - a1.y) * (a1.y - c.y));
-                var cc = c.x * c.x + c.y * c.y + a1.x * a1.x + a1.y * a1.y -
-                    2 * (c.x * a1.x + c.y * a1.y) - r * r;
-                var deter = b * b - 4 * a * cc;
-                if (deter < 0) {
-                    result = new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
-                }
-                else if (deter == 0) {
-                    result = new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.Tangent);
-                }
-                else {
-                    var e = Math.sqrt(deter);
-                    var u1 = (-b + e) / (2 * a);
-                    var u2 = (-b - e) / (2 * a);
-                    if ((u1 < 0 || u1 > 1) && (u2 < 0 || u2 > 1)) {
-                        if ((u1 < 0 && u2 < 0) || (u1 > 1 && u2 > 1)) {
-                            result = new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
+                */
+                MathUtils.fromRadiansToDegrees = function (radians) {
+                    //convert from radians to degrees
+                    //let degrees = radians * (180 / Math.PI);
+                    var degrees = (360 + (radians * (180 / Math.PI))) % 360;
+                    return degrees;
+                };
+                MathUtils.fromDegreesToRadians = function (degrees) {
+                    var radians = degrees * (Math.PI / 180);
+                    if (radians > Math.PI) {
+                        radians = Math.PI - radians;
+                    }
+                    return radians;
+                };
+                MathUtils.medianAngle = function (a, b) {
+                    a = a % 360;
+                    b = b % 360;
+                    var sum = a + b;
+                    if (sum > 360 && sum < 540) {
+                        sum = sum % 180;
+                    }
+                    return sum / 2;
+                };
+                /**
+                 * Predicts the Goal Coordinates for a given enemy/sprite at which it might intersect with the player.
+                 * @param source
+                 * @param target
+                 */
+                MathUtils.predictIntersection = function (source, target) {
+                    var sourceVector = new Victor(source.x, source.y), targetVector = new Victor(target.x, target.y), targetSpeed = target.magnitude;
+                    var targetVelocity = new Victor(target.velocity.x, target.velocity.y);
+                    var offset = targetVector.clone().subtract(sourceVector);
+                    var distanceDelta = offset.magnitude() / targetSpeed;
+                    var targetAverageVelocity = targetVelocity.clone().multiplyScalar(distanceDelta);
+                    var futureAt = targetVelocity.clone().add(targetAverageVelocity);
+                    var result = targetVector.add(futureAt);
+                    return new KartwarsBot.Structures.Point2D(result.x, result.y);
+                };
+                // README : http://stackoverflow.com/questions/2248876/2d-game-fire-at-a-moving-target-by-predicting-intersection-of-projectile-and-u
+                /**
+                 * Return the firing solution for a projectile starting at 'sourcePoint' with
+                 * velocity 'v', to hit a target, 'dst'.
+                 *
+                 * @param Object source position of shooter
+                 * @param Object target position & velocity of target
+                 * @param Number projectileVelocity speed of projectile
+                 * @return Object Coordinate at which to fire (and where intercept occurs)
+                 *
+                 * E.g.
+                 * >>> intercept({x:2, y:4}, {x:5, y:7, vx: 2, vy:1}, 5)
+                 * = {x: 8, y: 8.5}
+                 */
+                MathUtils.predictIntersectionEx = function (source, target, projectileVelocity) {
+                    var tx = target.x - source.x, ty = target.y - source.y, tvx = target.velocity.x, tvy = target.velocity.y;
+                    // Get quadratic equation components
+                    var a = tvx * tvx + tvy * tvy - projectileVelocity * projectileVelocity;
+                    var b = 2 * (tvx * tx + tvy * ty);
+                    var c = tx * tx + ty * ty;
+                    // Solve quadratic
+                    var ts = MathUtils.quad(a, b, c);
+                    // Find smallest positive solution
+                    var sol = null;
+                    if (ts) {
+                        var t0 = ts[0], t1 = ts[1];
+                        var t = Math.min(t0, t1);
+                        if (t < 0)
+                            t = Math.max(t0, t1);
+                        if (t > 0) {
+                            sol = new KartwarsBot.Structures.Point2D(target.x + target.velocity.x * t, target.y + target.velocity.y * t);
+                        }
+                    }
+                    return sol;
+                };
+                /**
+                 * Return solutions for quadratic
+                 */
+                MathUtils.quad = function (a, b, c) {
+                    var sol = null;
+                    if (Math.abs(a) < 1e-6) {
+                        if (Math.abs(b) < 1e-6) {
+                            sol = Math.abs(c) < 1e-6 ? [0, 0] : null;
                         }
                         else {
-                            result = new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.ShapeInside);
+                            sol = [-c / b, -c / b];
                         }
                     }
                     else {
-                        result = new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.HasIntersections);
-                        if (0 <= u1 && u1 <= 1)
-                            result.points.push(KartwarsBot.BotPoint2D.fromPoint2D(a1.lerp(a2, u1)));
-                        if (0 <= u2 && u2 <= 1)
-                            result.points.push(KartwarsBot.BotPoint2D.fromPoint2D(a1.lerp(a2, u2)));
-                    }
-                }
-                return result;
-            };
-            /**
-             * Check if circle and polygon intersects.
-             * @param c
-             * @param r
-             * @param polygon
-             */
-            GeometryIntersectionsUtils.intersectCirclePolygon = function (c, r, polygon) {
-                var result = new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
-                var points = polygon.geometryAsPoint2DArray;
-                var length = points.length;
-                var inter;
-                for (var i = 0; i < length; i++) {
-                    var a1 = points[i];
-                    var a2 = points[(i + 1) % length];
-                    inter = GeometryIntersectionsUtils.intersectCircleLine(c, r, a1, a2);
-                    result.addPoints(inter.points);
-                }
-                if (result.points.length > 0) {
-                    result.status = KartwarsBot.ShapesIntersectionStatus.HasIntersections;
-                }
-                else {
-                    var status_1 = inter.status;
-                    if (status_1 == KartwarsBot.ShapesIntersectionStatus.NoIntersection) {
-                        if (GeometryIntersectionsUtils.pointInPoly(c, polygon)) {
-                            status_1 = KartwarsBot.ShapesIntersectionStatus.ShapeInside;
+                        var disc = b * b - 4 * a * c;
+                        if (disc >= 0) {
+                            disc = Math.sqrt(disc);
+                            a = 2 * a;
+                            sol = [(-b - disc) / a, (-b + disc) / a];
                         }
                     }
-                    result.status = status_1;
-                }
-                return result;
-            };
-            /**
-             * Check if point is in Rectangle.
-             * @param point
-             * @param rect
-             */
-            GeometryIntersectionsUtils.pointInRect = function (point, rect) {
-                if (rect.x <= point.x && rect.y <= point.y &&
-                    rect.x + rect.width >= point.x && rect.y + rect.height >= point.y) {
-                    return true;
-                }
-                return false;
-            };
-            /**
-             * Check if point is in polygon.
-             * @param point
-             * @param poly
-             */
-            GeometryIntersectionsUtils.pointInPoly = function (point, polygon) {
-                if (point.x < polygon.minX || point.x > polygon.maxX ||
-                    point.y < polygon.minY || point.y > polygon.maxY) {
-                    return false;
-                }
-                var isInside = false;
-                var geometry = polygon.geometry;
-                var ll = geometry.length;
-                for (var i = 0, j = ll - 1; i < ll; j = i++) {
-                    if (((geometry[i].y > point.y) != (geometry[j].y > point.y)) &&
-                        (point.x < (geometry[j].x - geometry[i].x) * (point.y - geometry[i].y) / (geometry[j].y - geometry[i].y) + geometry[i].x)) {
-                        isInside = !isInside;
-                    }
-                }
-                return isInside;
-            };
-            /**
-             * Checks if a certain point is inside an arc.
-             * @param point
-             * @param center
-             * @param radius
-             * @param angle1
-             * @param angle2
-             */
-            GeometryIntersectionsUtils.isInsideArcSector = function (point, center, radius, angle1, angle2) {
-                function areClockwise(center, radius, angle, point2) {
-                    var point1 = new KartwarsBot.Point2D((center.x + radius) * Math.cos(angle), (center.y + radius) * Math.sin(angle));
-                    return -point1.x * point2.y + point1.y * point2.x > 0;
-                }
-                var relPoint = new KartwarsBot.Point2D(point.x - center.x, point.y - center.y);
-                return !areClockwise(center, radius, angle1, relPoint) &&
-                    areClockwise(center, radius, angle2, relPoint) &&
-                    (relPoint.x * relPoint.x + relPoint.y * relPoint.y <= radius * radius);
-            };
-            /**
-             * Check if circle and rect intersects.
-             * @param circle
-             * @param rect
-             */
-            GeometryIntersectionsUtils.circleRectIntersect = function (circle, rect) {
-                var deltaX = Math.abs(circle.x - rect.x - rect.width / 2);
-                var deltaY = Math.abs(circle.y - rect.y - rect.height / 2);
-                if (deltaX > (rect.width / 2 + circle.radius)) {
-                    return false;
-                }
-                if (deltaY > (rect.height / 2 + circle.radius)) {
-                    return false;
-                }
-                if (deltaX <= (rect.width / 2)) {
-                    return true;
-                }
-                if (deltaY <= (rect.height / 2)) {
-                    return true;
-                }
-                var dx = deltaX - rect.width / 2;
-                var dy = deltaY - rect.height / 2;
-                var returnStatus = (dx * dx + dy * dy <= (circle.radius * circle.radius));
-                return returnStatus;
-            };
-            /*
-            // Ported to JavaScript from
-            // http://www.migapro.com/circle-and-rotated-rectangle-collision-detection/
-            //
-            // An example:
-            // let circle: { x: 20, y: 10, radius: 20 };
-            // let rect: { x: 30, y: 30, width: 100, height: 100, rotation: Math.PI / 2 };
-            // collideCircleWithRotatedRectangle( circle, rect );
-            // // returns true.
-            //
-            //
-            // Please note:
-            // This code assumes that rect.x and rect.y are the CENTER coordinates
-            // of the rectangle. You may want to to change this.
-            // Also rotation values need to be in RADIANS.
-            public static circleRectIntersect(circle: Circle, rect: Rect) {
-                let rectCenterX = rect.x;
-                let rectCenterY = rect.y;
-    
-                let rectX = rectCenterX - rect.width / 2;
-                let rectY = rectCenterY - rect.height / 2;
-    
-                let rectReferenceX = rectX;
-                let rectReferenceY = rectY;
-    
-                // Rotate circle's center point back
-                let unrotatedCircleX = Math.cos(rect.rotation) * (circle.x - rectCenterX) - Math.sin(rect.rotation) * (circle.y - rectCenterY) + rectCenterX;
-                let unrotatedCircleY = Math.sin(rect.rotation) * (circle.x - rectCenterX) + Math.cos(rect.rotation) * (circle.y - rectCenterY) + rectCenterY;
-    
-                // Closest point in the rectangle to the center of circle rotated backwards(unrotated)
-                let closestX, closestY;
-    
-                // Find the unrotated closest x point from center of unrotated circle
-                if (unrotatedCircleX < rectReferenceX) {
-                    closestX = rectReferenceX;
-                } else if (unrotatedCircleX > rectReferenceX + rect.width) {
-                    closestX = rectReferenceX + rect.width;
-                } else {
-                    closestX = unrotatedCircleX;
-                }
-    
-                // Find the unrotated closest y point from center of unrotated circle
-                if (unrotatedCircleY < rectReferenceY) {
-                    closestY = rectReferenceY;
-                } else if (unrotatedCircleY > rectReferenceY + rect.height) {
-                    closestY = rectReferenceY + rect.height;
-                } else {
-                    closestY = unrotatedCircleY;
-                }
-    
-                // Determine collision
-                let collision = false;
-                let distance = MathUtils.getDistance(new Point2D(unrotatedCircleX, unrotatedCircleY), new Point2D(closestX, closestY));
-    
-                if (distance < circle.radius) {
-                    collision = true;
-                }
-                else {
-                    collision = false;
-                }
-    
-                return collision;
-            }
-            */
-            /**
-             * Check if two circles intersect.
-             * @param circle1
-             * @param circle2
-             */
-            GeometryIntersectionsUtils.circleCircleIntersect = function (circle1, circle2) {
-                var a, deltaX, deltaY, d, h, rx, ry;
-                var x2, y2;
-                var point;
-                // deltaX and deltaY are the vertical and horizontal distances between the circle centers.
-                deltaX = circle2.x - circle1.x;
-                deltaY = circle2.y - circle1.y;
-                // Determine the straight-line distance between the centers.
-                d = Math.sqrt((deltaY * deltaY) + (deltaX * deltaX));
-                // Check for solvability.
-                if (d > (circle1.radius + circle2.radius)) {
-                    // No solution. circles do not intersect.
-                    return new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
-                }
-                if (d < Math.abs(circle1.radius - circle2.radius)) {
-                    // No solution. one circle is contained in the other
-                    return new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.ShapeInside);
-                }
-                var returnData = new KartwarsBot.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.HasIntersections);
-                /* 'point 2' is the point where the line through the circle
-                 * intersection points crosses the line between the circle
-                 * centers.
-                 */
-                // Determine the distance from point 0 to point 2.
-                a = ((circle1.radius * circle1.radius) - (circle2.radius * circle2.radius) + (d * d)) / (2.0 * d);
-                // Determine the coordinates of point 2.
-                x2 = circle1.x + (deltaX * a / d);
-                y2 = circle1.y + (deltaY * a / d);
-                // Determine the distance from point 2 to either of the intersection points.
-                h = Math.sqrt((circle1.radius * circle1.radius) - (a * a));
-                // Now determine the offsets of the intersection points from point 2.
-                rx = -deltaY * (h / d);
-                ry = deltaX * (h / d);
-                // Determine the absolute intersection points and add them to stack.
-                returnData.addPoint(new KartwarsBot.BotPoint2D(x2 + rx, y2 + ry));
-                returnData.addPoint(new KartwarsBot.BotPoint2D(x2 - rx, y2 - ry));
-                return returnData;
-            };
-            return GeometryIntersectionsUtils;
-        }());
-        KartwarsBot.GeometryIntersectionsUtils = GeometryIntersectionsUtils;
-    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
-})(DracoolaArt || (DracoolaArt = {}));
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var DracoolaArt;
-(function (DracoolaArt) {
-    var KartwarsBot;
-    (function (KartwarsBot) {
-        var CanvasUtilsDrawOptions = (function () {
-            function CanvasUtilsDrawOptions() {
-                this.player = true;
-                this.dangers = true;
-                this.food = true;
-            }
-            return CanvasUtilsDrawOptions;
-        }());
-        KartwarsBot.CanvasUtilsDrawOptions = CanvasUtilsDrawOptions;
-        var CanvasUtilsColorsOptions = (function () {
-            function CanvasUtilsColorsOptions() {
-                this.goalLine = '#00ff00';
-                this.goalDot = '#ff0000';
-                this.goalCross = '#000000';
-                this.collidedPoint = '#66ff66';
-                this.collidedElement = '#ff9900';
-                this.collisionAvoidancePointA = '#ffa500';
-                this.collisionAvoidancePointB = '#ff0000';
-                this.foodCluster = '#ffffff';
-                this.foodClusterText = '#ffffff';
-                this.foodClusterLine = '#ffffff';
-                this.foodClusterBoundary = '#000000';
-                this.inRangeResource = '#00ff00';
-                this.collectableResource = '#ff0000';
-                this.predictionLine = '#000000';
-                this.predictionCircle = '#000000';
-                this.encircledPlayerWarning = '#ffff00';
-                this.encircledPlayerDanger = '#ff0000';
-                this.collisionElement = '#ff0000';
-                this.collisionLine = '#ff0000';
-                this.playerRadius = '#ffff00';
-                this.closeToImminentDangerRadius = '#ff0000';
-                this.playerSideDetector = '#ffff00';
-                this.playerHeadDetector = '#0000ff';
-                this.playerTailDetector = '#ffc0cb';
-                this.frontResourceGatherArc = '#00ff00';
-                this.frontDangerArc = '#0000ff';
-                this.tailDangerArc = '#0000ff';
-            }
-            return CanvasUtilsColorsOptions;
-        }());
-        KartwarsBot.CanvasUtilsColorsOptions = CanvasUtilsColorsOptions;
-        var CanvasUtilsOptions = (function () {
-            function CanvasUtilsOptions() {
-                // Shadow Blur
-                this.shadowBlur = 3;
-                this.draw = new CanvasUtilsDrawOptions();
-                this.colors = new CanvasUtilsColorsOptions();
-            }
-            return CanvasUtilsOptions;
-        }());
-        KartwarsBot.CanvasUtilsOptions = CanvasUtilsOptions;
-        /**
-         * Canvas draw for Base objects.
-         */
-        var CanvasUtilsBase = (function () {
-            // Constructor
-            function CanvasUtilsBase(gameWrapper) {
-                this.gameWrapper = gameWrapper;
-                this.opt = new CanvasUtilsOptions();
-            }
-            /**
-             * Spoofs moving the mouse to the provided coordinates.
-             * @param point
-             */
-            CanvasUtilsBase.prototype.setMouseCoordinates = function (point) {
-                this.gameWrapper.input.mouse.setCoordinates(point);
-            };
-            /**
-             * Convert map coordinates to mouse coordinates.
-             * @param point
-             */
-            CanvasUtilsBase.prototype.mapToMouse = function (point) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                var mousePoint = new KartwarsBot.Point2D((point.x - playerPosition.x) * window.game.world.scale.x, (point.y - playerPosition.y) * window.game.world.scale.y);
-                return mousePoint;
-            };
-            /**
-             * Map cordinates to Canvas cordinate shortcut
-             * @param point
-             */
-            CanvasUtilsBase.prototype.mapToCanvas = function (point) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                var canvasPoint = new KartwarsBot.Point2D((window.game.canvas.width / 2) + (point.x - playerPosition.x) * window.game.world.scale.x, (window.game.canvas.height / 2) + (point.y - playerPosition.y) * window.game.world.scale.y);
-                return canvasPoint;
-            };
-            /**
-             * Map to Canvas coordinate conversion for drawing circles.
-             * Radius also needs to scale by .gsc
-             * @param circle
-             */
-            CanvasUtilsBase.prototype.circleMapToCanvas = function (circle) {
-                var newCircle = this.mapToCanvas(circle);
-                return new KartwarsBot.Circle(newCircle.x, newCircle.y, circle.radius * window.game.world.scale.x);
-            };
-            /**
-             * Adjusts zoom in response to the mouse wheel.
-             * @param e
-             */
-            CanvasUtilsBase.prototype.setZoom = function (e) {
-                // TODO : Review
-                // let isInside = $('.dg.ac').data('isInside');
-                var isInside = $(window.botFactory.datGUI.gui.domElement.parentElement).data('isInside');
-                if (isInside) {
-                    return;
-                }
-                //
-                // Scaling ratio
-                if (window.game.world.scale.x) {
-                    var scaleValue = window.game.world.scale.x;
-                    scaleValue *= Math.pow(0.9, e.wheelDelta / -120 || e.detail / 2 || 0);
-                    if (scaleValue < 0.25) {
-                        scaleValue = 0.25;
-                    }
-                    else if (scaleValue > 1.5) {
-                        scaleValue = 1.5;
-                    }
-                    window.game.world.scale.x = window.game.world.scale.y = scaleValue;
-                    window.desired_gsc = window.game.world.scale.x;
-                }
-            };
-            /**
-             * Restores zoom to the default value.
-             */
-            CanvasUtilsBase.prototype.resetZoom = function () {
-                window.game.world.scale.x = window.game.world.scale.y = 0.8116666666666666;
-                window.desired_gsc = 0.8116666666666666;
-            };
-            /**
-             * Maintains Zoom
-             */
-            CanvasUtilsBase.prototype.maintainZoom = function () {
-                if (window.desired_gsc !== undefined) {
-                    window.game.world.scale.x = window.game.world.scale.y = window.desired_gsc;
-                }
-            };
-            // Sets background to the given image URL.
-            // Defaults to kartwars.io's own background.
-            CanvasUtilsBase.prototype.setBackground = function (url) {
-                throw new Error('Not implemented');
-            };
-            /**
-             * Draw a rectangle on the canvas.
-             * @param rect
-             * @param rotation
-             * @param color
-             * @param fill
-             * @param alpha
-             */
-            CanvasUtilsBase.prototype.drawRect = function (rect, rotation, color, fill, alpha) {
-                if (alpha === undefined)
-                    alpha = 1;
-                var context = this.gameWrapper.input.canvas.getContext();
-                //let lc = this.mapToCanvas({ x: rect.x, y: rect.y });
-                //let lc = this.mapToCanvas({ x: rect.x - rect.width / 2, y: rect.y - rect.height / 2 });
-                var lc = this.mapToCanvas(new KartwarsBot.Point2D(rect.x, rect.y));
-                var width = rect.width * window.game.world.scale.x, height = rect.height * window.game.world.scale.y;
-                // first save the untranslated/unrotated context
-                context.save();
-                context.beginPath();
-                context.globalAlpha = alpha;
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.strokeStyle = color;
-                // move the rotation point to the center of the rect
-                context.translate(lc.x + width / 2, lc.y + height / 2);
-                // rotate the rect
-                //ctx.rotate(degrees * Math.PI / 180);
-                context.rotate(rotation);
-                // draw the rect on the transformed context
-                // Note: after transforming [0,0] is visually [x,y]
-                //       so the rect needs to be offset accordingly when drawn
-                //ctx.rect(-width / 2, -height / 2, width, height);
-                context.rect(-width / 2, -height / 2, width, height);
-                context.stroke();
-                if (fill) {
-                    context.fillStyle = color;
-                    context.fill();
-                }
-                // restore the context to its untranslated/unrotated state
-                context.restore();
-            };
-            /**
-             * Draw a circle on the canvas.
-             * @param circle
-             * @param color
-             * @param fill
-             * @param alpha
-             */
-            CanvasUtilsBase.prototype.drawCircle = function (circle, color, fill, alpha) {
-                var thisCircle = circle;
-                if (alpha === undefined)
-                    alpha = 1;
-                if (thisCircle.radius === undefined)
-                    thisCircle.radius = 5;
-                var context = this.gameWrapper.input.canvas.getContext();
-                var drawCircle = this.circleMapToCanvas(thisCircle);
-                context.save();
-                context.globalAlpha = alpha;
-                context.beginPath();
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.strokeStyle = color;
-                context.arc(drawCircle.x, drawCircle.y, drawCircle.radius, 0, Math.PI * 2);
-                context.stroke();
-                if (fill) {
-                    context.fillStyle = color;
-                    context.fill();
-                }
-                context.restore();
-            };
-            /**
-             * Draw a circle on the canvas.
-             * @param circle
-             * @param directionInRadian
-             * @param emptyRadian
-             * @param color
-             * @param fill
-             * @param alpha
-             * @param clockwise
-             */
-            CanvasUtilsBase.prototype.drawArc = function (circle, directionInRadian, emptyRadian, color, fill, alpha, clockwise) {
-                if (clockwise === undefined)
-                    clockwise = true;
-                if (alpha === undefined)
-                    alpha = 1;
-                if (circle.radius === undefined)
-                    circle.radius = 5;
-                var context = this.gameWrapper.input.canvas.getContext();
-                var drawCircle = this.circleMapToCanvas(circle);
-                var halfEmptyRadian = emptyRadian / 2;
-                context.save();
-                context.globalAlpha = alpha;
-                context.beginPath();
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.strokeStyle = color;
-                context.arc(drawCircle.x, drawCircle.y, drawCircle.radius, directionInRadian - halfEmptyRadian, directionInRadian + halfEmptyRadian, clockwise);
-                context.stroke();
-                if (fill) {
-                    context.fillStyle = color;
-                    context.fill();
-                }
-                context.restore();
-            };
-            /*
-            // TODO : Unused
-            // Draw an angle.
-            // @param {number} start -- where to start the angle
-            // @param {number} angle -- width of the angle
-            // @param {bool} danger -- green if false, red if true
-            @MethodDecoration.bound
-            public drawAngle(start, angle, color, fill, alpha) {
-                if (alpha === undefined) alpha = 0.6;
-        
-                let context = this.gameWrapper.input.canvas.getContext();
-        
-                context.save();
-                context.globalAlpha = alpha;
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.beginPath();
-                context.moveTo(window.game.canvas.width / 2, window.game.canvas.height / 2);
-                context.arc(window.game.canvas.width / 2, window.game.canvas.height / 2, window.game.world.scale.x * 100, start, angle);
-                context.lineTo(window.game.canvas.width / 2, window.game.canvas.height / 2);
-                context.closePath();
-                context.stroke();
-                if (fill) {
-                    context.fillStyle = color;
-                    context.fill();
-                }
-                context.restore();
-            }
-            */
-            /**
-             * Draw a cross on the canvas.
-             * @param point
-             * @param color
-             * @param width
-             * @param alpha
-             */
-            CanvasUtilsBase.prototype.drawCross = function (point, color, width, alpha) {
-                var context = this.gameWrapper.input.canvas.getContext();
-                var canvas = context.canvas;
-                point = this.mapToCanvas(point);
-                this.drawLine(new KartwarsBot.Point2D(0, point.y), new KartwarsBot.Point2D(canvas.width, point.y), color, width, 0.15, false);
-                this.drawLine(new KartwarsBot.Point2D(point.x, 0), new KartwarsBot.Point2D(point.x, canvas.height), color, width, alpha, false);
-            };
-            /**
-             * Draw a line on the canvas.
-             * @param p1
-             * @param p2
-             * @param color
-             * @param width
-             * @param alpha
-             * @param mapToCanvas
-             */
-            CanvasUtilsBase.prototype.drawLine = function (p1, p2, color, width, alpha, mapToCanvas) {
-                if (width === undefined)
-                    width = 5;
-                if (alpha === undefined)
-                    alpha = 1.0;
-                if (mapToCanvas === undefined)
-                    mapToCanvas = true;
-                var context = this.gameWrapper.input.canvas.getContext();
-                if (mapToCanvas) {
-                    p1 = this.mapToCanvas(p1);
-                    p2 = this.mapToCanvas(p2);
-                }
-                context.save();
-                context.globalAlpha = alpha;
-                context.beginPath();
-                context.lineWidth = width * window.game.world.scale.x;
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.strokeStyle = color;
-                context.moveTo(p1.x, p1.y);
-                context.lineTo(p2.x, p2.y);
-                context.stroke();
-                context.restore();
-            };
-            CanvasUtilsBase.prototype.drawTriangle = function (p1, p2, p3, color, width, fill, alpha, mapToCanvas) {
-                if (width === undefined)
-                    width = 5;
-                if (alpha === undefined)
-                    alpha = 1.0;
-                if (mapToCanvas === undefined)
-                    mapToCanvas = true;
-                var context = this.gameWrapper.input.canvas.getContext();
-                if (mapToCanvas) {
-                    p1 = this.mapToCanvas(p1);
-                    p2 = this.mapToCanvas(p2);
-                    p3 = this.mapToCanvas(p3);
-                }
-                context.save();
-                context.globalAlpha = alpha;
-                context.beginPath();
-                context.lineWidth = width * window.game.world.scale.x;
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.strokeStyle = color;
-                context.moveTo(p1.x, p1.y);
-                context.lineTo(p2.x, p2.y);
-                context.lineTo(p3.x, p3.y);
-                context.stroke();
-                if (fill) {
-                    context.fillStyle = color;
-                    context.fill();
-                }
-                context.restore();
-            };
-            CanvasUtilsBase.prototype.drawPolygon = function (points, color, width, fill, alpha, mapToCanvas) {
-                if (points.length < 3) {
-                    throw new Error("Polygon must have more than 2 vertices. Supplied number of vertices: " + points.length);
-                }
-                if (width === undefined)
-                    width = 5;
-                if (alpha === undefined)
-                    alpha = 1.0;
-                if (mapToCanvas === undefined)
-                    mapToCanvas = true;
-                var context = this.gameWrapper.input.canvas.getContext();
-                if (mapToCanvas) {
-                    for (var idx = 0, length_1 = points.length; idx < length_1; idx++) {
-                        points[idx] = this.mapToCanvas(points[idx]);
-                    }
-                }
-                context.save();
-                context.globalAlpha = alpha;
-                context.beginPath();
-                context.lineWidth = width * window.game.world.scale.x;
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.strokeStyle = color;
-                context.moveTo(points[0].x, points[0].y);
-                for (var idx = 1, length_2 = points.length, point = undefined; point = points[idx], idx < length_2; idx++) {
-                    context.lineTo(point.x, point.y);
-                }
-                context.closePath();
-                context.stroke();
-                if (fill) {
-                    context.fillStyle = color;
-                    context.fill();
-                }
-                context.restore();
-            };
-            /**
-             * Draw text on the canvas.
-             * @param point
-             * @param text
-             * @param color
-             * @param alpha
-             * @param mapToCanvas
-             */
-            CanvasUtilsBase.prototype.drawText = function (point, text, color, alpha, mapToCanvas) {
-                if (alpha === undefined)
-                    alpha = 1.0;
-                if (mapToCanvas === undefined)
-                    mapToCanvas = true;
-                var context = this.gameWrapper.input.canvas.getContext();
-                if (mapToCanvas) {
-                    point = this.mapToCanvas(point);
-                }
-                context.save();
-                context.globalAlpha = alpha;
-                context.shadowBlur = this.opt.shadowBlur;
-                context.shadowColor = color;
-                context.fillStyle = color;
-                context.font = 'bold 20px Arial';
-                context.fillText(text, point.x, point.y);
-                //context.stroke();
-                context.restore();
-            };
-            return CanvasUtilsBase;
-        }());
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "setMouseCoordinates", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "mapToMouse", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "mapToCanvas", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawRect", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawCircle", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawArc", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawCross", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawLine", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawTriangle", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawPolygon", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], CanvasUtilsBase.prototype, "drawText", null);
-        KartwarsBot.CanvasUtilsBase = CanvasUtilsBase;
-    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
-})(DracoolaArt || (DracoolaArt = {}));
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var DracoolaArt;
-(function (DracoolaArt) {
-    var KartwarsBot;
-    (function (KartwarsBot) {
-        /**
-         * Canvas draw for Composed objects.
-         */
-        var CanvasUtils = (function (_super) {
-            __extends(CanvasUtils, _super);
-            function CanvasUtils() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            CanvasUtils.wrappedDrawInterceptor = function (fx) {
-                CanvasUtils.interceptedWrappedDrawCalls.push(fx);
-            };
-            /**
-             * Calls all below intercepted drawing methods.
-             */
-            CanvasUtils.prototype.drawAllInterceptedWrappedCalls = function () {
-                window.botFactory.clock.startFrame();
-                if (window.visualDebugging) {
-                    CanvasUtils.interceptedWrappedDrawCalls.forEach(function (fx) {
-                        fx();
-                    });
-                }
-                CanvasUtils.interceptedWrappedDrawCalls = [];
-                window.botFactory.clock.endFrame();
-            };
-            /**
-             * Draw global goal on canvas on the canvas.
-             * @param goalCoordinates
-             */
-            CanvasUtils.prototype.drawGoal = function (goalCoordinates) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                this.drawLine(playerPosition, goalCoordinates, this.opt.colors.goalLine, 2);
-                this.drawCircle(goalCoordinates, this.opt.colors.goalDot, true);
-                this.drawCross(goalCoordinates, this.opt.colors.goalCross, undefined, 0.05);
-            };
-            /**
-             * Draw collision point on the canvas.
-             * @param collisionPoint
-             */
-            CanvasUtils.prototype.drawCollisionPoint = function (collisionPoint) {
-                this.drawCircle(collisionPoint, this.opt.colors.collidedPoint, true);
-            };
-            /**
-             * Draw collision circle on the canvas.
-             * @param collisionCircle
-             */
-            CanvasUtils.prototype.drawCollisionCircle = function (collisionCircle) {
-                this.drawCircle(collisionCircle, this.opt.colors.collidedElement, false);
-            };
-            CanvasUtils.prototype.drawCollisionPolygon = function (polygon) {
-                this.drawPolygon(polygon.geometryAsPoint2DArray, this.opt.colors.collidedElement, undefined, false);
-            };
-            /**
-             * Draw collision avoidance lines on the canvas.
-             * @param collisionPoint
-             * @param avoidancePoint
-             */
-            CanvasUtils.prototype.drawCollisionAvoidance = function (collisionPoint, avoidancePoint) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                this.drawLine(playerPosition, avoidancePoint, this.opt.colors.collisionAvoidancePointA, 5);
-                this.drawLine(playerPosition, collisionPoint, this.opt.colors.collisionAvoidancePointB, 5);
-            };
-            /**
-             * Draw food cluster on the canvas.
-             * @param circle
-             * @param quantity
-             */
-            CanvasUtils.prototype.drawFoodCluster = function (circle, quantity) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                this.drawCircle(circle, this.opt.colors.foodCluster, false, 0.5);
-                this.drawText(circle, quantity.toString(), this.opt.colors.foodClusterText);
-                this.drawLine(playerPosition, circle, this.opt.colors.foodClusterLine, 2, 0.25);
-                /*
-                let bigCircle: Circle = {
-                    x: clusterMedianX,
-                    y: clusterMedianY,
-                    radius: clusterRadius * Cluster.radiusMultiplier
+                    return sol;
                 };
-    
-                this.drawCircle(bigCircle, 'white', false, 0.25);
-                */
-            };
+                return MathUtils;
+            }());
+            Utils.MathUtils = MathUtils;
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
+    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
+})(DracoolaArt || (DracoolaArt = {}));
+
+var DracoolaArt;
+(function (DracoolaArt) {
+    var KartwarsBot;
+    (function (KartwarsBot) {
+        var Utils;
+        (function (Utils) {
             /**
-             * Draw food cluster boundary on the canvas.
-             * @param radius
+             * Some methods are based on Kevin Lindsey's work
+             *
+             * copyright 2002, Kevin Lindsey
              */
-            CanvasUtils.prototype.drawFoodClusterBoundary = function (radius) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                var foodClusterBoundaryCircle = new KartwarsBot.Circle(playerPosition.x, playerPosition.y, radius);
-                this.drawCircle(foodClusterBoundaryCircle, this.opt.colors.foodClusterBoundary, false);
-            };
-            /**
-             * Draw resource on the canvas.
-             * @param resourceCircle
-             * @param canBeCollected
-             */
-            CanvasUtils.prototype.drawResource = function (resourceCircle, canBeCollected) {
-                if (!this.opt.draw.food) {
-                    return;
+            var GeometryIntersectionsUtils = (function () {
+                function GeometryIntersectionsUtils() {
                 }
-                this.drawCircle(resourceCircle, this.opt.colors.inRangeResource);
-                if (canBeCollected) {
-                    var canBeCollectedResourceCircle = new KartwarsBot.Circle(resourceCircle.x, resourceCircle.y, resourceCircle.radius + 15);
-                    this.drawCircle(canBeCollectedResourceCircle, this.opt.colors.collectableResource);
-                }
-            };
-            // TODO : Review
-            CanvasUtils.prototype.drawTunnel = function (left, right, alpha) {
-                if (alpha == undefined) {
-                    alpha = 0.15;
-                }
-                this.drawLine(left.point1, left.point2, 'black', 3, alpha);
-                this.drawLine(right.point1, right.point2, 'black', 3, alpha);
-            };
-            /**
-             * Draw intersection prediction on the canvas.
-             * @param goalCoordinates
-             */
-            CanvasUtils.prototype.drawIntersectionPrediction = function (goalCoordinates) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                this.drawLine(playerPosition, goalCoordinates, this.opt.colors.predictionLine, 12, 0.75);
-                this.drawCircle(goalCoordinates, this.opt.colors.predictionCircle, false, 0.75);
-            };
-            /**
-             * Draw encircled player on the canvas.
-             * @param playerCircle
-             * @param danger
-             */
-            CanvasUtils.prototype.drawEncircledPlayer = function (playerCircle, danger) {
-                var color = (danger ? this.opt.colors.encircledPlayerDanger : this.opt.colors.encircledPlayerWarning);
-                this.drawCircle(playerCircle, color, true, 0.2);
-            };
-            /**
-             * Draw collision elements and draw lines to collision angles on the canvas.
-             * @param collisionElements
-             * @param collisionAngles
-             */
-            CanvasUtils.prototype.drawCollisionElements = function (collisionElements, collisionAngles) {
-                if (!this.opt.draw.dangers) {
-                    return;
-                }
-                //if (this.bot.opt.draw.enemies) {
-                var playerPosition = this.gameWrapper.player.getPosition();
-                for (var idx = 0, ll = collisionElements.length; idx < ll; idx++) {
-                    var thisCollisionPoint = collisionElements[idx];
-                    if (thisCollisionPoint !== undefined) {
-                        switch (thisCollisionPoint.shapeType) {
-                            case KartwarsBot.CollisionElementType.Circle:
-                                {
-                                    this.drawCircle(thisCollisionPoint, this.opt.colors.collisionElement, false, 0.25);
-                                }
-                                break;
-                            case KartwarsBot.CollisionElementType.Polygon:
-                                {
-                                    var points = thisCollisionPoint.geometry.map(function (element) {
-                                        return new KartwarsBot.Point2D(element.x, element.y);
-                                    });
-                                    this.drawPolygon(points, this.opt.colors.collisionElement, undefined, true, 0.1);
-                                }
-                                break;
+                /**
+                 * Check if circle and line intersects.
+                 * @param c Circle.
+                 * @param r Circle radius.
+                 * @param a1 Line start point.
+                 * @param a2 Line end point.
+                 */
+                GeometryIntersectionsUtils.intersectCircleLine = function (c, r, a1, a2) {
+                    var result;
+                    var a = (a2.x - a1.x) * (a2.x - a1.x) +
+                        (a2.y - a1.y) * (a2.y - a1.y);
+                    var b = 2 * ((a2.x - a1.x) * (a1.x - c.x) +
+                        (a2.y - a1.y) * (a1.y - c.y));
+                    var cc = c.x * c.x + c.y * c.y + a1.x * a1.x + a1.y * a1.y -
+                        2 * (c.x * a1.x + c.y * a1.y) - r * r;
+                    var deter = b * b - 4 * a * cc;
+                    if (deter < 0) {
+                        result = new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
+                    }
+                    else if (deter == 0) {
+                        result = new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.Tangent);
+                    }
+                    else {
+                        var e = Math.sqrt(deter);
+                        var u1 = (-b + e) / (2 * a);
+                        var u2 = (-b - e) / (2 * a);
+                        if ((u1 < 0 || u1 > 1) && (u2 < 0 || u2 > 1)) {
+                            if ((u1 < 0 && u2 < 0) || (u1 > 1 && u2 > 1)) {
+                                result = new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
+                            }
+                            else {
+                                result = new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.ShapeInside);
+                            }
+                        }
+                        else {
+                            result = new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.HasIntersections);
+                            if (0 <= u1 && u1 <= 1)
+                                result.points.push(KartwarsBot.Structures.BotPoint2D.fromPoint2D(a1.lerp(a2, u1)));
+                            if (0 <= u2 && u2 <= 1)
+                                result.points.push(KartwarsBot.Structures.BotPoint2D.fromPoint2D(a1.lerp(a2, u2)));
                         }
                     }
-                }
-                for (var idx = 0, ll = collisionAngles.length; idx < ll; idx++) {
-                    var thisCollisionAngles = collisionAngles[idx];
-                    if (thisCollisionAngles !== undefined) {
-                        this.drawLine(playerPosition, new KartwarsBot.Point2D(thisCollisionAngles.x, thisCollisionAngles.y), this.opt.colors.collisionLine, 2, 0.25);
+                    return result;
+                };
+                /**
+                 * Check if circle and polygon intersects.
+                 * @param c Circle.
+                 * @param r Circle radius.
+                 * @param polygon Polygon.
+                 */
+                GeometryIntersectionsUtils.intersectCirclePolygon = function (c, r, polygon) {
+                    var result = new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
+                    var points = polygon.geometryAsPoint2DArray;
+                    var length = points.length;
+                    var inter;
+                    for (var i = 0; i < length; i++) {
+                        var a1 = points[i];
+                        var a2 = points[(i + 1) % length];
+                        inter = GeometryIntersectionsUtils.intersectCircleLine(c, r, a1, a2);
+                        result.addPoints(inter.points);
                     }
-                }
-                //}
-            };
-            /**
-             * Draw player on the canvas.
-             * @param playerCircle
-             * @param playerResourceGatherCircle
-             * @param headCircle
-             * @param tailCircle
-             * @param leftSideCircle
-             * @param rightSideCircle
-             * @param emptyDangerRadian
-             */
-            CanvasUtils.prototype.drawPlayer = function (playerCircle, playerResourceGatherCircle, headCircle, tailCircle, closeToImminentDangerCircle, leftSideCircle, rightSideCircle, emptyDangerRadian, emptyTailDangerRadian, emptyResourceGatherRadian) {
-                if (!this.opt.draw.player) {
-                    return;
-                }
-                var playerRotation = this.gameWrapper.player.getRotation();
-                //
-                // Draw Close To Imminent Danger Circle
-                {
-                    this.drawCircle(closeToImminentDangerCircle, this.opt.colors.closeToImminentDangerRadius, false, 0.35);
-                }
-                //
-                // Draw Resource Gather Arc
-                {
-                    this.drawArc(playerResourceGatherCircle, playerRotation, emptyResourceGatherRadian, this.opt.colors.frontResourceGatherArc, undefined, undefined, false);
-                }
-                //
-                // Draw front Resource Gather lines
-                {
-                    var pointA = KartwarsBot.MathUtils.arcPoint(playerResourceGatherCircle.x, playerResourceGatherCircle.y, playerResourceGatherCircle.radius, playerRotation - (emptyResourceGatherRadian / 2));
-                    var pointB = KartwarsBot.MathUtils.arcPoint(playerResourceGatherCircle.x, playerResourceGatherCircle.y, playerResourceGatherCircle.radius, playerRotation + (emptyResourceGatherRadian / 2));
-                    this.drawLine(new KartwarsBot.Point2D(playerResourceGatherCircle.x, playerResourceGatherCircle.y), pointA, this.opt.colors.frontResourceGatherArc);
-                    this.drawLine(new KartwarsBot.Point2D(playerResourceGatherCircle.x, playerResourceGatherCircle.y), pointB, this.opt.colors.frontResourceGatherArc);
-                }
-                {
-                    this.drawCircle(headCircle, this.opt.colors.playerHeadDetector, false);
-                    this.drawCircle(tailCircle, this.opt.colors.playerTailDetector, false);
-                    this.drawCircle(leftSideCircle, this.opt.colors.playerSideDetector, false);
-                    this.drawCircle(rightSideCircle, this.opt.colors.playerSideDetector, false);
-                }
-                {
-                    this.drawArc(playerCircle, playerRotation, emptyDangerRadian, this.opt.colors.playerRadius);
-                    this.drawArc(playerCircle, playerRotation, emptyDangerRadian, this.opt.colors.frontDangerArc, true, 0.1, false);
-                }
-                //
-                // Experimental
+                    if (result.points.length > 0) {
+                        result.status = KartwarsBot.ShapesIntersectionStatus.HasIntersections;
+                    }
+                    else {
+                        var status_1 = inter.status;
+                        if (status_1 == KartwarsBot.ShapesIntersectionStatus.NoIntersection) {
+                            if (GeometryIntersectionsUtils.pointInPoly(c, polygon)) {
+                                status_1 = KartwarsBot.ShapesIntersectionStatus.ShapeInside;
+                            }
+                        }
+                        result.status = status_1;
+                    }
+                    return result;
+                };
+                /**
+                 * Check if point is in Rectangle.
+                 * @param point
+                 * @param rect
+                 */
+                GeometryIntersectionsUtils.pointInRect = function (point, rect) {
+                    if (rect.x <= point.x && rect.y <= point.y &&
+                        rect.x + rect.width >= point.x && rect.y + rect.height >= point.y) {
+                        return true;
+                    }
+                    return false;
+                };
+                /**
+                 * Check if point is in polygon.
+                 * @param point
+                 * @param poly
+                 */
+                GeometryIntersectionsUtils.pointInPoly = function (point, polygon) {
+                    if (point.x < polygon.minX || point.x > polygon.maxX ||
+                        point.y < polygon.minY || point.y > polygon.maxY) {
+                        return false;
+                    }
+                    var isInside = false;
+                    var geometry = polygon.geometry;
+                    var ll = geometry.length;
+                    for (var i = 0, j = ll - 1; i < ll; j = i++) {
+                        if (((geometry[i].y > point.y) != (geometry[j].y > point.y)) &&
+                            (point.x < (geometry[j].x - geometry[i].x) * (point.y - geometry[i].y) / (geometry[j].y - geometry[i].y) + geometry[i].x)) {
+                            isInside = !isInside;
+                        }
+                    }
+                    return isInside;
+                };
+                /**
+                 * Checks if a certain point is inside an arc.
+                 * @param point
+                 * @param center
+                 * @param radius
+                 * @param angle1
+                 * @param angle2
+                 */
+                GeometryIntersectionsUtils.isInsideArcSector = function (point, center, radius, angle1, angle2) {
+                    function areClockwise(center, radius, angle, point2) {
+                        var point1 = new KartwarsBot.Structures.Point2D((center.x + radius) * Math.cos(angle), (center.y + radius) * Math.sin(angle));
+                        return -point1.x * point2.y + point1.y * point2.x > 0;
+                    }
+                    var relPoint = new KartwarsBot.Structures.Point2D(point.x - center.x, point.y - center.y);
+                    return !areClockwise(center, radius, angle1, relPoint) &&
+                        areClockwise(center, radius, angle2, relPoint) &&
+                        (relPoint.x * relPoint.x + relPoint.y * relPoint.y <= radius * radius);
+                };
+                /**
+                 * Check if circle and rect intersects.
+                 * @param circle
+                 * @param rect
+                 */
+                GeometryIntersectionsUtils.circleRectIntersect = function (circle, rect) {
+                    var deltaX = Math.abs(circle.x - rect.x - rect.width / 2);
+                    var deltaY = Math.abs(circle.y - rect.y - rect.height / 2);
+                    if (deltaX > (rect.width / 2 + circle.radius)) {
+                        return false;
+                    }
+                    if (deltaY > (rect.height / 2 + circle.radius)) {
+                        return false;
+                    }
+                    if (deltaX <= (rect.width / 2)) {
+                        return true;
+                    }
+                    if (deltaY <= (rect.height / 2)) {
+                        return true;
+                    }
+                    var dx = deltaX - rect.width / 2;
+                    var dy = deltaY - rect.height / 2;
+                    var returnStatus = (dx * dx + dy * dy <= (circle.radius * circle.radius));
+                    return returnStatus;
+                };
                 /*
-                this.drawRect(new Rect(
-                    playerCircle.x, // - (circle.radius / 2),
-                    playerCircle.y, // - (circle.radius / 2),
-                    playerCircle.radius,
-                    playerCircle.radius),
-                    playerRotation,
-                    'pink', false, 0.25
-                );
+                // Ported to JavaScript from
+                // http://www.migapro.com/circle-and-rotated-rectangle-collision-detection/
+                //
+                // An example:
+                // let circle: { x: 20, y: 10, radius: 20 };
+                // let rect: { x: 30, y: 30, width: 100, height: 100, rotation: Math.PI / 2 };
+                // collideCircleWithRotatedRectangle( circle, rect );
+                // // returns true.
+                //
+                //
+                // Please note:
+                // This code assumes that rect.x and rect.y are the CENTER coordinates
+                // of the rectangle. You may want to to change this.
+                // Also rotation values need to be in RADIANS.
+                public static circleRectIntersect(circle: Circle, rect: Rect) {
+                    let rectCenterX = rect.x;
+                    let rectCenterY = rect.y;
+        
+                    let rectX = rectCenterX - rect.width / 2;
+                    let rectY = rectCenterY - rect.height / 2;
+        
+                    let rectReferenceX = rectX;
+                    let rectReferenceY = rectY;
+        
+                    // Rotate circle's center point back
+                    let unrotatedCircleX = Math.cos(rect.rotation) * (circle.x - rectCenterX) - Math.sin(rect.rotation) * (circle.y - rectCenterY) + rectCenterX;
+                    let unrotatedCircleY = Math.sin(rect.rotation) * (circle.x - rectCenterX) + Math.cos(rect.rotation) * (circle.y - rectCenterY) + rectCenterY;
+        
+                    // Closest point in the rectangle to the center of circle rotated backwards(unrotated)
+                    let closestX, closestY;
+        
+                    // Find the unrotated closest x point from center of unrotated circle
+                    if (unrotatedCircleX < rectReferenceX) {
+                        closestX = rectReferenceX;
+                    } else if (unrotatedCircleX > rectReferenceX + rect.width) {
+                        closestX = rectReferenceX + rect.width;
+                    } else {
+                        closestX = unrotatedCircleX;
+                    }
+        
+                    // Find the unrotated closest y point from center of unrotated circle
+                    if (unrotatedCircleY < rectReferenceY) {
+                        closestY = rectReferenceY;
+                    } else if (unrotatedCircleY > rectReferenceY + rect.height) {
+                        closestY = rectReferenceY + rect.height;
+                    } else {
+                        closestY = unrotatedCircleY;
+                    }
+        
+                    // Determine collision
+                    let collision = false;
+                    let distance = MathUtils.getDistance(new Point2D(unrotatedCircleX, unrotatedCircleY), new Point2D(closestX, closestY));
+        
+                    if (distance < circle.radius) {
+                        collision = true;
+                    }
+                    else {
+                        collision = false;
+                    }
+        
+                    return collision;
+                }
                 */
-                //
-                // Draw front lines
-                {
-                    var pointA = KartwarsBot.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation - (emptyDangerRadian / 2));
-                    var pointB = KartwarsBot.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation + (emptyDangerRadian / 2));
-                    this.drawTriangle(pointA, playerCircle, pointB, this.opt.colors.frontDangerArc, undefined, true, 0.1);
-                    this.drawLine(new KartwarsBot.Point2D(playerCircle.x, playerCircle.y), pointA, this.opt.colors.playerRadius);
-                    this.drawLine(new KartwarsBot.Point2D(playerCircle.x, playerCircle.y), pointB, this.opt.colors.playerRadius);
+                /**
+                 * Check if two circles intersect.
+                 * @param circle1
+                 * @param circle2
+                 */
+                GeometryIntersectionsUtils.circleCircleIntersect = function (circle1, circle2) {
+                    var a, deltaX, deltaY, d, h, rx, ry;
+                    var x2, y2;
+                    var point;
+                    // deltaX and deltaY are the vertical and horizontal distances between the circle centers.
+                    deltaX = circle2.x - circle1.x;
+                    deltaY = circle2.y - circle1.y;
+                    // Determine the straight-line distance between the centers.
+                    d = Math.sqrt((deltaY * deltaY) + (deltaX * deltaX));
+                    // Check for solvability.
+                    if (d > (circle1.radius + circle2.radius)) {
+                        // No solution. circles do not intersect.
+                        return new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.NoIntersection);
+                    }
+                    if (d < Math.abs(circle1.radius - circle2.radius)) {
+                        // No solution. one circle is contained in the other
+                        return new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.ShapeInside);
+                    }
+                    var returnData = new KartwarsBot.Structures.ShapesIntersectionsResult(KartwarsBot.ShapesIntersectionStatus.HasIntersections);
+                    /* 'point 2' is the point where the line through the circle
+                     * intersection points crosses the line between the circle
+                     * centers.
+                     */
+                    // Determine the distance from point 0 to point 2.
+                    a = ((circle1.radius * circle1.radius) - (circle2.radius * circle2.radius) + (d * d)) / (2.0 * d);
+                    // Determine the coordinates of point 2.
+                    x2 = circle1.x + (deltaX * a / d);
+                    y2 = circle1.y + (deltaY * a / d);
+                    // Determine the distance from point 2 to either of the intersection points.
+                    h = Math.sqrt((circle1.radius * circle1.radius) - (a * a));
+                    // Now determine the offsets of the intersection points from point 2.
+                    rx = -deltaY * (h / d);
+                    ry = deltaX * (h / d);
+                    // Determine the absolute intersection points and add them to stack.
+                    returnData.addPoint(new KartwarsBot.Structures.BotPoint2D(x2 + rx, y2 + ry));
+                    returnData.addPoint(new KartwarsBot.Structures.BotPoint2D(x2 - rx, y2 - ry));
+                    return returnData;
+                };
+                return GeometryIntersectionsUtils;
+            }());
+            Utils.GeometryIntersectionsUtils = GeometryIntersectionsUtils;
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
+    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
+})(DracoolaArt || (DracoolaArt = {}));
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var DracoolaArt;
+(function (DracoolaArt) {
+    var KartwarsBot;
+    (function (KartwarsBot) {
+        var Utils;
+        (function (Utils) {
+            var CanvasUtilsDrawOptions = (function () {
+                function CanvasUtilsDrawOptions() {
+                    this.player = true;
+                    this.dangers = true;
+                    this.food = true;
                 }
-                //
-                // Draw tail lines
-                {
-                    var pointA = KartwarsBot.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation + Math.PI - (emptyTailDangerRadian / 2));
-                    var pointB = KartwarsBot.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation + Math.PI + (emptyTailDangerRadian / 2));
-                    this.drawLine(new KartwarsBot.Point2D(playerCircle.x, playerCircle.y), pointA, this.opt.colors.tailDangerArc);
-                    this.drawLine(new KartwarsBot.Point2D(playerCircle.x, playerCircle.y), pointB, this.opt.colors.tailDangerArc);
+                return CanvasUtilsDrawOptions;
+            }());
+            Utils.CanvasUtilsDrawOptions = CanvasUtilsDrawOptions;
+            var CanvasUtilsColorsOptions = (function () {
+                function CanvasUtilsColorsOptions() {
+                    this.goalLine = '#00ff00';
+                    this.goalDot = '#ff0000';
+                    this.goalCross = '#000000';
+                    this.collidedPoint = '#66ff66';
+                    this.collidedElement = '#ff9900';
+                    this.collisionAvoidancePointA = '#ffa500';
+                    this.collisionAvoidancePointB = '#ff0000';
+                    this.foodCluster = '#ffffff';
+                    this.foodClusterText = '#ffffff';
+                    this.foodClusterLine = '#ffffff';
+                    this.foodClusterBoundary = '#000000';
+                    this.inRangeResource = '#00ff00';
+                    this.collectableResource = '#ff0000';
+                    this.predictionLine = '#000000';
+                    this.predictionCircle = '#000000';
+                    this.encircledPlayerWarning = '#ffff00';
+                    this.encircledPlayerDanger = '#ff0000';
+                    this.collisionElement = '#ff0000';
+                    this.collisionLine = '#ff0000';
+                    this.playerRadius = '#ffff00';
+                    this.closeToImminentDangerRadius = '#ff0000';
+                    this.playerSideDetector = '#ffff00';
+                    this.playerHeadDetector = '#0000ff';
+                    this.playerTailDetector = '#ffc0cb';
+                    this.frontResourceGatherArc = '#00ff00';
+                    this.frontDangerArc = '#0000ff';
+                    this.tailDangerArc = '#0000ff';
                 }
-            };
-            return CanvasUtils;
-        }(KartwarsBot.CanvasUtilsBase));
-        CanvasUtils.interceptedWrappedDrawCalls = [];
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawGoal", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawCollisionPoint", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawCollisionCircle", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawCollisionPolygon", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawCollisionAvoidance", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawFoodCluster", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawFoodClusterBoundary", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawResource", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawTunnel", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawIntersectionPrediction", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawEncircledPlayer", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawCollisionElements", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
-        ], CanvasUtils.prototype, "drawPlayer", null);
-        KartwarsBot.CanvasUtils = CanvasUtils;
+                return CanvasUtilsColorsOptions;
+            }());
+            Utils.CanvasUtilsColorsOptions = CanvasUtilsColorsOptions;
+            var CanvasUtilsOptions = (function () {
+                function CanvasUtilsOptions() {
+                    /**
+                     * Visual debugging.
+                     */
+                    this.visualDebugging = false;
+                    /**
+                     * Shadow Blur.
+                     */
+                    this.shadowBlur = 3;
+                    this.draw = new CanvasUtilsDrawOptions();
+                    this.colors = new CanvasUtilsColorsOptions();
+                }
+                return CanvasUtilsOptions;
+            }());
+            Utils.CanvasUtilsOptions = CanvasUtilsOptions;
+            /**
+             * Canvas draw for Base objects.
+             */
+            var CanvasUtilsBase = (function () {
+                // Constructor
+                function CanvasUtilsBase(gameWrapper) {
+                    this.gameWrapper = gameWrapper;
+                    this.opt = new CanvasUtilsOptions();
+                }
+                /**
+                 * Spoofs moving the mouse to the provided coordinates.
+                 * @param point
+                 */
+                CanvasUtilsBase.prototype.setMouseCoordinates = function (point) {
+                    this.gameWrapper.input.mouse.setCoordinates(point);
+                };
+                /**
+                 * Convert map coordinates to mouse coordinates.
+                 * @param point
+                 */
+                CanvasUtilsBase.prototype.mapToMouse = function (point) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    var mousePoint = new KartwarsBot.Structures.Point2D((point.x - playerPosition.x) * window.game.world.scale.x, (point.y - playerPosition.y) * window.game.world.scale.y);
+                    return mousePoint;
+                };
+                /**
+                 * Map cordinates to Canvas cordinate shortcut
+                 * @param point
+                 */
+                CanvasUtilsBase.prototype.mapToCanvas = function (point) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    var canvasPoint = new KartwarsBot.Structures.Point2D((window.game.canvas.width / 2) + (point.x - playerPosition.x) * window.game.world.scale.x, (window.game.canvas.height / 2) + (point.y - playerPosition.y) * window.game.world.scale.y);
+                    return canvasPoint;
+                };
+                /**
+                 * Map to Canvas coordinate conversion for drawing circles.
+                 * Radius also needs to scale by .gsc
+                 * @param circle
+                 */
+                CanvasUtilsBase.prototype.circleMapToCanvas = function (circle) {
+                    var newCircle = this.mapToCanvas(circle);
+                    return new KartwarsBot.Structures.Circle(newCircle.x, newCircle.y, circle.radius * window.game.world.scale.x);
+                };
+                /**
+                 * Adjusts zoom in response to the mouse wheel.
+                 * @param e
+                 */
+                CanvasUtilsBase.prototype.setZoom = function (e) {
+                    // TODO : Review
+                    // let isInside = $('.dg.ac').data('isInside');
+                    var isInside = $(window.botFactory.datGUI.gui.domElement.parentElement).data('isInside');
+                    if (isInside) {
+                        return;
+                    }
+                    //
+                    // Scaling ratio
+                    if (window.game.world.scale.x) {
+                        var scaleValue = window.game.world.scale.x;
+                        scaleValue *= Math.pow(0.9, e.wheelDelta / -120 || e.detail / 2 || 0);
+                        if (scaleValue < 0.25) {
+                            scaleValue = 0.25;
+                        }
+                        else if (scaleValue > 1.5) {
+                            scaleValue = 1.5;
+                        }
+                        window.game.world.scale.x = window.game.world.scale.y = scaleValue;
+                        window.desired_gsc = window.game.world.scale.x;
+                    }
+                };
+                /**
+                 * Restores zoom to the default value.
+                 */
+                CanvasUtilsBase.prototype.resetZoom = function () {
+                    window.game.world.scale.x = window.game.world.scale.y = 0.8116666666666666;
+                    window.desired_gsc = 0.8116666666666666;
+                };
+                /**
+                 * Maintains Zoom
+                 */
+                CanvasUtilsBase.prototype.maintainZoom = function () {
+                    if (window.desired_gsc !== undefined) {
+                        window.game.world.scale.x = window.game.world.scale.y = window.desired_gsc;
+                    }
+                };
+                // Sets background to the given image URL.
+                // Defaults to kartwars.io's own background.
+                CanvasUtilsBase.prototype.setBackground = function (url) {
+                    throw new Error('Not implemented');
+                };
+                /**
+                 * Draw a rectangle on the canvas.
+                 * @param rect
+                 * @param rotation
+                 * @param color
+                 * @param fill
+                 * @param alpha
+                 */
+                CanvasUtilsBase.prototype.drawRect = function (rect, rotation, color, fill, alpha) {
+                    if (alpha === undefined)
+                        alpha = 1;
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    //let lc = this.mapToCanvas({ x: rect.x, y: rect.y });
+                    //let lc = this.mapToCanvas({ x: rect.x - rect.width / 2, y: rect.y - rect.height / 2 });
+                    var lc = this.mapToCanvas(new KartwarsBot.Structures.Point2D(rect.x, rect.y));
+                    var width = rect.width * window.game.world.scale.x, height = rect.height * window.game.world.scale.y;
+                    // first save the untranslated/unrotated context
+                    context.save();
+                    context.beginPath();
+                    context.globalAlpha = alpha;
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.strokeStyle = color;
+                    // move the rotation point to the center of the rect
+                    context.translate(lc.x + width / 2, lc.y + height / 2);
+                    // rotate the rect
+                    //ctx.rotate(degrees * Math.PI / 180);
+                    context.rotate(rotation);
+                    // draw the rect on the transformed context
+                    // Note: after transforming [0,0] is visually [x,y]
+                    //       so the rect needs to be offset accordingly when drawn
+                    //ctx.rect(-width / 2, -height / 2, width, height);
+                    context.rect(-width / 2, -height / 2, width, height);
+                    context.stroke();
+                    if (fill) {
+                        context.fillStyle = color;
+                        context.fill();
+                    }
+                    // restore the context to its untranslated/unrotated state
+                    context.restore();
+                };
+                /**
+                 * Draw a circle on the canvas.
+                 * @param circle
+                 * @param color
+                 * @param fill
+                 * @param alpha
+                 */
+                CanvasUtilsBase.prototype.drawCircle = function (circle, color, fill, alpha) {
+                    var thisCircle = circle;
+                    if (alpha === undefined)
+                        alpha = 1;
+                    if (thisCircle.radius === undefined)
+                        thisCircle.radius = 5;
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    var drawCircle = this.circleMapToCanvas(thisCircle);
+                    context.save();
+                    context.globalAlpha = alpha;
+                    context.beginPath();
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.strokeStyle = color;
+                    context.arc(drawCircle.x, drawCircle.y, drawCircle.radius, 0, Math.PI * 2);
+                    context.stroke();
+                    if (fill) {
+                        context.fillStyle = color;
+                        context.fill();
+                    }
+                    context.restore();
+                };
+                /**
+                 * Draw a circle on the canvas.
+                 * @param circle
+                 * @param directionInRadian
+                 * @param emptyRadian
+                 * @param color
+                 * @param fill
+                 * @param alpha
+                 * @param clockwise
+                 */
+                CanvasUtilsBase.prototype.drawArc = function (circle, directionInRadian, emptyRadian, color, fill, alpha, clockwise) {
+                    if (clockwise === undefined)
+                        clockwise = true;
+                    if (alpha === undefined)
+                        alpha = 1;
+                    if (circle.radius === undefined)
+                        circle.radius = 5;
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    var drawCircle = this.circleMapToCanvas(circle);
+                    var halfEmptyRadian = emptyRadian / 2;
+                    context.save();
+                    context.globalAlpha = alpha;
+                    context.beginPath();
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.strokeStyle = color;
+                    context.arc(drawCircle.x, drawCircle.y, drawCircle.radius, directionInRadian - halfEmptyRadian, directionInRadian + halfEmptyRadian, clockwise);
+                    context.stroke();
+                    if (fill) {
+                        context.fillStyle = color;
+                        context.fill();
+                    }
+                    context.restore();
+                };
+                /*
+                // TODO : Unused
+                // Draw an angle.
+                // @param {number} start -- where to start the angle
+                // @param {number} angle -- width of the angle
+                // @param {bool} danger -- green if false, red if true
+                @MethodDecoration.bound
+                public drawAngle(start, angle, color, fill, alpha) {
+                    if (alpha === undefined) alpha = 0.6;
+            
+                    let context = this.gameWrapper.input.canvas.getContext();
+            
+                    context.save();
+                    context.globalAlpha = alpha;
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.beginPath();
+                    context.moveTo(window.game.canvas.width / 2, window.game.canvas.height / 2);
+                    context.arc(window.game.canvas.width / 2, window.game.canvas.height / 2, window.game.world.scale.x * 100, start, angle);
+                    context.lineTo(window.game.canvas.width / 2, window.game.canvas.height / 2);
+                    context.closePath();
+                    context.stroke();
+                    if (fill) {
+                        context.fillStyle = color;
+                        context.fill();
+                    }
+                    context.restore();
+                }
+                */
+                /**
+                 * Draw a cross on the canvas.
+                 * @param point
+                 * @param color
+                 * @param width
+                 * @param alpha
+                 */
+                CanvasUtilsBase.prototype.drawCross = function (point, color, width, alpha) {
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    var canvas = context.canvas;
+                    point = this.mapToCanvas(point);
+                    this.drawLine(new KartwarsBot.Structures.Point2D(0, point.y), new KartwarsBot.Structures.Point2D(canvas.width, point.y), color, width, 0.15, false);
+                    this.drawLine(new KartwarsBot.Structures.Point2D(point.x, 0), new KartwarsBot.Structures.Point2D(point.x, canvas.height), color, width, alpha, false);
+                };
+                /**
+                 * Draw a line on the canvas.
+                 * @param p1
+                 * @param p2
+                 * @param color
+                 * @param width
+                 * @param alpha
+                 * @param mapToCanvas
+                 */
+                CanvasUtilsBase.prototype.drawLine = function (p1, p2, color, width, alpha, mapToCanvas) {
+                    if (width === undefined)
+                        width = 5;
+                    if (alpha === undefined)
+                        alpha = 1.0;
+                    if (mapToCanvas === undefined)
+                        mapToCanvas = true;
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    if (mapToCanvas) {
+                        p1 = this.mapToCanvas(p1);
+                        p2 = this.mapToCanvas(p2);
+                    }
+                    context.save();
+                    context.globalAlpha = alpha;
+                    context.beginPath();
+                    context.lineWidth = width * window.game.world.scale.x;
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.strokeStyle = color;
+                    context.moveTo(p1.x, p1.y);
+                    context.lineTo(p2.x, p2.y);
+                    context.stroke();
+                    context.restore();
+                };
+                CanvasUtilsBase.prototype.drawTriangle = function (p1, p2, p3, color, width, fill, alpha, mapToCanvas) {
+                    if (width === undefined)
+                        width = 5;
+                    if (alpha === undefined)
+                        alpha = 1.0;
+                    if (mapToCanvas === undefined)
+                        mapToCanvas = true;
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    if (mapToCanvas) {
+                        p1 = this.mapToCanvas(p1);
+                        p2 = this.mapToCanvas(p2);
+                        p3 = this.mapToCanvas(p3);
+                    }
+                    context.save();
+                    context.globalAlpha = alpha;
+                    context.beginPath();
+                    context.lineWidth = width * window.game.world.scale.x;
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.strokeStyle = color;
+                    context.moveTo(p1.x, p1.y);
+                    context.lineTo(p2.x, p2.y);
+                    context.lineTo(p3.x, p3.y);
+                    context.stroke();
+                    if (fill) {
+                        context.fillStyle = color;
+                        context.fill();
+                    }
+                    context.restore();
+                };
+                CanvasUtilsBase.prototype.drawPolygon = function (points, color, width, fill, alpha, mapToCanvas) {
+                    if (points.length < 3) {
+                        throw new Error("Polygon must have more than 2 vertices. Supplied number of vertices: " + points.length);
+                    }
+                    if (width === undefined)
+                        width = 5;
+                    if (alpha === undefined)
+                        alpha = 1.0;
+                    if (mapToCanvas === undefined)
+                        mapToCanvas = true;
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    if (mapToCanvas) {
+                        for (var idx = 0, length_1 = points.length; idx < length_1; idx++) {
+                            points[idx] = this.mapToCanvas(points[idx]);
+                        }
+                    }
+                    context.save();
+                    context.globalAlpha = alpha;
+                    context.beginPath();
+                    context.lineWidth = width * window.game.world.scale.x;
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.strokeStyle = color;
+                    context.moveTo(points[0].x, points[0].y);
+                    for (var idx = 1, length_2 = points.length, point = undefined; point = points[idx], idx < length_2; idx++) {
+                        context.lineTo(point.x, point.y);
+                    }
+                    context.closePath();
+                    context.stroke();
+                    if (fill) {
+                        context.fillStyle = color;
+                        context.fill();
+                    }
+                    context.restore();
+                };
+                /**
+                 * Draw text on the canvas.
+                 * @param point
+                 * @param text
+                 * @param color
+                 * @param alpha
+                 * @param mapToCanvas
+                 */
+                CanvasUtilsBase.prototype.drawText = function (point, text, color, alpha, mapToCanvas) {
+                    if (alpha === undefined)
+                        alpha = 1.0;
+                    if (mapToCanvas === undefined)
+                        mapToCanvas = true;
+                    var context = this.gameWrapper.input.canvas.getContext();
+                    if (mapToCanvas) {
+                        point = this.mapToCanvas(point);
+                    }
+                    context.save();
+                    context.globalAlpha = alpha;
+                    context.shadowBlur = this.opt.shadowBlur;
+                    context.shadowColor = color;
+                    context.fillStyle = color;
+                    context.font = 'bold 20px Arial';
+                    context.fillText(text, point.x, point.y);
+                    //context.stroke();
+                    context.restore();
+                };
+                return CanvasUtilsBase;
+            }());
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "setMouseCoordinates", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "mapToMouse", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "mapToCanvas", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawRect", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawCircle", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawArc", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawCross", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawLine", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawTriangle", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawPolygon", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.bound
+            ], CanvasUtilsBase.prototype, "drawText", null);
+            Utils.CanvasUtilsBase = CanvasUtilsBase;
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
+    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
+})(DracoolaArt || (DracoolaArt = {}));
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var DracoolaArt;
+(function (DracoolaArt) {
+    var KartwarsBot;
+    (function (KartwarsBot) {
+        var Utils;
+        (function (Utils) {
+            /**
+             * Canvas draw for Composed objects.
+             */
+            var CanvasUtils = (function (_super) {
+                __extends(CanvasUtils, _super);
+                function CanvasUtils() {
+                    return _super !== null && _super.apply(this, arguments) || this;
+                }
+                CanvasUtils.wrappedDrawInterceptor = function (fx) {
+                    CanvasUtils.interceptedWrappedDrawCalls.push(fx);
+                };
+                /**
+                 * Calls all below intercepted drawing methods.
+                 */
+                CanvasUtils.prototype.drawAllInterceptedWrappedCalls = function () {
+                    window.botFactory.clock.startFrame();
+                    if (this.opt.visualDebugging) {
+                        CanvasUtils.interceptedWrappedDrawCalls.forEach(function (fx) {
+                            fx();
+                        });
+                    }
+                    CanvasUtils.interceptedWrappedDrawCalls = [];
+                    window.botFactory.clock.endFrame();
+                };
+                /**
+                 * Draw global goal on canvas on the canvas.
+                 * @param goalCoordinates
+                 */
+                CanvasUtils.prototype.drawGoal = function (goalCoordinates) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    this.drawLine(playerPosition, goalCoordinates, this.opt.colors.goalLine, 2);
+                    this.drawCircle(goalCoordinates, this.opt.colors.goalDot, true);
+                    this.drawCross(goalCoordinates, this.opt.colors.goalCross, undefined, 0.05);
+                };
+                /**
+                 * Draw collision point on the canvas.
+                 * @param collisionPoint
+                 */
+                CanvasUtils.prototype.drawCollisionPoint = function (collisionPoint) {
+                    this.drawCircle(collisionPoint, this.opt.colors.collidedPoint, true);
+                };
+                /**
+                 * Draw collision circle on the canvas.
+                 * @param collisionCircle
+                 */
+                CanvasUtils.prototype.drawCollisionCircle = function (collisionCircle) {
+                    this.drawCircle(collisionCircle, this.opt.colors.collidedElement, false);
+                };
+                CanvasUtils.prototype.drawCollisionPolygon = function (polygon) {
+                    this.drawPolygon(polygon.geometryAsPoint2DArray, this.opt.colors.collidedElement, undefined, false);
+                };
+                /**
+                 * Draw collision avoidance lines on the canvas.
+                 * @param collisionPoint
+                 * @param avoidancePoint
+                 */
+                CanvasUtils.prototype.drawCollisionAvoidance = function (collisionPoint, avoidancePoint) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    this.drawLine(playerPosition, avoidancePoint, this.opt.colors.collisionAvoidancePointA, 5);
+                    this.drawLine(playerPosition, collisionPoint, this.opt.colors.collisionAvoidancePointB, 5);
+                };
+                /**
+                 * Draw food cluster on the canvas.
+                 * @param circle
+                 * @param quantity
+                 */
+                CanvasUtils.prototype.drawFoodCluster = function (circle, quantity) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    this.drawCircle(circle, this.opt.colors.foodCluster, false, 0.5);
+                    this.drawText(circle, quantity.toString(), this.opt.colors.foodClusterText);
+                    this.drawLine(playerPosition, circle, this.opt.colors.foodClusterLine, 2, 0.25);
+                    /*
+                    let bigCircle: Circle = {
+                        x: clusterMedianX,
+                        y: clusterMedianY,
+                        radius: clusterRadius * Cluster.radiusMultiplier
+                    };
+        
+                    this.drawCircle(bigCircle, 'white', false, 0.25);
+                    */
+                };
+                /**
+                 * Draw food cluster boundary on the canvas.
+                 * @param radius
+                 */
+                CanvasUtils.prototype.drawFoodClusterBoundary = function (radius) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    var foodClusterBoundaryCircle = new KartwarsBot.Structures.Circle(playerPosition.x, playerPosition.y, radius);
+                    this.drawCircle(foodClusterBoundaryCircle, this.opt.colors.foodClusterBoundary, false);
+                };
+                /**
+                 * Draw resource on the canvas.
+                 * @param resourceCircle
+                 * @param canBeCollected
+                 */
+                CanvasUtils.prototype.drawResource = function (resourceCircle, canBeCollected) {
+                    if (!this.opt.draw.food) {
+                        return;
+                    }
+                    this.drawCircle(resourceCircle, this.opt.colors.inRangeResource);
+                    if (canBeCollected) {
+                        var canBeCollectedResourceCircle = new KartwarsBot.Structures.Circle(resourceCircle.x, resourceCircle.y, resourceCircle.radius + 15);
+                        this.drawCircle(canBeCollectedResourceCircle, this.opt.colors.collectableResource);
+                    }
+                };
+                // TODO : Review
+                CanvasUtils.prototype.drawTunnel = function (left, right, alpha) {
+                    if (alpha == undefined) {
+                        alpha = 0.15;
+                    }
+                    this.drawLine(left.point1, left.point2, 'black', 3, alpha);
+                    this.drawLine(right.point1, right.point2, 'black', 3, alpha);
+                };
+                /**
+                 * Draw intersection prediction on the canvas.
+                 * @param goalCoordinates
+                 */
+                CanvasUtils.prototype.drawIntersectionPrediction = function (goalCoordinates) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    this.drawLine(playerPosition, goalCoordinates, this.opt.colors.predictionLine, 12, 0.75);
+                    this.drawCircle(goalCoordinates, this.opt.colors.predictionCircle, false, 0.75);
+                };
+                /**
+                 * Draw encircled player on the canvas.
+                 * @param playerCircle
+                 * @param danger
+                 */
+                CanvasUtils.prototype.drawEncircledPlayer = function (playerCircle, danger) {
+                    var color = (danger ? this.opt.colors.encircledPlayerDanger : this.opt.colors.encircledPlayerWarning);
+                    this.drawCircle(playerCircle, color, true, 0.2);
+                };
+                /**
+                 * Draw collision elements and draw lines to collision angles on the canvas.
+                 * @param collisionElements
+                 * @param collisionAngles
+                 */
+                CanvasUtils.prototype.drawCollisionElements = function (collisionElements, collisionAngles) {
+                    if (!this.opt.draw.dangers) {
+                        return;
+                    }
+                    //if (this.bot.opt.draw.enemies) {
+                    var playerPosition = this.gameWrapper.player.getPosition();
+                    for (var idx = 0, ll = collisionElements.length; idx < ll; idx++) {
+                        var thisCollisionPoint = collisionElements[idx];
+                        if (thisCollisionPoint !== undefined) {
+                            switch (thisCollisionPoint.shapeType) {
+                                case KartwarsBot.CollisionElementType.Circle:
+                                    {
+                                        this.drawCircle(thisCollisionPoint, this.opt.colors.collisionElement, false, 0.25);
+                                    }
+                                    break;
+                                case KartwarsBot.CollisionElementType.Polygon:
+                                    {
+                                        var points = thisCollisionPoint.geometry.map(function (element) {
+                                            return new KartwarsBot.Structures.Point2D(element.x, element.y);
+                                        });
+                                        this.drawPolygon(points, this.opt.colors.collisionElement, undefined, true, 0.1);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    for (var idx = 0, ll = collisionAngles.length; idx < ll; idx++) {
+                        var thisCollisionAngles = collisionAngles[idx];
+                        if (thisCollisionAngles !== undefined) {
+                            this.drawLine(playerPosition, new KartwarsBot.Structures.Point2D(thisCollisionAngles.x, thisCollisionAngles.y), this.opt.colors.collisionLine, 2, 0.25);
+                        }
+                    }
+                    //}
+                };
+                /**
+                 * Draw player on the canvas.
+                 * @param playerCircle
+                 * @param playerResourceGatherCircle
+                 * @param headCircle
+                 * @param tailCircle
+                 * @param leftSideCircle
+                 * @param rightSideCircle
+                 * @param emptyDangerRadian
+                 */
+                CanvasUtils.prototype.drawPlayer = function (playerCircle, playerResourceGatherCircle, headCircle, tailCircle, closeToImminentDangerCircle, leftSideCircle, rightSideCircle, emptyDangerRadian, emptyTailDangerRadian, emptyResourceGatherRadian) {
+                    if (!this.opt.draw.player) {
+                        return;
+                    }
+                    var playerRotation = this.gameWrapper.player.getRotation();
+                    //
+                    // Draw Close To Imminent Danger Circle
+                    {
+                        this.drawCircle(closeToImminentDangerCircle, this.opt.colors.closeToImminentDangerRadius, false, 0.35);
+                    }
+                    //
+                    // Draw Resource Gather Arc
+                    {
+                        this.drawArc(playerResourceGatherCircle, playerRotation, emptyResourceGatherRadian, this.opt.colors.frontResourceGatherArc, undefined, undefined, false);
+                    }
+                    //
+                    // Draw front Resource Gather lines
+                    {
+                        var pointA = Utils.MathUtils.arcPoint(playerResourceGatherCircle.x, playerResourceGatherCircle.y, playerResourceGatherCircle.radius, playerRotation - (emptyResourceGatherRadian / 2));
+                        var pointB = Utils.MathUtils.arcPoint(playerResourceGatherCircle.x, playerResourceGatherCircle.y, playerResourceGatherCircle.radius, playerRotation + (emptyResourceGatherRadian / 2));
+                        this.drawLine(new KartwarsBot.Structures.Point2D(playerResourceGatherCircle.x, playerResourceGatherCircle.y), pointA, this.opt.colors.frontResourceGatherArc);
+                        this.drawLine(new KartwarsBot.Structures.Point2D(playerResourceGatherCircle.x, playerResourceGatherCircle.y), pointB, this.opt.colors.frontResourceGatherArc);
+                    }
+                    {
+                        this.drawCircle(headCircle, this.opt.colors.playerHeadDetector, false);
+                        this.drawCircle(tailCircle, this.opt.colors.playerTailDetector, false);
+                        this.drawCircle(leftSideCircle, this.opt.colors.playerSideDetector, false);
+                        this.drawCircle(rightSideCircle, this.opt.colors.playerSideDetector, false);
+                    }
+                    {
+                        this.drawArc(playerCircle, playerRotation, emptyDangerRadian, this.opt.colors.playerRadius);
+                        this.drawArc(playerCircle, playerRotation, emptyDangerRadian, this.opt.colors.frontDangerArc, true, 0.1, false);
+                    }
+                    //
+                    // Experimental
+                    /*
+                    this.drawRect(new Structures.Rect(
+                        playerCircle.x, // - (circle.radius / 2),
+                        playerCircle.y, // - (circle.radius / 2),
+                        playerCircle.radius,
+                        playerCircle.radius),
+                        playerRotation,
+                        'pink', false, 0.25
+                    );
+                    */
+                    //
+                    // Draw front lines
+                    {
+                        var pointA = Utils.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation - (emptyDangerRadian / 2));
+                        var pointB = Utils.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation + (emptyDangerRadian / 2));
+                        this.drawTriangle(pointA, playerCircle, pointB, this.opt.colors.frontDangerArc, undefined, true, 0.1);
+                        this.drawLine(new KartwarsBot.Structures.Point2D(playerCircle.x, playerCircle.y), pointA, this.opt.colors.playerRadius);
+                        this.drawLine(new KartwarsBot.Structures.Point2D(playerCircle.x, playerCircle.y), pointB, this.opt.colors.playerRadius);
+                    }
+                    //
+                    // Draw tail lines
+                    {
+                        var pointA = Utils.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation + Math.PI - (emptyTailDangerRadian / 2));
+                        var pointB = Utils.MathUtils.arcPoint(playerCircle.x, playerCircle.y, playerCircle.radius, playerRotation + Math.PI + (emptyTailDangerRadian / 2));
+                        this.drawLine(new KartwarsBot.Structures.Point2D(playerCircle.x, playerCircle.y), pointA, this.opt.colors.tailDangerArc);
+                        this.drawLine(new KartwarsBot.Structures.Point2D(playerCircle.x, playerCircle.y), pointB, this.opt.colors.tailDangerArc);
+                    }
+                };
+                return CanvasUtils;
+            }(Utils.CanvasUtilsBase));
+            CanvasUtils.interceptedWrappedDrawCalls = [];
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawGoal", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawCollisionPoint", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawCollisionCircle", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawCollisionPolygon", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawCollisionAvoidance", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawFoodCluster", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawFoodClusterBoundary", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawResource", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawTunnel", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawIntersectionPrediction", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawEncircledPlayer", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawCollisionElements", null);
+            __decorate([
+                KartwarsBot.MethodDecoration.intercept(CanvasUtils.wrappedDrawInterceptor)
+            ], CanvasUtils.prototype, "drawPlayer", null);
+            Utils.CanvasUtils = CanvasUtils;
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -8098,7 +8142,7 @@ var DracoolaArt;
                     var thisCar = window.sprites[carId];
                     if (void 0 != thisCar) {
                         if (thisCar.weapon == undefined) {
-                            thisCar.weapon = new KartwarsBot.CarWeaponData(weaponIndex);
+                            thisCar.weapon = new KartwarsBot.Structures.CarWeaponData(weaponIndex);
                         }
                         //thisCar.weapon = weaponIndex;
                         thisCar.weapon.weaponType = weaponIndex;
@@ -8209,22 +8253,24 @@ var DracoolaArt;
                                 if (!bot.shapesHolster || !bot.shapesHolster.tunnelLeftSideLine || !bot.shapesHolster.tunnelRightSideLine) {
                                     return;
                                 }
-                                var deployedWeaponCoordinates = new KartwarsBot.Point2D(itemPositionX, itemPositionY);
-                                var kartPosition = new KartwarsBot.Point2D(window.mainCar.img.position.x, window.mainCar.img.position.y);
-                                var distance = KartwarsBot.MathUtils.getDistance(kartPosition, deployedWeaponCoordinates);
+                                var deployedWeaponCoordinates = new KartwarsBot.Structures.Point2D(itemPositionX, itemPositionY);
+                                var kartPosition = new KartwarsBot.Structures.Point2D(window.mainCar.img.position.x, window.mainCar.img.position.y);
+                                var distance = KartwarsBot.Utils.MathUtils.getDistance(kartPosition, deployedWeaponCoordinates);
                                 if (distance <= this.opt.maxDistanceForDetectingSelfDeployedWeapons /*&& window.mainCar.weapon.weaponType != CarWeapon.None*/) {
-                                    var isDeployedWeaponInTunnel = KartwarsBot.MathUtils.isLeft(bot.shapesHolster.tunnelLeftSideLine.point1, bot.shapesHolster.tunnelLeftSideLine.point2, deployedWeaponCoordinates) &&
-                                        KartwarsBot.MathUtils.isRight(bot.shapesHolster.tunnelRightSideLine.point1, bot.shapesHolster.tunnelRightSideLine.point2, deployedWeaponCoordinates);
+                                    var isDeployedWeaponInTunnel = KartwarsBot.Utils.MathUtils.isLeft(bot.shapesHolster.tunnelLeftSideLine.point1, bot.shapesHolster.tunnelLeftSideLine.point2, deployedWeaponCoordinates) &&
+                                        KartwarsBot.Utils.MathUtils.isRight(bot.shapesHolster.tunnelRightSideLine.point1, bot.shapesHolster.tunnelRightSideLine.point2, deployedWeaponCoordinates);
                                     if (isDeployedWeaponInTunnel) {
                                         switch (addItemSpecialCase) {
                                             case WebSocketAddItemActivatedDataTypeEnum.Missile:
                                                 {
                                                     gameWrapper.items.ignoreMissilesById(itemId);
+                                                    // window.log('Add Misil: ', itemId, itemPositionX, itemPositionY, K, D, distance, `previousWeaponType = ${CarWeapon[window.mainCar.weapon.previousWeaponType]}`, `weaponType = ${CarWeapon[window.mainCar.weapon.weaponType]}`);
                                                 }
                                                 break;
                                             case WebSocketAddItemActivatedDataTypeEnum.TeleMissile:
                                                 {
                                                     gameWrapper.items.ignoreMissilesById(itemId);
+                                                    // window.log('Add MisilTele: ', p, P, M, K, D, distance, `previousWeaponType = ${CarWeapon[window.mainCar.weapon.previousWeaponType]}`, `weaponType = ${CarWeapon[window.mainCar.weapon.weaponType]}`); //, `x=${window.mainCar.img.position.x}; y=${window.mainCar.img.position.y}`);
                                                 }
                                                 break;
                                         }
@@ -8306,7 +8352,9 @@ var DracoolaArt;
                                 for (var i = 0, ls = enemies.length; i < ls && enemies[i] !== null; i++) {
                                     var thisEnemy = enemies[i];
                                     if (thisEnemy.velocity) {
-                                        window.log("Chasing new enemy with id " + thisEnemy.id);
+                                        if (window.botFactory.developerInterface.opt.individual.chaseNewEnemy) {
+                                            window.log("Chasing new enemy with id " + thisEnemy.id);
+                                        }
                                         this.currentTarget = {
                                             reference: thisEnemy,
                                             x: thisEnemy.x,
@@ -8325,17 +8373,17 @@ var DracoolaArt;
                                 this.bot.stage = KartwarsBot.BotStageEnum.InterceptEnemy;
                                 // This might fail if there's no quadratic solution
                                 if (projectileMagnitude > 0) {
-                                    goalCoordinates = KartwarsBot.MathUtils.predictIntersectionEx(window.mainCar, selectedEnemy, projectileMagnitude);
+                                    goalCoordinates = KartwarsBot.Utils.MathUtils.predictIntersectionEx(window.mainCar, selectedEnemy, projectileMagnitude);
                                 }
                                 if (!goalCoordinates) {
-                                    goalCoordinates = KartwarsBot.MathUtils.predictIntersection(window.mainCar, selectedEnemy);
+                                    goalCoordinates = KartwarsBot.Utils.MathUtils.predictIntersection(window.mainCar, selectedEnemy);
                                 }
                                 // Draw intersection prediction
                                 this.canvas.drawIntersectionPrediction(goalCoordinates);
-                                return KartwarsBot.ActivityResult.CreateValidResponse(goalCoordinates);
+                                return KartwarsBot.Structures.ActivityResult.CreateValidResponse(goalCoordinates);
                             }
                         }
-                        return KartwarsBot.ActivityResult.CreateInvalidResponse();
+                        return KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                     };
                     return ChaseClosest;
                 }());
@@ -8441,26 +8489,26 @@ var DracoolaArt;
                                 }
                             }
                             // Sort by distance
-                            resources.sort(KartwarsBot.ArrayUtils.sortDistance);
+                            resources.sort(KartwarsBot.Utils.ArrayUtils.sortDistance);
                             //
                             // Select first available resource
                             var firstResource = null;
                             if (typeof (firstResource = resources[0]) !== 'undefined') {
-                                this.currentTarget = new KartwarsBot.Bot2Point2D(firstResource.x, firstResource.y, 50, 0.1, // ??
+                                this.currentTarget = new KartwarsBot.Structures.Bot2Point2D(firstResource.x, firstResource.y, 50, 0.1, // ??
                                 0, 0, firstResource.id);
                             }
                             else {
-                                this.currentTarget = new KartwarsBot.Bot2Point2D(this.bot.worldCenterX, this.bot.worldCenterY, 0, 0, 0, 0, undefined);
+                                this.currentTarget = new KartwarsBot.Structures.Bot2Point2D(this.bot.worldCenterX, this.bot.worldCenterY, 0, 0, 0, 0, undefined);
                             }
                         }
-                        return KartwarsBot.ActivityResult.CreateValidResponse(this.currentTarget);
+                        return KartwarsBot.Structures.ActivityResult.CreateValidResponse(this.currentTarget);
                     };
                     /**
                      * Determines if the resource is easy accessible and does require too many turns and misses.
                      * @param thisResource
                      */
                     FindClosestResourceBase.prototype.canBeCollected = function (thisResource) {
-                        var thisResourceCircle = new KartwarsBot.Circle(thisResource.x, thisResource.y, 2);
+                        var thisResourceCircle = new KartwarsBot.Structures.Circle(thisResource.x, thisResource.y, 2);
                         if (!this.bot.inFrontResourceGatherAngle(thisResourceCircle)) {
                             return false;
                         }
@@ -8498,14 +8546,13 @@ var DracoolaArt;
                      * @param resources
                      * @param baseRadius
                      */
-                    //@visualDebug
                     FindClosestResourceBase.prototype.drawResources = function (resources, baseRadius) {
-                        if (window.visualDebugging && this.canvas.opt.draw.player) {
+                        if (this.canvas.opt.visualDebugging && this.canvas.opt.draw.player) {
                             var playerResourceGatherRadius = this.bot.shapesHolster.playerResourceGatherCircle.radius;
                             for (var i = 0, ll = resources.length, thisResource = null; i < ll && (thisResource = resources[i]) !== null; i++) {
                                 if (thisResource.distance <= playerResourceGatherRadius) {
                                     var canBeCollected = this.canBeCollected(thisResource);
-                                    this.canvas.drawResource(new KartwarsBot.Circle(thisResource.x, thisResource.y, baseRadius), canBeCollected);
+                                    this.canvas.drawResource(new KartwarsBot.Structures.Circle(thisResource.x, thisResource.y, baseRadius), canBeCollected);
                                 }
                                 else {
                                     break;
@@ -8541,11 +8588,16 @@ var DracoolaArt;
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
@@ -8635,7 +8687,7 @@ var DracoolaArt;
                             this.gameWrapper = gameWrapper;
                             this.canvas = canvas;
                             this.opt = new Food.FindClosestClusterOptions();
-                            this.foodClusterWrapper = new KartwarsBot.ClusterWrapper();
+                            this.foodClusterWrapper = new KartwarsBot.Structures.ClusterWrapper();
                         }
                         FindClosestCluster.prototype.noop = function () {
                         };
@@ -8653,8 +8705,9 @@ var DracoolaArt;
                                 return el.distance <= playerRadius;
                             });
                             window.botFactory.clock.startFrame('ElementsDensity');
-                            var clusters = KartwarsBot.MathUtils.get2DElementsDensity(food, this.opt.sectorSize, this.opt.minimumElementsPerCluster);
+                            var clusters = KartwarsBot.Utils.MathUtils.get2DElementsDensity(food, this.opt.sectorSize, this.opt.minimumElementsPerCluster);
                             window.botFactory.clock.endFrame('ElementsDensity');
+                            // Compute radius for each cluster.
                             for (var clusterIdx = 0, clusterLength = clusters.length; clusterIdx < clusterLength; clusterIdx++) {
                                 var indexesInThisCluster = clusters[clusterIdx];
                                 var clusterMinX = Infinity, clusterMinY = Infinity, clusterMaxX = -Infinity, clusterMaxY = -Infinity;
@@ -8669,9 +8722,9 @@ var DracoolaArt;
                                     localSprites.push(sprite);
                                 }
                                 var clusterMedianX = (clusterMinX + clusterMaxX) / 2, clusterMedianY = (clusterMinY + clusterMaxY) / 2, clusterRadius = Math.max(clusterMaxX - clusterMinX, clusterMaxY - clusterMinY) / 2;
-                                var circle = new KartwarsBot.Circle(clusterMedianX, clusterMedianY, clusterRadius);
-                                var thisCluster = new KartwarsBot.Cluster(circle, localSprites);
-                                thisCluster.distance = KartwarsBot.MathUtils.getDistance(thisCluster, playerPosition);
+                                var circle = new KartwarsBot.Structures.Circle(clusterMedianX, clusterMedianY, clusterRadius);
+                                var thisCluster = new KartwarsBot.Structures.Cluster(circle, localSprites);
+                                thisCluster.distance = KartwarsBot.Utils.MathUtils.getDistance(thisCluster, playerPosition);
                                 localFoodClusters.push(thisCluster);
                                 // Draw food cluster
                                 this.canvas.drawFoodCluster(circle, indexesInThisCluster.length);
@@ -8680,7 +8733,7 @@ var DracoolaArt;
                             this.canvas.drawFoodClusterBoundary(playerRadius);
                             this.foodClusterWrapper.foodClusters = localFoodClusters;
                             window.botFactory.clock.endFrame();
-                            return KartwarsBot.ActivityResult.CreateCustomResponse(this.foodClusterWrapper);
+                            return KartwarsBot.Structures.ActivityResult.CreateCustomResponse(this.foodClusterWrapper);
                         };
                         return FindClosestCluster;
                     }());
@@ -8714,11 +8767,16 @@ var DracoolaArt;
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
@@ -8761,97 +8819,100 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        var Behaviour;
-        (function (Behaviour) {
-            var FoodBehaviour;
-            (function (FoodBehaviour) {
-                FoodBehaviour[FoodBehaviour["DoNotSeekFood"] = 0] = "DoNotSeekFood";
-                FoodBehaviour[FoodBehaviour["SeekFood"] = 1] = "SeekFood";
-                // SeekFoodCluster,
-                FoodBehaviour[FoodBehaviour["SeekFoodInsideFoodCluster"] = 2] = "SeekFoodInsideFoodCluster";
-                // InterceptFood, // ??
-                // StayInsideFoodCluster
-            })(FoodBehaviour = Behaviour.FoodBehaviour || (Behaviour.FoodBehaviour = {}));
-            var WeaponBehaviour;
-            (function (WeaponBehaviour) {
-                WeaponBehaviour[WeaponBehaviour["DoNotSeekWeapons"] = 0] = "DoNotSeekWeapons";
-                WeaponBehaviour[WeaponBehaviour["SeekWeaponsBasedOnAggressivity"] = 1] = "SeekWeaponsBasedOnAggressivity";
-            })(WeaponBehaviour = Behaviour.WeaponBehaviour || (Behaviour.WeaponBehaviour = {}));
-            var FightBehaviour;
-            (function (FightBehaviour) {
-                FightBehaviour[FightBehaviour["DoNotFight"] = 0] = "DoNotFight";
-                FightBehaviour[FightBehaviour["ShootImmediately"] = 1] = "ShootImmediately";
-                FightBehaviour[FightBehaviour["ShootWhenEnemyInCloseRange"] = 2] = "ShootWhenEnemyInCloseRange";
-                FightBehaviour[FightBehaviour["ShootWhenEnemyInBigRange"] = 3] = "ShootWhenEnemyInBigRange";
-                FightBehaviour[FightBehaviour["InterceptAndShootWhenEnemyInTunnel"] = 4] = "InterceptAndShootWhenEnemyInTunnel";
-            })(FightBehaviour = Behaviour.FightBehaviour || (Behaviour.FightBehaviour = {}));
-            var AvoidanceBehaviour;
-            (function (AvoidanceBehaviour) {
-                AvoidanceBehaviour[AvoidanceBehaviour["DoNotAvoid"] = 0] = "DoNotAvoid";
-                AvoidanceBehaviour[AvoidanceBehaviour["AvoidLethalEnemies"] = 1] = "AvoidLethalEnemies";
-            })(AvoidanceBehaviour = Behaviour.AvoidanceBehaviour || (Behaviour.AvoidanceBehaviour = {}));
-            var BehaviourBuilder = (function () {
-                function BehaviourBuilder() {
-                }
-                BehaviourBuilder.getDefaultBehaviour = function () {
-                    var behaviourData = new BehaviourData();
-                    behaviourData.Food = FoodBehaviour.SeekFoodInsideFoodCluster;
-                    behaviourData.Weapon = WeaponBehaviour.SeekWeaponsBasedOnAggressivity;
-                    behaviourData.Fight = FightBehaviour.ShootImmediately;
-                    behaviourData.Avoidance = AvoidanceBehaviour.AvoidLethalEnemies;
-                    return behaviourData;
-                };
-                return BehaviourBuilder;
-            }());
-            Behaviour.BehaviourBuilder = BehaviourBuilder;
-            var BehaviourData = (function () {
-                function BehaviourData() {
-                }
-                Object.defineProperty(BehaviourData.prototype, "Food", {
-                    get: function () {
-                        return this._food;
-                    },
-                    set: function (value) {
-                        this._food = FoodBehaviour[FoodBehaviour[value]];
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(BehaviourData.prototype, "Weapon", {
-                    get: function () {
-                        return this._weapon;
-                    },
-                    set: function (value) {
-                        this._weapon = WeaponBehaviour[WeaponBehaviour[value]];
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(BehaviourData.prototype, "Fight", {
-                    get: function () {
-                        return this._fight;
-                    },
-                    set: function (value) {
-                        this._fight = FightBehaviour[FightBehaviour[value]];
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(BehaviourData.prototype, "Avoidance", {
-                    get: function () {
-                        return this._avoidance;
-                    },
-                    set: function (value) {
-                        this._avoidance = AvoidanceBehaviour[AvoidanceBehaviour[value]];
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                return BehaviourData;
-            }());
-            BehaviourData.defaultBehaviour = BehaviourBuilder.getDefaultBehaviour();
-            Behaviour.BehaviourData = BehaviourData;
-        })(Behaviour = KartwarsBot.Behaviour || (KartwarsBot.Behaviour = {}));
+        var Strategy;
+        (function (Strategy) {
+            var Behaviour;
+            (function (Behaviour) {
+                var FoodBehaviour;
+                (function (FoodBehaviour) {
+                    FoodBehaviour[FoodBehaviour["DoNotSeekFood"] = 0] = "DoNotSeekFood";
+                    FoodBehaviour[FoodBehaviour["SeekFood"] = 1] = "SeekFood";
+                    // SeekFoodCluster,
+                    FoodBehaviour[FoodBehaviour["SeekFoodInsideFoodCluster"] = 2] = "SeekFoodInsideFoodCluster";
+                    // InterceptFood, // ??
+                    // StayInsideFoodCluster
+                })(FoodBehaviour = Behaviour.FoodBehaviour || (Behaviour.FoodBehaviour = {}));
+                var WeaponBehaviour;
+                (function (WeaponBehaviour) {
+                    WeaponBehaviour[WeaponBehaviour["DoNotSeekWeapons"] = 0] = "DoNotSeekWeapons";
+                    WeaponBehaviour[WeaponBehaviour["SeekWeaponsBasedOnAggressivity"] = 1] = "SeekWeaponsBasedOnAggressivity";
+                })(WeaponBehaviour = Behaviour.WeaponBehaviour || (Behaviour.WeaponBehaviour = {}));
+                var FightBehaviour;
+                (function (FightBehaviour) {
+                    FightBehaviour[FightBehaviour["DoNotFight"] = 0] = "DoNotFight";
+                    FightBehaviour[FightBehaviour["ShootImmediately"] = 1] = "ShootImmediately";
+                    FightBehaviour[FightBehaviour["ShootWhenEnemyInCloseRange"] = 2] = "ShootWhenEnemyInCloseRange";
+                    FightBehaviour[FightBehaviour["ShootWhenEnemyInBigRange"] = 3] = "ShootWhenEnemyInBigRange";
+                    FightBehaviour[FightBehaviour["InterceptAndShootWhenEnemyInTunnel"] = 4] = "InterceptAndShootWhenEnemyInTunnel";
+                })(FightBehaviour = Behaviour.FightBehaviour || (Behaviour.FightBehaviour = {}));
+                var AvoidanceBehaviour;
+                (function (AvoidanceBehaviour) {
+                    AvoidanceBehaviour[AvoidanceBehaviour["DoNotAvoid"] = 0] = "DoNotAvoid";
+                    AvoidanceBehaviour[AvoidanceBehaviour["AvoidLethalEnemies"] = 1] = "AvoidLethalEnemies";
+                })(AvoidanceBehaviour = Behaviour.AvoidanceBehaviour || (Behaviour.AvoidanceBehaviour = {}));
+                var BehaviourBuilder = (function () {
+                    function BehaviourBuilder() {
+                    }
+                    BehaviourBuilder.getDefaultBehaviour = function () {
+                        var behaviourData = new BehaviourData();
+                        behaviourData.Food = FoodBehaviour.SeekFoodInsideFoodCluster;
+                        behaviourData.Weapon = WeaponBehaviour.SeekWeaponsBasedOnAggressivity;
+                        behaviourData.Fight = FightBehaviour.ShootImmediately;
+                        behaviourData.Avoidance = AvoidanceBehaviour.AvoidLethalEnemies;
+                        return behaviourData;
+                    };
+                    return BehaviourBuilder;
+                }());
+                Behaviour.BehaviourBuilder = BehaviourBuilder;
+                var BehaviourData = (function () {
+                    function BehaviourData() {
+                    }
+                    Object.defineProperty(BehaviourData.prototype, "Food", {
+                        get: function () {
+                            return this._food;
+                        },
+                        set: function (value) {
+                            this._food = FoodBehaviour[FoodBehaviour[value]];
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(BehaviourData.prototype, "Weapon", {
+                        get: function () {
+                            return this._weapon;
+                        },
+                        set: function (value) {
+                            this._weapon = WeaponBehaviour[WeaponBehaviour[value]];
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(BehaviourData.prototype, "Fight", {
+                        get: function () {
+                            return this._fight;
+                        },
+                        set: function (value) {
+                            this._fight = FightBehaviour[FightBehaviour[value]];
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(BehaviourData.prototype, "Avoidance", {
+                        get: function () {
+                            return this._avoidance;
+                        },
+                        set: function (value) {
+                            this._avoidance = AvoidanceBehaviour[AvoidanceBehaviour[value]];
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    return BehaviourData;
+                }());
+                BehaviourData.defaultBehaviour = BehaviourBuilder.getDefaultBehaviour();
+                Behaviour.BehaviourData = BehaviourData;
+            })(Behaviour = Strategy.Behaviour || (Strategy.Behaviour = {}));
+        })(Strategy = KartwarsBot.Strategy || (KartwarsBot.Strategy = {}));
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -9016,11 +9077,16 @@ var DracoolaArt;
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
@@ -9141,32 +9207,32 @@ var DracoolaArt;
                     if (this.aggressivity <= 0) {
                         return;
                     }
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     // Reset Force Chasing Prediction
                     this._forceChasingPrediction = false;
                     switch (defaultBehaviour.Fight) {
-                        case KartwarsBot.Behaviour.FightBehaviour.DoNotFight:
+                        case Strategy.Behaviour.FightBehaviour.DoNotFight:
                             {
                                 // NOOP
                                 this.FightTactics.noop();
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.ShootImmediately:
+                        case Strategy.Behaviour.FightBehaviour.ShootImmediately:
                             {
                                 this.bot.fireWeapon();
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange:
+                        case Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange:
                             {
                                 this.FightTactics.action();
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange:
+                        case Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange:
                             {
                                 this.FightTactics.action(this.bot.shapesHolster.playerCircle.radius * 2);
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel: {
+                        case Strategy.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel: {
                             // TODO : Review
                             if (window.mainCar.weapon) {
                                 var doFightTactics = false;
@@ -9222,8 +9288,8 @@ var DracoolaArt;
                  */
                 DefaultStrategy.prototype.resourceAction = function (resourcePriority) {
                     var resourceActivityResult = null;
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
-                    if (defaultBehaviour.Weapon == KartwarsBot.Behaviour.WeaponBehaviour.DoNotSeekWeapons) {
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
+                    if (defaultBehaviour.Weapon == Strategy.Behaviour.WeaponBehaviour.DoNotSeekWeapons) {
                         return this.foodAction();
                     }
                     if (resourcePriority == KartwarsBot.Tactics.Resource.ResourcePriority.Food) {
@@ -9246,17 +9312,17 @@ var DracoolaArt;
                 DefaultStrategy.prototype.foodAction = function () {
                     var foodTacticsActivityResult = null;
                     window.botFactory.clock.startFrame();
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     if (this.gameWrapper.util.isPlaying) {
                         switch (defaultBehaviour.Food) {
-                            case KartwarsBot.Behaviour.FoodBehaviour.DoNotSeekFood:
+                            case Strategy.Behaviour.FoodBehaviour.DoNotSeekFood:
                                 {
                                     // NOOP
                                     this.FoodTactics.noop();
-                                    foodTacticsActivityResult = KartwarsBot.ActivityResult.CreateInvalidResponse();
+                                    foodTacticsActivityResult = KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                                 }
                                 break;
-                            case KartwarsBot.Behaviour.FoodBehaviour.SeekFood:
+                            case Strategy.Behaviour.FoodBehaviour.SeekFood:
                                 {
                                     foodTacticsActivityResult = this.FoodTactics.action();
                                 }
@@ -9267,7 +9333,7 @@ var DracoolaArt;
                                 this.FoodTactics.noop();
                             } break;
                             */
-                            case KartwarsBot.Behaviour.FoodBehaviour.SeekFoodInsideFoodCluster:
+                            case Strategy.Behaviour.FoodBehaviour.SeekFoodInsideFoodCluster:
                                 {
                                     //
                                     // Experimental
@@ -9289,11 +9355,13 @@ var DracoolaArt;
                                         */
                                         foodTacticsActivityResult = this.FoodTactics.action();
                                     }
+                                    //
+                                    //
                                 }
                                 break;
                             default:
                                 {
-                                    foodTacticsActivityResult = KartwarsBot.ActivityResult.CreateInvalidResponse();
+                                    foodTacticsActivityResult = KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                                 }
                                 break;
                         }
@@ -9308,7 +9376,7 @@ var DracoolaArt;
                     }
                     var gui = datGUIWrapper.gui;
                     var smallestRadianDivisions = 32;
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     {
                         var botOptions = gui.addFolder('Bot Options');
                         this._guiElements.push(botOptions.domElement);
@@ -9385,26 +9453,26 @@ var DracoolaArt;
                         gui.remember(defaultBehaviour);
                         /* tslint:disable:object-literal-sort-keys */
                         var foodBehaviourConstrains = {
-                            'Do Not Seek Food': KartwarsBot.Behaviour.FoodBehaviour.DoNotSeekFood,
-                            'Seek Food': KartwarsBot.Behaviour.FoodBehaviour.SeekFood,
+                            'Do Not Seek Food': Strategy.Behaviour.FoodBehaviour.DoNotSeekFood,
+                            'Seek Food': Strategy.Behaviour.FoodBehaviour.SeekFood,
                             //'Seek Food Cluster': Behaviour.FoodBehaviour.SeekFoodCluster,
-                            'Seek Food Inside Food Cluster': KartwarsBot.Behaviour.FoodBehaviour.SeekFoodInsideFoodCluster,
+                            'Seek Food Inside Food Cluster': Strategy.Behaviour.FoodBehaviour.SeekFoodInsideFoodCluster,
                         };
                         var weaponBehaviourConstrains = {
-                            'Do Not Seek Weapons': KartwarsBot.Behaviour.WeaponBehaviour.DoNotSeekWeapons,
-                            'Seek Weapons Based On Aggressivity': KartwarsBot.Behaviour.WeaponBehaviour.SeekWeaponsBasedOnAggressivity,
+                            'Do Not Seek Weapons': Strategy.Behaviour.WeaponBehaviour.DoNotSeekWeapons,
+                            'Seek Weapons Based On Aggressivity': Strategy.Behaviour.WeaponBehaviour.SeekWeaponsBasedOnAggressivity,
                         };
                         var fightBehaviourConstrains = {
-                            'Do Not Fight': KartwarsBot.Behaviour.FightBehaviour.DoNotFight,
-                            'Shoot Immediately': KartwarsBot.Behaviour.FightBehaviour.ShootImmediately,
-                            'Shoot When Enemy In Close Range': KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange,
-                            'Shoot When Enemy In Big Range': KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange,
+                            'Do Not Fight': Strategy.Behaviour.FightBehaviour.DoNotFight,
+                            'Shoot Immediately': Strategy.Behaviour.FightBehaviour.ShootImmediately,
+                            'Shoot When Enemy In Close Range': Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange,
+                            'Shoot When Enemy In Big Range': Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange,
                             //'Chase Closest & Shoot When Enemy In Close Range': Behaviour.FightBehaviour.ChaseClosest,
-                            'Intercept And Shoot When Enemy In Tunnel': KartwarsBot.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel,
+                            'Intercept And Shoot When Enemy In Tunnel': Strategy.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel,
                         };
                         var avoidanceBehaviourConstrains = {
-                            'Do Not Avoid': KartwarsBot.Behaviour.AvoidanceBehaviour.DoNotAvoid,
-                            'Avoid Lethal Enemies': KartwarsBot.Behaviour.AvoidanceBehaviour.AvoidLethalEnemies,
+                            'Do Not Avoid': Strategy.Behaviour.AvoidanceBehaviour.DoNotAvoid,
+                            'Avoid Lethal Enemies': Strategy.Behaviour.AvoidanceBehaviour.AvoidLethalEnemies,
                         };
                         /* tslint:enable:object-literal-sort-keys */
                         behaviourOptions.add(defaultBehaviour, KartwarsBot.nameof(function () { return defaultBehaviour.Food; }), foodBehaviourConstrains);
@@ -9421,55 +9489,6 @@ var DracoolaArt;
                         findClosestClusterFoodTacticsOptions.add(this.FindClosestClusterFoodTactics.opt, KartwarsBot.nameof(function () { return _this.FindClosestClusterFoodTactics.opt.scanRadius; }), 100, 10000).step(50);
                         findClosestClusterFoodTacticsOptions.add(this.FindClosestClusterFoodTactics.opt, KartwarsBot.nameof(function () { return _this.FindClosestClusterFoodTactics.opt.sectorSize; }), 10, 1000).step(5);
                         findClosestClusterFoodTacticsOptions.add(this.FindClosestClusterFoodTactics.opt, KartwarsBot.nameof(function () { return _this.FindClosestClusterFoodTactics.opt.minimumElementsPerCluster; }), 1, 350).step(1);
-                    }
-                    {
-                        var visualDebuggingOptions = gui.addFolder('Visual Debugging');
-                        this._guiElements.push(visualDebuggingOptions.domElement);
-                        visualDebuggingOptions.open();
-                        gui.remember(window);
-                        gui.remember(this.canvas.opt);
-                        gui.remember(this.canvas.opt.draw);
-                        gui.remember(this.canvas.opt.colors);
-                        visualDebuggingOptions.add(window, 'visualDebugging');
-                        visualDebuggingOptions.add(this.canvas.opt, 'shadowBlur').name('Shadow Blur');
-                        {
-                            var visualDebuggingIndividualOptions = visualDebuggingOptions.addFolder('Individual');
-                            visualDebuggingIndividualOptions.open();
-                            visualDebuggingIndividualOptions.add(this.canvas.opt.draw, KartwarsBot.nameof(function () { return _this.canvas.opt.draw.player; }));
-                            visualDebuggingIndividualOptions.add(this.canvas.opt.draw, KartwarsBot.nameof(function () { return _this.canvas.opt.draw.dangers; }));
-                            visualDebuggingIndividualOptions.add(this.canvas.opt.draw, KartwarsBot.nameof(function () { return _this.canvas.opt.draw.food; }));
-                        }
-                        {
-                            var visualDebuggingColorsOptions = visualDebuggingOptions.addFolder('Colors');
-                            //visualDebuggingIndividualOptions.open();
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.goalLine; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.goalDot; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.goalCross; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.collidedPoint; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.collidedElement; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.collisionAvoidancePointA; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.collisionAvoidancePointB; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.foodCluster; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.foodClusterText; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.foodClusterLine; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.foodClusterBoundary; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.inRangeResource; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.collectableResource; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.predictionLine; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.predictionCircle; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.encircledPlayerWarning; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.encircledPlayerDanger; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.collisionElement; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.collisionLine; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.playerRadius; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.closeToImminentDangerRadius; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.playerSideDetector; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.playerHeadDetector; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.playerTailDetector; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.frontResourceGatherArc; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.frontDangerArc; }));
-                            visualDebuggingColorsOptions.add(this.canvas.opt.colors, KartwarsBot.nameof(function () { return _this.canvas.opt.colors.tailDangerArc; }));
-                        }
                     }
                     {
                         var fizzyTextOptions = gui.addFolder('Fizzy Text');
@@ -9499,11 +9518,16 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 /* tslint:disable */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9566,7 +9590,7 @@ var DracoolaArt;
                     var playerPosition = this.gameWrapper.player.getPosition();
                     if (!this.startPosition) {
                         this.startPosition = playerPosition;
-                        goalCoordinates = new KartwarsBot.Point2D(playerPosition.x, playerPosition.y);
+                        goalCoordinates = new KartwarsBot.Structures.Point2D(playerPosition.x, playerPosition.y);
                     }
                     this.xPoints.p1 = Math.min(this.xPoints.p1, playerPosition.x);
                     this.xPoints.p2 = Math.max(this.xPoints.p2, playerPosition.x);
@@ -9597,10 +9621,10 @@ var DracoolaArt;
                     window['xPoints'] = this.xPoints;
                     window['yPoints'] = this.yPoints;
                     if (goalCoordinates) {
-                        foodTacticsActivityResult = KartwarsBot.ActivityResult.CreateValidResponse(goalCoordinates);
+                        foodTacticsActivityResult = KartwarsBot.Structures.ActivityResult.CreateValidResponse(goalCoordinates);
                     }
                     else {
-                        foodTacticsActivityResult = KartwarsBot.ActivityResult.CreateValidResponse(this.bot.goal.coordinates);
+                        foodTacticsActivityResult = KartwarsBot.Structures.ActivityResult.CreateValidResponse(this.bot.goal.coordinates);
                     }
                     window.botFactory.clock.endFrame();
                     return foodTacticsActivityResult;
@@ -9614,7 +9638,7 @@ var DracoolaArt;
                         return;
                     }
                     var gui = datGUIWrapper.gui;
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     {
                         var baseControlsOptions = gui.addFolder('Torque Test Actions');
                         this._guiElements.push(baseControlsOptions.domElement);
@@ -9636,11 +9660,16 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 /* tslint:disable */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9706,12 +9735,12 @@ var DracoolaArt;
                             };
                         }
                     }
-                    var preprocessedGoalCoordinates = new KartwarsBot.Point2D(this.currentEnemy.x, this.currentEnemy.y);
+                    var preprocessedGoalCoordinates = new KartwarsBot.Structures.Point2D(this.currentEnemy.x, this.currentEnemy.y);
                     var selectedEnemy = this.currentEnemy.thisEnemy;
                     if (this.usePrediction && selectedEnemy) {
                         if (selectedEnemy.velocity) {
-                            preprocessedGoalCoordinates = KartwarsBot.MathUtils.predictIntersection(window.mainCar, selectedEnemy);
-                            var goalCoordinatesEx = KartwarsBot.MathUtils.predictIntersectionEx(window.mainCar, selectedEnemy, 20.25);
+                            preprocessedGoalCoordinates = KartwarsBot.Utils.MathUtils.predictIntersection(window.mainCar, selectedEnemy);
+                            var goalCoordinatesEx = KartwarsBot.Utils.MathUtils.predictIntersectionEx(window.mainCar, selectedEnemy, 20.25);
                             if (goalCoordinatesEx) {
                                 var playerPosition = this.gameWrapper.player.getPosition();
                                 this.canvas.drawLine(playerPosition, goalCoordinatesEx, 'black', 10, 0.75);
@@ -9719,7 +9748,7 @@ var DracoolaArt;
                             }
                         }
                     }
-                    foodTacticsActivityResult = KartwarsBot.ActivityResult.CreateValidResponse(preprocessedGoalCoordinates);
+                    foodTacticsActivityResult = KartwarsBot.Structures.ActivityResult.CreateValidResponse(preprocessedGoalCoordinates);
                     window.botFactory.clock.endFrame();
                     return foodTacticsActivityResult;
                 };
@@ -9732,7 +9761,7 @@ var DracoolaArt;
                         return;
                     }
                     var gui = datGUIWrapper.gui;
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     {
                         var baseControlsOptions = gui.addFolder('Pursuit Test Actions');
                         this._guiElements.push(baseControlsOptions.domElement);
@@ -9752,11 +9781,16 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 /* tslint:disable */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
@@ -9816,32 +9850,32 @@ var DracoolaArt;
                     if (this.aggressivity <= 0) {
                         return;
                     }
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     // Reset Force Chasing Prediction
                     this._forceChasingPrediction = false;
                     switch (defaultBehaviour.Fight) {
-                        case KartwarsBot.Behaviour.FightBehaviour.DoNotFight:
+                        case Strategy.Behaviour.FightBehaviour.DoNotFight:
                             {
                                 // NOOP
                                 this.FightTactics.noop();
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.ShootImmediately:
+                        case Strategy.Behaviour.FightBehaviour.ShootImmediately:
                             {
                                 this.bot.fireWeapon();
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange:
+                        case Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange:
                             {
                                 this.FightTactics.action();
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange:
+                        case Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange:
                             {
                                 this.FightTactics.action(this.bot.shapesHolster.playerCircle.radius * 2);
                             }
                             break;
-                        case KartwarsBot.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel: {
+                        case Strategy.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel: {
                             // TODO : Review
                             if (window.mainCar.weapon) {
                                 var doFightTactics = false;
@@ -9890,7 +9924,7 @@ var DracoolaArt;
                  * Food action.
                  */
                 PursuitAndShootBotStrategy.prototype.foodAction = function () {
-                    return KartwarsBot.ActivityResult.CreateInvalidResponse();
+                    return KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                 };
                 PursuitAndShootBotStrategy.prototype.initDatGui = function (datGUIWrapper) {
                     var _this = this;
@@ -9899,7 +9933,7 @@ var DracoolaArt;
                     }
                     var gui = datGUIWrapper.gui;
                     var smallestRadianDivisions = 32;
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     {
                         var foodActionsOptions = gui.addFolder('Tactics (Pursuit & Shoot)');
                         this._guiElements.push(foodActionsOptions.domElement);
@@ -9918,26 +9952,26 @@ var DracoolaArt;
                         gui.remember(this);
                         gui.remember(defaultBehaviour);
                         var foodBehaviourConstrains = {
-                            'Do Not Seek Food': KartwarsBot.Behaviour.FoodBehaviour.DoNotSeekFood,
-                            'Seek Food': KartwarsBot.Behaviour.FoodBehaviour.SeekFood,
+                            'Do Not Seek Food': Strategy.Behaviour.FoodBehaviour.DoNotSeekFood,
+                            'Seek Food': Strategy.Behaviour.FoodBehaviour.SeekFood,
                             //'Seek Food Cluster': Behaviour.FoodBehaviour.SeekFoodCluster,
-                            'Seek Food Inside Food Cluster': KartwarsBot.Behaviour.FoodBehaviour.SeekFoodInsideFoodCluster,
+                            'Seek Food Inside Food Cluster': Strategy.Behaviour.FoodBehaviour.SeekFoodInsideFoodCluster,
                         };
                         var weaponBehaviourConstrains = {
-                            'Do Not Seek Weapons': KartwarsBot.Behaviour.WeaponBehaviour.DoNotSeekWeapons,
-                            'Seek Weapons Based On Agresivity': KartwarsBot.Behaviour.WeaponBehaviour.SeekWeaponsBasedOnAggressivity,
+                            'Do Not Seek Weapons': Strategy.Behaviour.WeaponBehaviour.DoNotSeekWeapons,
+                            'Seek Weapons Based On Agresivity': Strategy.Behaviour.WeaponBehaviour.SeekWeaponsBasedOnAggressivity,
                         };
                         var fightBehaviourConstrains = {
-                            'Do Not Fight': KartwarsBot.Behaviour.FightBehaviour.DoNotFight,
-                            'Shoot Immediately': KartwarsBot.Behaviour.FightBehaviour.ShootImmediately,
-                            'Shoot When Enemy In Close Range': KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange,
-                            'Shoot When Enemy In Big Range': KartwarsBot.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange,
+                            'Do Not Fight': Strategy.Behaviour.FightBehaviour.DoNotFight,
+                            'Shoot Immediately': Strategy.Behaviour.FightBehaviour.ShootImmediately,
+                            'Shoot When Enemy In Close Range': Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInCloseRange,
+                            'Shoot When Enemy In Big Range': Strategy.Behaviour.FightBehaviour.ShootWhenEnemyInBigRange,
                             //'Chase Closest & Shoot When Enemy In Close Range': Behaviour.FightBehaviour.ChaseClosest,
-                            'Intercept And Shoot When Enemy In Tunnel': KartwarsBot.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel,
+                            'Intercept And Shoot When Enemy In Tunnel': Strategy.Behaviour.FightBehaviour.InterceptAndShootWhenEnemyInTunnel,
                         };
                         var avoidanceBehaviourConstrains = {
-                            'Do Not Avoid': KartwarsBot.Behaviour.AvoidanceBehaviour.DoNotAvoid,
-                            'Avoid Lethal Enemies': KartwarsBot.Behaviour.AvoidanceBehaviour.AvoidLethalEnemies,
+                            'Do Not Avoid': Strategy.Behaviour.AvoidanceBehaviour.DoNotAvoid,
+                            'Avoid Lethal Enemies': Strategy.Behaviour.AvoidanceBehaviour.AvoidLethalEnemies,
                         };
                         behaviourOptions.add(defaultBehaviour, KartwarsBot.nameof(function () { return defaultBehaviour.Food; }), foodBehaviourConstrains);
                         behaviourOptions.add(defaultBehaviour, KartwarsBot.nameof(function () { return defaultBehaviour.Weapon; }), weaponBehaviourConstrains);
@@ -9973,11 +10007,16 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 /* tslint:disable */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10024,7 +10063,7 @@ var DracoolaArt;
                         var x = element.img.position.x, y = element.img.position.y;
                         element.x = x;
                         element.y = y;
-                        element.distance = KartwarsBot.MathUtils.getDistance(element, playerPosition);
+                        element.distance = KartwarsBot.Utils.MathUtils.getDistance(element, playerPosition);
                         if (skipId && (element.id == skipId)) {
                             delete (localElements[localSprite]);
                             continue;
@@ -10042,11 +10081,11 @@ var DracoolaArt;
                     var enemies = this._baseGetItems(window.sprites, window.Car, window.mainCar.id);
                     var $this = this;
                     enemies.forEach(function (element) {
-                        $this.canvas.drawCircle(new KartwarsBot.Circle(element.x, element.y, 75), 'red', true, 0.25);
+                        $this.canvas.drawCircle(new KartwarsBot.Structures.Circle(element.x, element.y, 75), 'red', true, 0.25);
                     });
                     //
                     //
-                    foodTacticsActivityResult = KartwarsBot.ActivityResult.CreateValidResponse(new KartwarsBot.Point2D(this.bot.worldCenterX, this.bot.worldCenterY));
+                    foodTacticsActivityResult = KartwarsBot.Structures.ActivityResult.CreateValidResponse(new KartwarsBot.Structures.Point2D(this.bot.worldCenterX, this.bot.worldCenterY));
                     window.botFactory.clock.endFrame();
                     return foodTacticsActivityResult;
                 };
@@ -10058,11 +10097,12 @@ var DracoolaArt;
                         return;
                     }
                     var gui = datGUIWrapper.gui;
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     {
                         var baseControlsOptions = gui.addFolder('Draw Enemies Test Actions');
                         this._guiElements.push(baseControlsOptions.domElement);
                         baseControlsOptions.open();
+                        //baseControlsOptions.add(this, 'property');
                     }
                     this._guiIsInitialised = true;
                 };
@@ -10077,11 +10117,16 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 /* tslint:disable */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10146,11 +10191,12 @@ var DracoolaArt;
                         return;
                     }
                     var gui = datGUIWrapper.gui;
-                    var defaultBehaviour = KartwarsBot.Behaviour.BehaviourData.defaultBehaviour;
+                    var defaultBehaviour = Strategy.Behaviour.BehaviourData.defaultBehaviour;
                     {
                         var baseControlsOptions = gui.addFolder('Interconnect Food Test Actions');
                         this._guiElements.push(baseControlsOptions.domElement);
                         baseControlsOptions.open();
+                        //baseControlsOptions.add(this, 'property');
                     }
                     this._guiIsInitialised = true;
                 };
@@ -10603,7 +10649,7 @@ var DracoolaArt;
                 (function (Managers) {
                     Managers[Managers["Default"] = 0] = "Default";
                     Managers[Managers["Advanced"] = 1] = "Advanced";
-                    Managers[Managers["\u00DCber"] = 2] = "\u00DCber";
+                    // Uber
                 })(Managers = Collision.Managers || (Collision.Managers = {}));
             })(Collision = Manager.Collision || (Manager.Collision = {}));
         })(Manager = KartwarsBot.Manager || (KartwarsBot.Manager = {}));
@@ -10694,7 +10740,7 @@ var DracoolaArt;
                             openAngles.push({ openStart: openStart, openEnd: openStart, sz: 0 });
                         }
                         if (openAngles.length > 0) {
-                            openAngles.sort(KartwarsBot.ArrayUtils.sortSz);
+                            openAngles.sort(KartwarsBot.Utils.ArrayUtils.sortSz);
                             return this.bot.changeHeadingAbs((openAngles[0].openEnd - openAngles[0].sz / 2) * this.bot.opt.arcSize);
                         }
                         else {
@@ -10713,10 +10759,10 @@ var DracoolaArt;
                         if (ang === undefined || ang > Math.PI) {
                             ang = Math.PI;
                         }
-                        var end = new KartwarsBot.Point2D(playerPosition.x + 2000 * this.bot.cos, playerPosition.y + 2000 * this.bot.sin);
+                        var end = new KartwarsBot.Structures.Point2D(playerPosition.x + 2000 * this.bot.cos, playerPosition.y + 2000 * this.bot.sin);
                         // Draw collision avoidance
                         this.canvas.drawCollisionAvoidance(point, end);
-                        if (KartwarsBot.MathUtils.isLeft(playerPosition, end, point)) {
+                        if (KartwarsBot.Utils.MathUtils.isLeft(playerPosition, end, point)) {
                             return this.bot.changeHeadingAbs(point.ang - ang);
                         }
                         else {
@@ -10734,12 +10780,12 @@ var DracoolaArt;
                             var collisionElement = collisionElements[idx];
                             // Ensures the distance is set
                             this.bot.setDistance2FromPlayer(collisionElement);
-                            var ang = KartwarsBot.MathUtils.fastAtan2(Math.round(collisionElement.y - playerPosition.y), Math.round(collisionElement.x - playerPosition.x));
+                            var ang = KartwarsBot.Utils.MathUtils.fastAtan2(Math.round(collisionElement.y - playerPosition.y), Math.round(collisionElement.x - playerPosition.x));
                             var aIndex = this.getAngleIndex(ang);
                             var actualDistance = Math.round(Math.pow(Math.sqrt(collisionElement.distance2) - collisionElement.radius, 2));
                             // Add to collisionAngles if distance is closer
                             if (collisionAngles[aIndex] === undefined || collisionAngles[aIndex].distance2 > collisionElement.distance2) {
-                                collisionAngles[aIndex] = new KartwarsBot.CollisionAngle(Math.round(collisionElement.x), Math.round(collisionElement.y), ang, collisionElement.dangerType, actualDistance, collisionElement.radius, aIndex);
+                                collisionAngles[aIndex] = new KartwarsBot.Structures.CollisionAngle(Math.round(collisionElement.x), Math.round(collisionElement.y), ang, collisionElement.dangerType, actualDistance, collisionElement.radius, aIndex);
                             }
                         }
                         return collisionAngles;
@@ -10753,11 +10799,16 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 /// <reference path="CollisionBaseManager.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
@@ -10786,7 +10837,7 @@ var DracoolaArt;
                             this.bot.stage = KartwarsBot.BotStageEnum.AvoidEncirclement;
                             return checkEncircleActivityResult;
                         }
-                        return KartwarsBot.ActivityResult.CreateInvalidResponse();
+                        return KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                     };
                     /**
                      * Extract collision elements based on the design map.
@@ -10855,7 +10906,7 @@ var DracoolaArt;
                                     newX -= cos * hNewRadius;
                                     newY -= sin * hNewRadius;
                                 }
-                                scPoint = new KartwarsBot.CollisionElement(newX, newY, enemyRotation, KartwarsBot.CollisionElementType.Circle, dangerType, newRadius /*,
+                                scPoint = new KartwarsBot.Structures.CollisionElement(newX, newY, enemyRotation, KartwarsBot.CollisionElementType.Circle, dangerType, newRadius /*,
                                 true*/);
                                 //this.bot.setDistance2FromPlayer(scPoint);
                                 //this.addCollisionAngle(scPoint);
@@ -10924,7 +10975,7 @@ var DracoolaArt;
                         this.pushWeaponsCollisionElements(collisionElements);
                         this.pushEnemiesCollisionElements(collisionElements);
                         collisionAngles = this.getCollisionAngles(collisionElements);
-                        collisionElements.sort(KartwarsBot.ArrayUtils.sortDistance2);
+                        collisionElements.sort(KartwarsBot.Utils.ArrayUtils.sortDistance2);
                         /*
                         // WALL
                         // TODO : Review
@@ -10950,7 +11001,7 @@ var DracoolaArt;
                     
                             if (window.visualDebugging) {
                                 this.canvas.drawCircle(
-                                    new Circle(
+                                    new Structures.Circle(
                                         scPoint.x,
                                         scPoint.y,
                                         scPoint.radius
@@ -10961,7 +11012,7 @@ var DracoolaArt;
                         }
                         //*/
                         this.canvas.drawCollisionElements(collisionElements, collisionAngles);
-                        return new KartwarsBot.CollisionDataRespons(collisionElements, collisionAngles);
+                        return new KartwarsBot.Structures.CollisionDataRespons(collisionElements, collisionAngles);
                     };
                     /**
                      * Get intersection points between the supplied Collision Element and the head detector.
@@ -10969,7 +11020,7 @@ var DracoolaArt;
                      */
                     CollisionCourseManager.prototype.getIntersectionPoints = function (thisCollisionElement) {
                         var pointsIntersection;
-                        var collisionCircle = new KartwarsBot.Circle(thisCollisionElement.x, thisCollisionElement.y, thisCollisionElement.radius);
+                        var collisionCircle = new KartwarsBot.Structures.Circle(thisCollisionElement.x, thisCollisionElement.y, thisCollisionElement.radius);
                         // -1 snake is special case for non kart object.
                         pointsIntersection = this.bot.math.circleIntersect(this.bot.shapesHolster.headCircle, collisionCircle);
                         return pointsIntersection;
@@ -10982,7 +11033,7 @@ var DracoolaArt;
                         var intersectionResult;
                         if (collisionElements.length === 0) {
                             window.botFactory.clock.endFrame();
-                            return KartwarsBot.ActivityResult.CreateInvalidResponse();
+                            return KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                         }
                         var accelerate = KartwarsBot.AccelerationFlag.NotDefined;
                         var playerRotation = this.gameWrapper.player.getRotation();
@@ -11011,13 +11062,13 @@ var DracoolaArt;
                                         //
                                         var activityResult = this.avoidCollisionPoint(intersectionPoint, this.opt.avoidanceAngle - additionalAvoidanceAngle);
                                         window.botFactory.clock.endFrame();
-                                        return KartwarsBot.ActivityResult.CreateValidResponse(activityResult.goalCoordinates, accelerate);
+                                        return KartwarsBot.Structures.ActivityResult.CreateValidResponse(activityResult.goalCoordinates, accelerate);
                                     }
                                 }
                             }
                         }
                         window.botFactory.clock.endFrame();
-                        return KartwarsBot.ActivityResult.CreateInvalidResponse();
+                        return KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                     };
                     /**
                      * Checks to see if you are surrounded by multiple dangerous point.
@@ -11041,6 +11092,7 @@ var DracoolaArt;
                                     }
                                     if (encircledKart[dangerType] > high) {
                                         high = encircledKart[dangerType];
+                                        //highSnake = dangerType;
                                     }
                                 }
                                 if (collisionAngles[i].distance2 < Math.pow(this.bot.kartRadius * this.bot.opt.enCircleDistanceMult, 2)) {
@@ -11064,7 +11116,7 @@ var DracoolaArt;
                             // Draw encircled player
                             this.canvas.drawEncircledPlayer(this.bot.shapesHolster.playerCircle, true);
                             window.botFactory.clock.endFrame();
-                            return KartwarsBot.ActivityResult.Transfer(activityResult, null, null, KartwarsBot.AccelerationFlag.Yes);
+                            return KartwarsBot.Structures.ActivityResult.Transfer(activityResult, null, null, KartwarsBot.AccelerationFlag.Yes);
                         }
                         if (enAll > this.bot.MAXARC * this.bot.opt.enCircleAllThreshold) {
                             var activityResult = this.headingBestAngle(collisionAngles);
@@ -11072,7 +11124,7 @@ var DracoolaArt;
                             // Draw encircled player
                             this.canvas.drawEncircledPlayer(this.bot.shapesHolster.playerCircle, false);
                             window.botFactory.clock.endFrame();
-                            return KartwarsBot.ActivityResult.Transfer(activityResult, null, null, KartwarsBot.AccelerationFlag.Default);
+                            return KartwarsBot.Structures.ActivityResult.Transfer(activityResult, null, null, KartwarsBot.AccelerationFlag.Default);
                         }
                         else {
                             this.canvas.drawPlayer(this.bot.shapesHolster.playerCircle, this.bot.shapesHolster.playerResourceGatherCircle, this.bot.shapesHolster.headCircle, this.bot.shapesHolster.tailCircle, this.bot.shapesHolster.closeToImminentDangerCircle, this.bot.shapesHolster.playerLeftSideCircle, this.bot.shapesHolster.playerRightSideCircle, this.bot.opt.frontDangerAngle, this.bot.opt.tailDangerAngle, this.bot.opt.frontResourceGatherAngle);
@@ -11080,7 +11132,7 @@ var DracoolaArt;
                         // TODO : Review
                         //this.bot.setAcceleration(this.bot.defaultAccel);
                         window.botFactory.clock.endFrame();
-                        return KartwarsBot.ActivityResult.CreateInvalidResponse();
+                        return KartwarsBot.Structures.ActivityResult.CreateInvalidResponse();
                     };
                     return CollisionCourseManager;
                 }(Collision.CollisionBaseManager));
@@ -11091,11 +11143,16 @@ var DracoolaArt;
 })(DracoolaArt || (DracoolaArt = {}));
 
 /// <reference path="../../_references.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
@@ -11138,7 +11195,7 @@ var DracoolaArt;
                                 .multiplyScalar(scaling)
                                 .add(enemyVector);
                         }
-                        scPoint = new KartwarsBot.CollisionElement(enemyXPosition, enemyYPosition, enemyRotation, KartwarsBot.CollisionElementType.Polygon, dangerType, scaling /*,
+                        scPoint = new KartwarsBot.Structures.CollisionElement(enemyXPosition, enemyYPosition, enemyRotation, KartwarsBot.CollisionElementType.Polygon, dangerType, scaling /*,
                         true*/);
                         scPoint.geometry = thisDesignCopy;
                         //this.bot.setDistance2FromPlayer(scPoint);
@@ -11176,9 +11233,9 @@ var DracoolaArt;
                         _super.prototype.pushWeaponsCollisionElements.call(this, collisionElements);
                         this.pushEnemiesCollisionElements(collisionElements);
                         collisionAngles = this.getCollisionAngles(collisionElements);
-                        collisionElements.sort(KartwarsBot.ArrayUtils.sortDistance2);
+                        collisionElements.sort(KartwarsBot.Utils.ArrayUtils.sortDistance2);
                         this.canvas.drawCollisionElements(collisionElements, collisionAngles);
-                        return new KartwarsBot.CollisionDataRespons(collisionElements, collisionAngles);
+                        return new KartwarsBot.Structures.CollisionDataRespons(collisionElements, collisionAngles);
                     };
                     /**
                      * Get intersection points betwwen the supplied Collision Element and the head detector.
@@ -11189,13 +11246,13 @@ var DracoolaArt;
                         switch (thisCollisionElement.shapeType) {
                             case KartwarsBot.CollisionElementType.Circle:
                                 {
-                                    var collisionCircle = new KartwarsBot.Circle(thisCollisionElement.x, thisCollisionElement.y, thisCollisionElement.radius);
+                                    var collisionCircle = new KartwarsBot.Structures.Circle(thisCollisionElement.x, thisCollisionElement.y, thisCollisionElement.radius);
                                     pointsIntersection = this.bot.math.circleIntersect(this.bot.shapesHolster.headCircle, collisionCircle);
                                 }
                                 break;
                             case KartwarsBot.CollisionElementType.Polygon:
                                 {
-                                    var collisionPolygon = new KartwarsBot.Polygon(thisCollisionElement.x, thisCollisionElement.y, thisCollisionElement.geometry);
+                                    var collisionPolygon = new KartwarsBot.Structures.Polygon(thisCollisionElement.x, thisCollisionElement.y, thisCollisionElement.geometry);
                                     pointsIntersection = this.bot.math.circlePolygonIntersect(this.bot.shapesHolster.headCircle, collisionPolygon);
                                 }
                                 break;
@@ -11213,33 +11270,6 @@ var DracoolaArt;
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
-/// <reference path="../../_references.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var DracoolaArt;
-(function (DracoolaArt) {
-    var KartwarsBot;
-    (function (KartwarsBot) {
-        var Manager;
-        (function (Manager) {
-            var Collision;
-            (function (Collision) {
-                var ÜberCollisionCourseManager = (function (_super) {
-                    __extends(ÜberCollisionCourseManager, _super);
-                    function ÜberCollisionCourseManager() {
-                        return _super !== null && _super.apply(this, arguments) || this;
-                    }
-                    return ÜberCollisionCourseManager;
-                }(Collision.AdvancedCollisionCourseManager));
-                Collision.ÜberCollisionCourseManager = ÜberCollisionCourseManager;
-            })(Collision = Manager.Collision || (Manager.Collision = {}));
-        })(Manager = KartwarsBot.Manager || (KartwarsBot.Manager = {}));
-    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
-})(DracoolaArt || (DracoolaArt = {}));
-
 var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
@@ -11250,29 +11280,53 @@ var DracoolaArt;
         var BotOptions = (function () {
             // Constructor
             function BotOptions() {
-                // Target fps
-                // targetFps: number = 30;
-                // Size of arc for collisionAngles
+                /**
+                 * Auto respawn
+                 */
+                this.autoRespawn = false;
+                /**
+                 * Size of arc for collisionAngles
+                 */
                 this.arcSize = Math.PI / 8;
-                // Radius multiple for side detector circle intersects
+                /**
+                 * Radius multiple for side detector circle intersects
+                 */
                 this.radiusSideDetectorsMultiplier = 1;
-                // Radius multiple for front detector circle intersects
+                /**
+                 * Radius multiple for front detector circle intersects
+                 */
                 this.radiusFrontDetectorMultiplier = 10;
-                // Radius multiple for behind detector circle intersects
+                /**
+                 * Radius multiple for behind detector circle intersects
+                 */
                 this.radiusBehindDetectorMultiplier = 10;
-                // Radius multiple for danger circle intersects
+                /**
+                 * Radius multiple for danger circle intersects
+                 */
                 this.radiusDangerMultiplier = 10;
-                // Front resource gather angle size
+                /**
+                 * Front resource gather angle size
+                 */
                 this.frontResourceGatherAngle = Math.PI * 2 / 3;
-                // Front danger angle size
+                /**
+                 * Front danger angle size
+                 */
                 this.frontDangerAngle = Math.PI / 2;
-                // Tail danger angle size
+                /**
+                 * Tail danger angle size
+                 */
                 this.tailDangerAngle = Math.PI / 2;
-                // Percent of angles covered by same danger type to be considered an encircle attempt
+                /**
+                 * Percent of angles covered by same danger type to be considered an encircle attempt
+                 */
                 this.enCircleThreshold = 0.5625;
-                // Percent of angles covered by all dangers to move to safety
+                /**
+                 * Percent of angles covered by all dangers to move to safety
+                 */
                 this.enCircleAllThreshold = 0.5625;
-                // Distance multiplier for enCircleAllThreshold
+                /**
+                 * Distance multiplier for enCircleAllThreshold
+                 */
                 this.enCircleDistanceMult = 20;
                 // TODO : Description
                 this.basePlayerWidth = 50;
@@ -11326,9 +11380,9 @@ var DracoolaArt;
              * @param circle2
              */
             BotMathWrapper.prototype.circleIntersect = function (circle1, circle2) {
-                var intersections = KartwarsBot.GeometryIntersectionsUtils.circleCircleIntersect(circle1, circle2);
+                var intersections = KartwarsBot.Utils.GeometryIntersectionsUtils.circleCircleIntersect(circle1, circle2);
                 if (intersections.status == KartwarsBot.ShapesIntersectionStatus.ShapeInside) {
-                    intersections.addPoint(new KartwarsBot.BotPoint2D(circle2.x, circle2.y));
+                    intersections.addPoint(new KartwarsBot.Structures.BotPoint2D(circle2.x, circle2.y));
                 }
                 else if (intersections.status != KartwarsBot.ShapesIntersectionStatus.HasIntersections) {
                     return intersections;
@@ -11336,7 +11390,7 @@ var DracoolaArt;
                 var playerPosition = this.gameWrapper.player.getPosition();
                 for (var intersectionIdx = 0, ls = intersections.length; intersectionIdx < ls; intersectionIdx++) {
                     var point = intersections.points[intersectionIdx];
-                    point.ang = KartwarsBot.MathUtils.fastAtan2(point.y - playerPosition.y, point.x - playerPosition.x);
+                    point.ang = KartwarsBot.Utils.MathUtils.fastAtan2(point.y - playerPosition.y, point.x - playerPosition.x);
                     // Draw collision point
                     this.canvas.drawCollisionPoint(point);
                 }
@@ -11350,9 +11404,9 @@ var DracoolaArt;
              * @param polygon
              */
             BotMathWrapper.prototype.circlePolygonIntersect = function (circle, polygon) {
-                var intersections = KartwarsBot.GeometryIntersectionsUtils.intersectCirclePolygon(circle, circle.radius, polygon);
+                var intersections = KartwarsBot.Utils.GeometryIntersectionsUtils.intersectCirclePolygon(circle, circle.radius, polygon);
                 if (intersections.status == KartwarsBot.ShapesIntersectionStatus.ShapeInside) {
-                    intersections.addPoint(new KartwarsBot.BotPoint2D(polygon.x, polygon.y));
+                    intersections.addPoint(new KartwarsBot.Structures.BotPoint2D(polygon.x, polygon.y));
                 }
                 else if (intersections.status != KartwarsBot.ShapesIntersectionStatus.HasIntersections) {
                     return intersections;
@@ -11360,7 +11414,7 @@ var DracoolaArt;
                 var playerPosition = this.gameWrapper.player.getPosition();
                 for (var intersectionIdx = 0, ls = intersections.length; intersectionIdx < ls; intersectionIdx++) {
                     var point = intersections.points[intersectionIdx];
-                    point.ang = KartwarsBot.MathUtils.fastAtan2(point.y - playerPosition.y, point.x - playerPosition.x);
+                    point.ang = KartwarsBot.Utils.MathUtils.fastAtan2(point.y - playerPosition.y, point.x - playerPosition.x);
                     // Draw collision point
                     this.canvas.drawCollisionPoint(point);
                 }
@@ -11399,7 +11453,7 @@ var DracoolaArt;
                 this.worldCenterY = (worldBounds.height / 2);
                 this.opt = new KartwarsBot.BotOptions();
                 this.math = new BotMathWrapper(gameWrapper, canvas);
-                this.goal = new KartwarsBot.GoalData();
+                this.goal = new KartwarsBot.Structures.GoalData();
             }
             Object.defineProperty(BotBase.prototype, "kartWidth", {
                 get: function () { return this.opt.basePlayerWidth; },
@@ -11425,7 +11479,9 @@ var DracoolaArt;
                 if (flag == KartwarsBot.AccelerationFlag.Yes) {
                     if (!window.mainCar.isAccelerating) {
                         window.mainCar.isAccelerating = true;
-                        window.log('Speed up!!');
+                        if (window.botFactory.developerInterface.opt.individual.acceleration) {
+                            window.log('Speed up!!');
+                        }
                         var e = new MouseEvent('mousedown', {
                             altKey: false,
                             bubbles: true,
@@ -11441,7 +11497,9 @@ var DracoolaArt;
                 else {
                     if (window.mainCar.isAccelerating) {
                         window.mainCar.isAccelerating = false;
-                        window.log('Stop speeding up!!');
+                        if (window.botFactory.developerInterface.opt.individual.acceleration) {
+                            window.log('Stop speeding up!!');
+                        }
                         var e = new MouseEvent('mouseup', {
                             altKey: false,
                             bubbles: true,
@@ -11540,10 +11598,10 @@ var DracoolaArt;
              */
             BotBase.prototype.changeHeadingAbs = function (angle) {
                 var playerPosition = this.gameWrapper.player.getPosition();
-                var goalCoordinates = new KartwarsBot.Point2D(
+                var goalCoordinates = new KartwarsBot.Structures.Point2D(
                 /*Math.round(*/ playerPosition.x + (Math.cos(angle) * (this.shapesHolster.headCircle.radius)) /*)*/, 
                 /*Math.round(*/ playerPosition.y + (Math.sin(angle) * (this.shapesHolster.headCircle.radius)) /*)*/);
-                return KartwarsBot.ActivityResult.CreateValidResponse(goalCoordinates);
+                return KartwarsBot.Structures.ActivityResult.CreateValidResponse(goalCoordinates);
             };
             /**
              * Set distance2 from player.
@@ -11551,7 +11609,7 @@ var DracoolaArt;
              */
             BotBase.prototype.setDistance2FromPlayer = function (collisionElement) {
                 var playerPosition = this.gameWrapper.player.getPosition();
-                collisionElement.distance2 = KartwarsBot.MathUtils.getDistance2(playerPosition, collisionElement);
+                collisionElement.distance2 = KartwarsBot.Utils.MathUtils.getDistance2(playerPosition, collisionElement);
                 return collisionElement;
             };
             /**
@@ -11562,7 +11620,7 @@ var DracoolaArt;
             BotBase.prototype.inFrontAngle = function (point, angle, radiusCheck) {
                 var playerPosition = this.gameWrapper.player.getPosition();
                 var playerRotation = this.gameWrapper.player.getRotation();
-                return KartwarsBot.GeometryIntersectionsUtils.isInsideArcSector(
+                return KartwarsBot.Utils.GeometryIntersectionsUtils.isInsideArcSector(
                 //new Point2D(point.x, point.y),
                 point, 
                 //new Point2D(playerPosition.x, playerPosition.y),
@@ -11571,7 +11629,7 @@ var DracoolaArt;
             BotBase.prototype.inBackAngle = function (point, angle, radiusCheck) {
                 var playerPosition = this.gameWrapper.player.getPosition();
                 var playerRotation = this.gameWrapper.player.getRotation();
-                return KartwarsBot.GeometryIntersectionsUtils.isInsideArcSector(
+                return KartwarsBot.Utils.GeometryIntersectionsUtils.isInsideArcSector(
                 //new Point2D(point.x, point.y),
                 point, 
                 //new Point2D(playerPosition.x, playerPosition.y),
@@ -11669,11 +11727,16 @@ var DracoolaArt;
 
 /// <reference path="_references.ts" />
 /// <reference path="BotBase.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11820,11 +11883,11 @@ var DracoolaArt;
                                     instance = new KartwarsBot.Manager.Collision.AdvancedCollisionCourseManager(this, this.gameWrapper, this.canvas);
                                 }
                                 break;
-                            case KartwarsBot.Manager.Collision.Managers.Über:
-                                {
-                                    instance = new KartwarsBot.Manager.Collision.ÜberCollisionCourseManager(this, this.gameWrapper, this.canvas);
-                                }
-                                break;
+                            /*
+                            case Manager.Collision.Managers.Uber: {
+                                instance = new Manager.Collision.UberCollisionCourseManager(this, this.gameWrapper, this.canvas);
+                            } break;
+                            */
                             default: {
                                 throw Error("Incompatible value or type '" + selectedCollisionManagerOption + "' in CollisionManager. Type: " + typeof selectedCollisionManagerOption + ".");
                             }
@@ -11862,7 +11925,7 @@ var DracoolaArt;
                 //
                 //
                 this.sectorBoxSide = this.gameWrapper.world.getSectorSquaredWidth();
-                this.sectorBox = new KartwarsBot.Rect(playerPosition.x - (this.sectorBoxSide / 2), playerPosition.y - (this.sectorBoxSide / 2), this.sectorBoxSide, this.sectorBoxSide);
+                this.sectorBox = new KartwarsBot.Structures.Rect(playerPosition.x - (this.sectorBoxSide / 2), playerPosition.y - (this.sectorBoxSide / 2), this.sectorBoxSide, this.sectorBoxSide);
                 // if (window.visualDebugging) this.canvas.drawRect(this.sectorBox, '#c0c0c0', true, 0.1);
                 this.canvas.drawRect(this.sectorBox, 0, '#c0c0c0', true, 0.1);
                 var thisCos = this.cos = Math.cos(playerRotation);
@@ -11870,15 +11933,15 @@ var DracoolaArt;
                 //
                 // Base player
                 {
-                    this.shapesHolster.playerCircle = new KartwarsBot.Circle(playerPosition.x, playerPosition.y, this.kartRadius * this.opt.playerRadiusMultiplier);
-                    this.shapesHolster.playerResourceGatherCircle = new KartwarsBot.Circle(playerPosition.x, playerPosition.y, this.kartRadius * this.opt.playerResourceGatherRadiusMultiplier);
+                    this.shapesHolster.playerCircle = new KartwarsBot.Structures.Circle(playerPosition.x, playerPosition.y, this.kartRadius * this.opt.playerRadiusMultiplier);
+                    this.shapesHolster.playerResourceGatherCircle = new KartwarsBot.Structures.Circle(playerPosition.x, playerPosition.y, this.kartRadius * this.opt.playerResourceGatherRadiusMultiplier);
                 }
                 //
                 //
                 //
                 // Close To Imminent Danger detector
                 {
-                    this.shapesHolster.closeToImminentDangerCircle = new KartwarsBot.Circle(playerPosition.x, playerPosition.y, this.opt.closeToImminentDangerRange);
+                    this.shapesHolster.closeToImminentDangerCircle = new KartwarsBot.Structures.Circle(playerPosition.x, playerPosition.y, this.opt.closeToImminentDangerRange);
                 }
                 //
                 //
@@ -11888,8 +11951,8 @@ var DracoolaArt;
                     var unknown = Math.min(1, this.speedMult - 1);
                     var headCircleRadius = this.opt.radiusFrontDetectorMultiplier / 2 * this.kartRadius;
                     var tailCircleRadius = this.opt.radiusBehindDetectorMultiplier / 2 * this.kartRadius;
-                    this.shapesHolster.headCircle = new KartwarsBot.Circle(playerPosition.x + thisCos * unknown * headCircleRadius, playerPosition.y + thisSin * unknown * headCircleRadius, headCircleRadius);
-                    this.shapesHolster.tailCircle = new KartwarsBot.Circle(playerPosition.x - thisCos * unknown * tailCircleRadius, playerPosition.y - thisSin * unknown * tailCircleRadius, tailCircleRadius);
+                    this.shapesHolster.headCircle = new KartwarsBot.Structures.Circle(playerPosition.x + thisCos * unknown * headCircleRadius, playerPosition.y + thisSin * unknown * headCircleRadius, headCircleRadius);
+                    this.shapesHolster.tailCircle = new KartwarsBot.Structures.Circle(playerPosition.x - thisCos * unknown * tailCircleRadius, playerPosition.y - thisSin * unknown * tailCircleRadius, tailCircleRadius);
                 }
                 //
                 //
@@ -11899,8 +11962,8 @@ var DracoolaArt;
                     var playerLeftSideCircleRadius = KartwarsBot.Data.playerTurnRadius * this.opt.radiusSideDetectorsMultiplier;
                     var playerLeftSideCircleSin = thisSin * playerLeftSideCircleRadius;
                     var playerLeftSideCircleCos = thisCos * playerLeftSideCircleRadius;
-                    this.shapesHolster.playerLeftSideCircle = new KartwarsBot.Circle(playerPosition.x + playerLeftSideCircleSin, playerPosition.y - playerLeftSideCircleCos, playerLeftSideCircleRadius);
-                    this.shapesHolster.playerRightSideCircle = new KartwarsBot.Circle(playerPosition.x - playerLeftSideCircleSin, playerPosition.y + playerLeftSideCircleCos, playerLeftSideCircleRadius);
+                    this.shapesHolster.playerLeftSideCircle = new KartwarsBot.Structures.Circle(playerPosition.x + playerLeftSideCircleSin, playerPosition.y - playerLeftSideCircleCos, playerLeftSideCircleRadius);
+                    this.shapesHolster.playerRightSideCircle = new KartwarsBot.Structures.Circle(playerPosition.x - playerLeftSideCircleSin, playerPosition.y + playerLeftSideCircleCos, playerLeftSideCircleRadius);
                 }
                 //
                 //
@@ -11908,22 +11971,22 @@ var DracoolaArt;
                 // Tunnel
                 {
                     var goalCoordinates = this.goal.coordinates;
-                    var distance2goalCoordinates = KartwarsBot.MathUtils.getDistance(playerPosition, goalCoordinates);
+                    var distance2goalCoordinates = KartwarsBot.Utils.MathUtils.getDistance(playerPosition, goalCoordinates);
                     var tunnelSideDistance = this.opt.tunnelSideDistance;
                     var tunnelSideStartSin = thisSin * tunnelSideDistance;
                     var tunnelSideStartCos = thisCos * tunnelSideDistance;
                     var tunnelSideEndSin = thisSin * distance2goalCoordinates;
                     var tunnelSideEndCos = thisCos * distance2goalCoordinates;
                     //
-                    var tunnelLeftSideStartPoint = new KartwarsBot.Point2D(playerPosition.x + tunnelSideStartSin, playerPosition.y - tunnelSideStartCos);
-                    var tunnelLeftSideLine = this.shapesHolster.tunnelLeftSideLine = new KartwarsBot.Line(tunnelLeftSideStartPoint, new KartwarsBot.Point2D(tunnelLeftSideStartPoint.x + tunnelSideEndCos, tunnelLeftSideStartPoint.y + tunnelSideEndSin));
-                    var tunnelRightSideStartPoint = new KartwarsBot.Point2D(playerPosition.x - tunnelSideStartSin, playerPosition.y + tunnelSideStartCos);
-                    var tunnelRightSideLine = this.shapesHolster.tunnelRightSideLine = new KartwarsBot.Line(tunnelRightSideStartPoint, new KartwarsBot.Point2D(tunnelRightSideStartPoint.x + tunnelSideEndCos, tunnelRightSideStartPoint.y + tunnelSideEndSin));
+                    var tunnelLeftSideStartPoint = new KartwarsBot.Structures.Point2D(playerPosition.x + tunnelSideStartSin, playerPosition.y - tunnelSideStartCos);
+                    var tunnelLeftSideLine = this.shapesHolster.tunnelLeftSideLine = new KartwarsBot.Structures.Line(tunnelLeftSideStartPoint, new KartwarsBot.Structures.Point2D(tunnelLeftSideStartPoint.x + tunnelSideEndCos, tunnelLeftSideStartPoint.y + tunnelSideEndSin));
+                    var tunnelRightSideStartPoint = new KartwarsBot.Structures.Point2D(playerPosition.x - tunnelSideStartSin, playerPosition.y + tunnelSideStartCos);
+                    var tunnelRightSideLine = this.shapesHolster.tunnelRightSideLine = new KartwarsBot.Structures.Line(tunnelRightSideStartPoint, new KartwarsBot.Structures.Point2D(tunnelRightSideStartPoint.x + tunnelSideEndCos, tunnelRightSideStartPoint.y + tunnelSideEndSin));
                     //
                     var alpha = undefined;
                     var isGoalInTunnel = this.goal.isInTunnel =
-                        KartwarsBot.MathUtils.isLeft(tunnelLeftSideLine.point1, tunnelLeftSideLine.point2, goalCoordinates) &&
-                            KartwarsBot.MathUtils.isRight(tunnelRightSideLine.point1, tunnelRightSideLine.point2, goalCoordinates);
+                        KartwarsBot.Utils.MathUtils.isLeft(tunnelLeftSideLine.point1, tunnelLeftSideLine.point2, goalCoordinates) &&
+                            KartwarsBot.Utils.MathUtils.isRight(tunnelRightSideLine.point1, tunnelRightSideLine.point2, goalCoordinates);
                     if (isGoalInTunnel) {
                         alpha = 0.85;
                         this.goal.state = this.inFront(goalCoordinates) ? KartwarsBot.GoalState.InFront : KartwarsBot.GoalState.InBack;
@@ -11992,832 +12055,925 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        var ContextMenuActions;
-        (function (ContextMenuActions) {
-            ContextMenuActions[ContextMenuActions["First"] = 0] = "First";
-            ContextMenuActions[ContextMenuActions["Default"] = 0] = "Default";
-            ContextMenuActions[ContextMenuActions["Torque"] = 1] = "Torque";
-            ContextMenuActions[ContextMenuActions["Pursuit"] = 2] = "Pursuit";
-            ContextMenuActions[ContextMenuActions["Enemies"] = 3] = "Enemies";
-            ContextMenuActions[ContextMenuActions["Food"] = 4] = "Food";
-            ContextMenuActions[ContextMenuActions["Last"] = 4] = "Last";
-        })(ContextMenuActions = KartwarsBot.ContextMenuActions || (KartwarsBot.ContextMenuActions = {}));
-        // let actions: IDictionary<ContextMenuAction> = {};
-        //actions[ContextMenuActions.Facebook] = {
-        //	type: ContextMenuActions.Facebook,
-        //	icon: '',
-        //	href: ''
-        //};
-        var icons = {};
-        /*
-        icons[ContextMenuActions.Default] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMzM5LjA5MSAyNzUuOTI4IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMzkuMDkxIDI3NS45Mjg7IiB4bWw6c3BhY2U9InByZXNlcnZlIj48Zz48cGF0aCBkPSJNNC45MjIsMTAyLjg4NmMyNy41OTksMTEuNTA1LDQ3LjcyMiwxNS4yNTYsNjIuNDQyLDE1LjI2NWMwLjAxOSwwLDAuMDQsMCwwLjA2LDBjMTEuNTM0LDAsMTkuNzM0LTIuMzczLDI1LjE3Ni01LjA3OSAgIGMxLjcwOC0wLjg0NCwzLjEzOC0xLjcxNiw0LjMxNS0yLjU0bDE0OC40MjMsNjEuOTA2YzYuMzAyLDIuNjI5LDEzLjU0Mi0wLjM1MiwxNi4xNy02LjY1MWMyLjYyOC02LjMwMi0wLjM0OS0xMy41NDMtNi42NS0xNi4xNzIgICBsLTgzLjMxNy0zNC43NWwxLjc4NC00LjI3N2w4My4zMTYsMzQuNzVjNi4zMDMsMi42MjksMTMuNTQzLTAuMzUxLDE2LjE3LTYuNjUxYzIuNjI5LTYuMzAyLTAuMzQ5LTEzLjU0My02LjY1LTE2LjE3MSAgIEwxMTcuNzM5LDYwLjYwOWMtMC44NzItNS0zLjU0NS0xMi42MzktMTAuNzg4LTIxLjMxYy05LjY5NS0xMS42NjItMjcuMjQ5LTI1LjI3NC01OS4zNzQtMzguNjggICBDNDMuNS0xLjA4MywzOC44MTUsMC44NDYsMzcuMTEzLDQuOTI0Yy0xLjY5OSw0LjA3OCwwLjIyNyw4Ljc2Myw0LjMwNSwxMC40NjJjMjEuOTk1LDkuMTY5LDM2LjA1OCwxOC4xNzQsNDQuOTg5LDI1Ljg2MSAgIGMwLjM5OC0wLjAxOSwwLjc5Ny0wLjA0NCwxLjE5OS0wLjA0NGMzLjIzOCwwLDYuNDEsMC42MzgsOS40MjQsMS44OTRjNi4wMzksMi41MiwxMC43MzUsNy4yMzgsMTMuMjI1LDEzLjI5MSAgIGMyLjQ5MSw2LjA1NSwyLjQ3NCwxMi43MTMtMC4wNDQsMTguNzUyYy0zLjM2Niw4LjA2OC0xMC42NiwxMy42MTUtMTkuMTMzLDE0LjgyMmwtMy4wMDcsNy4yMDkgICBjLTEuOTUsMS40OTQtNy42NzcsNC45MDktMjAuNzA3LDQuOThjLTExLjk1NywwLjAwNi0zMC4wOTEtMy4xMDItNTYuMjg0LTE0LjAzYy00LjA3OS0xLjctOC43NjIsMC4yMjctMTAuNDYyLDQuMzA0ICAgQy0xLjA4Miw5Ni41LDAuODQ1LDEwMS4xODUsNC45MjIsMTAyLjg4NnoiLz48ZWxsaXBzZSB0cmFuc2Zvcm09Im1hdHJpeCgwLjM4NSAtMC45MjI5IDAuOTIyOSAwLjM4NSAtNi43NjcyIDEyMS4yNTg4KSIgY3g9Ijg3LjU5OCIgY3k9IjY1LjcwNyIgcng9IjIyLjUiIHJ5PSIyMi40OTkiLz48cGF0aCBkPSJNMjk5LjQ2NiwxNDQuNDc5YzAuNjE4LDAuNzI3LDEuMjcxLDEuNDM0LDEuOTk1LDIuMDkyYzkuMTg4LDguMzYsMjMuNDE2LDcuNjg4LDMxLjc3Ni0xLjUwMiAgIGM4LjM1OC05LjE5LDcuNjg1LTIzLjQxOC0xLjUwNS0zMS43NzdjLTguNjI2LTcuODQ4LTIxLjY5LTcuNzM1LTMwLjE3My0wLjA5Yy0xLjkyMiw2LjU4OS0yLjkwOCwxMy4zNTgtMi45MjEsMjAuMjczICAgQzI5OC42MzIsMTM3LjQwOSwyOTguOTU3LDE0MS4xMDYsMjk5LjQ2NiwxNDQuNDc5eiIvPjxwYXRoIGQ9Ik0zMDYuMTMzLDE3MS43NzhjLTAuNzU4LDIuNTY0LTIuNDY3LDQuNjc4LTQuODE1LDUuOTUzYy0xLjQ2MiwwLjc5OC0zLjExMiwxLjIxOS00Ljc3MSwxLjIxOSAgIGMtMy42NjcsMC03LjAzNS0xLjk5OS04Ljc5MS01LjIxOWwtMC4wNzQtMC4xNDJjLTEuMDE3LTEuOTU3LTMuMTQxLTYuNDMyLTUuMDc1LTEyLjg5OGMtMC42NjksMC42NDctMS4zMTUsMS4zMTktMS45MDYsMi4wNCAgIGMtOS45NTksMTAuMTk3LTIzLjcxNCwyNS41ODMtMzkuMTYzLDMzLjQ1M2MtNS43MTYsMS40NjgtMTUuNjg5LDQuNTE5LTI3LjU4MywxMC4yNjljLTE4LjE4Myw4Ljc5OC00MC45OTQsMjQuMDQ3LTU5LjA3OCw0OS43ODkgICBjLTMuOTY3LDUuNjUxLTIuNjA0LDEzLjQ0OCwzLjA0OCwxNy40MTRjMi4xODQsMS41MzUsNC42OSwyLjI3Miw3LjE3MiwyLjI3MmMzLjkzNiwwLDcuODA5LTEuODUzLDEwLjI0Mi01LjMxOCAgIGMxNS4wMDctMjEuMzgzLDM0LjA3OS0zNC4xODQsNDkuNTA4LTQxLjY1NGM2LjcxNy0zLjI1MSwxMi43MS01LjQ3MiwxNy4yNzEtNi45MjZjNC45MDEsNC4yOSwxMS42NzMsNi41NjgsMjEuODI1LDIuMTMzICAgYzE5Ljc1My0xMC40ODYsMjkuNzMyLTE5LjE0Niw0Mi40NzMtMzYuMjA0YzkuMTk1LTEyLjQ1OSw1Ljk4NC0yNS4yNzgtMC42MTYtMzEuMDk3Yy0xLjIwNy0xLjA2NC0yLjU5Ni0xLjgwNC00LjA5NS0yLjI2NSAgIGMxLjczOSw1LjkyMywzLjU3OCw5LjQ5NywzLjYxMiw5LjU2MUMzMDYuNjAyLDE2Ni41MTQsMzA2Ljg4OCwxNjkuMjE4LDMwNi4xMzMsMTcxLjc3OHoiLz48cGF0aCBkPSJNMjg5LjUxMywxNzIuNzczYzEuNDUyLDIuNjY2LDQuMTk4LDQuMTc3LDcuMDM0LDQuMTc3YzEuMjkyLDAsMi42MDMtMC4zMTMsMy44MTYtMC45NzYgICBjMy44ODMtMi4xMTEsNS4zMTYtNi45NywzLjIwNS0xMC44NTFsLTAuMDAyLDAuMDAxYy0wLjM2NS0wLjY1Ny02Ljk2LTEzLjY3LTYuOTI3LTMxLjY1NGMwLjAyMy0xMi42NzMsMy4xMDYtMjcuNzY5LDEzLjg5MS00My43MzIgICBjMi40NzctMy42NTksMS41MTgtOC42MzItMi4xMzktMTEuMTA5Yy0zLjY1OS0yLjQ3Ny04LjYzMy0xLjUyLTExLjEwOSwyLjEzOWMtMTIuNzExLDE4LjczMi0xNi42NjYsMzcuMzgxLTE2LjY0Myw1Mi43MDIgICBDMjgwLjY3OCwxNTYuNDY2LDI4OS4xNTcsMTcyLjA2NywyODkuNTEzLDE3Mi43NzN6Ii8+PHBvbHlnb24gcG9pbnRzPSIyNDIuOTA1LDE3Ni45MiAxNjcuOTA1LDE4MS45MiAxNjkuOTA2LDE5Ni41ODcgMjQzLjkwNiwxODEuOTIgICIvPjxwb2x5Z29uIHBvaW50cz0iMjc2LjUwNiwxMTUuMzM4IDIyOS44MjgsNTYuNzk3IDIxOS42NjIsNjcuNTU2IDI3My4yNCwxMTkuMjU0ICAiLz48L2c+PC9zdmc+';
-        icons[ContextMenuActions.Torque] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTMyMC4zLDIxOC4ybDE1LjItMTUuMmwtMjYuNS0yNi41bC0xNS4yLDE1LjJjLTUuOS0zLjUtMTIuMy02LjItMTkuMS04di0yMS40aC0zNy41djIxLjRjLTYuOCwxLjgtMTMuMiw0LjUtMTkuMSw4ICAgbC0xNS4yLTE1LjJMMTc2LjQsMjAzbDE1LjIsMTUuMmMtMy41LDUuOS02LjIsMTIuMy04LDE5LjFoLTIxLjR2MzcuNWgyMS40YzEuOCw2LjgsNC41LDEzLjIsOCwxOS4xbC0xNS4yLDE1LjJsMjYuNSwyNi41ICAgbDE1LjItMTUuMmM1LjksMy41LDEyLjMsNi4yLDE5LjEsOHYyMS40aDM3LjV2LTIxLjRjNi44LTEuOCwxMy4yLTQuNSwxOS4xLThsMTUuMiwxNS4ybDI2LjUtMjYuNWwtMTUuMi0xNS4yICAgYzMuNS01LjksNi4yLTEyLjMsOC0xOS4xaDIxLjR2LTM3LjVoLTIxLjRDMzI2LjUsMjMwLjUsMzIzLjgsMjI0LjEsMzIwLjMsMjE4LjJ6IE0yNTUuOSwyOTMuNWMtMjAuNywwLTM3LjUtMTYuOC0zNy41LTM3LjUgICBjMC0yMC43LDE2LjgtMzcuNSwzNy41LTM3LjVjMjAuNywwLDM3LjUsMTYuOCwzNy41LDM3LjVDMjkzLjQsMjc2LjcsMjc2LjYsMjkzLjUsMjU1LjksMjkzLjV6Ii8+PHBhdGggZD0iTTMyNS42LDgybC0xNCwzNC44QzM2OSwxMzkuOSw0MDYsMTk0LjUsNDA2LDI1NmMwLDQwLjEtMTUuNiw3Ny44LTQ0LDEwNmwyNi40LDI2LjZjMzUuNS0zNS4zLDU1LTgyLjQsNTUtMTMyLjYgICBDNDQzLjUsMTc5LjEsMzk3LjIsMTEwLjgsMzI1LjYsODJ6Ii8+PHBhdGggZD0iTTI1Niw0MDZjLTgyLjcsMC0xNTAtNjcuMy0xNTAtMTUwYzAtMTguNywzLjQtMzYuOCwxMC01My44TDgxLDE4OC42Yy04LjMsMjEuMy0xMi41LDQ0LTEyLjUsNjcuNCAgIGMwLDEwMy40LDg0LjEsMTg3LjUsMTg3LjUsMTg3LjVjMjQuOSwwLDQ4LjktNC44LDcxLjQtMTQuMmwtMTQuNS0zNC42QzI5NSw0MDIuMiwyNzUuOSw0MDYsMjU2LDQwNnoiLz48cGF0aCBkPSJNMjU2LDEwNlY2OC41Yy01MC4xLDAtOTcuMiwxOS41LTEzMi43LDU1bDI2LjUsMjYuNUMxNzguMiwxMjEuNiwyMTUuOSwxMDYsMjU2LDEwNnoiLz48L2c+PC9zdmc+';
-        icons[ContextMenuActions.Pursuit] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNzIgNzIiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDcyIDcyIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMzYsMC41QzE2LjQsMC41LDAuNSwxNi40LDAuNSwzNlMxNi40LDcxLjUsMzYsNzEuNVM3MS41LDU1LjYsNzEuNSwzNlM1NS42LDAuNSwzNiwwLjV6IE02Ni41LDM0aC02LjUgIGMtMC41LDAtMC44LTAuMy0wLjktMC44Yy0wLjMtMi43LTEuMS01LjMtMi4zLTcuNmMtMC4xLTAuMi0wLjEtMC41LDAtMC44YzAuMy0wLjYsMC41LTEuMywwLjUtMmMwLTIuNi0yLjEtNC42LTQuNi00LjYgIGMtMC4zLDAtMC43LDAtMSwwLjFjLTAuMywwLjEtMC42LDAtMC44LTAuMmMtMy4zLTIuOC03LjQtNC42LTEyLTUuMmMtMC41LTAuMS0wLjgtMC40LTAuOC0wLjlWNS41YzAtMC41LDAuNC0wLjksMS0wLjkgIEM1NCw2LjEsNjUuOSwxOCw2Ny40LDMzQzY3LjQsMzMuNiw2NywzNCw2Ni41LDM0eiBNNDkuMSw1MGMtMC4zLDAuMy0wLjgsMC4zLTEuMSwwLjFjLTAuNy0wLjUtMS42LTAuOC0yLjUtMC44ICBjLTIuNiwwLTQuNiwyLjEtNC42LDQuNmMwLDAuMiwwLDAuNCwwLjEsMC42Yy0wLjYsMC4yLTEuMywwLjMtMS45LDAuNGMtMC41LDAuMS0xLTAuMy0xLTAuOXYtNmMwLTAuNCwwLjMtMC44LDAuNy0wLjkgIGM0LjItMSw3LjUtNC4zLDguNS04LjVjMC4xLTAuNCwwLjUtMC43LDAuOS0wLjdoNmMwLjYsMCwxLDAuNSwwLjksMS4xQzU0LjMsNDMuMyw1Mi4yLDQ3LjEsNDkuMSw1MHogTTM0LDM4LjlWNDIgIGMwLDAuNy0wLjcsMS4xLTEuMywwLjhjLTEuNS0wLjctMi43LTItMy41LTMuNUMyOC45LDM4LjcsMjkuNCwzOCwzMCwzOGgzLjFDMzMuNiwzOCwzNCwzOC40LDM0LDM4Ljl6IE0yOS4yLDMyLjcgIGMwLjgtMS42LDIuMS0yLjksMy44LTMuNmMwLjUtMC4yLDEsMC4xLDEsMC42djMuNGMwLDAuNS0wLjQsMC45LTAuOSwwLjlIMzBDMjkuNCwzNCwyOC45LDMzLjMsMjkuMiwzMi43eiBNMzguOSwzOEg0MiAgYzAuNywwLDEuMSwwLjcsMC44LDEuM2MtMC43LDEuNS0yLDIuNy0zLjUsMy41QzM4LjcsNDMuMSwzOCw0Mi42LDM4LDQydi0zLjFDMzgsMzguNCwzOC40LDM4LDM4LjksMzh6IE0zOCwzMy4xdi0zLjQgIGMwLTAuNSwwLjUtMC44LDEtMC42YzEuNywwLjcsMywyLDMuOCwzLjZjMC4zLDAuNi0wLjEsMS4zLTAuOCwxLjNoLTMuMUMzOC40LDM0LDM4LDMzLjYsMzgsMzMuMXogTTM0LDI0LjV2MC4yICBjLTQuNSwwLjgtOC4yLDQuMi05LjIsOC43Yy0wLjEsMC40LTAuNSwwLjctMC45LDAuN2gtNmMtMC42LDAtMS0wLjUtMC45LTFjMS4zLTcuOCw3LjItMTQsMTQuOS0xNS43YzAuMiwwLDAuNCwwLjIsMC4zLDAuNCAgYy0wLjUsMC44LTAuOCwxLjctMC44LDIuN0MzMS40LDIyLjEsMzIuNCwyMy43LDM0LDI0LjV6IE0yNC44LDM4LjdjMSw0LjIsNC4zLDcuNSw4LjUsOC41YzAuNCwwLjEsMC43LDAuNSwwLjcsMC45djYgIGMwLDAuNi0wLjUsMS0xLjEsMC45Yy04LjItMS4zLTE0LjYtNy44LTE1LjktMTUuOWMtMC4xLTAuNSwwLjMtMS4xLDAuOS0xLjFoNkMyNC4zLDM4LDI0LjcsMzguMywyNC44LDM4Ljd6IE00OC4xLDM0ICBjLTAuNCwwLTAuOC0wLjMtMC45LTAuN2MtMS4xLTQuNC00LjctNy45LTkuMi04Ljd2LTAuMmMxLjYtMC43LDIuNi0yLjMsMi42LTQuMmMwLTEtMC4zLTEuOS0wLjgtMi43Yy0wLjEtMC4yLDAtMC40LDAuMy0wLjQgIGMyLjgsMC42LDUuNSwxLjgsNy43LDMuNmMwLjMsMC4yLDAuNCwwLjYsMC4zLDAuOWMtMC4xLDAuMy0wLjEsMC43LTAuMSwxLjFjMCwyLjYsMi4xLDQuNiw0LjYsNC42aDBjMC40LDAsMC43LDAuMiwwLjksMC41ICBjMC43LDEuNSwxLjIsMy4yLDEuNSw0LjljMC4xLDAuNi0wLjMsMS4xLTAuOSwxLjFINDguMXogTTM0LDUuNXY2LjVjMCwwLjUtMC40LDAuOC0wLjgsMC45QzIyLjYsMTQuMiwxNC4yLDIyLjYsMTMsMzMuMiAgYy0wLjEsMC41LTAuNCwwLjgtMC45LDAuOEg1LjVjLTAuNSwwLTAuOS0wLjQtMC45LTFDNi4xLDE4LDE4LDYuMSwzMyw0LjZDMzMuNiw0LjYsMzQsNSwzNCw1LjV6IE01LjUsMzhoNi41YzAuNSwwLDAuOCwwLjQsMC45LDAuOCAgYzEuMywxMC42LDkuNywxOC45LDIwLjIsMjAuMmMwLjUsMC4xLDAuOCwwLjQsMC44LDAuOXY2LjVjMCwwLjUtMC40LDAuOS0xLDAuOUMxOCw2NS45LDYuMSw1NCw0LjYsMzlDNC42LDM4LjQsNSwzOCw1LjUsMzh6ICAgTTM4LDY2LjV2LTYuNWMwLTAuNSwwLjMtMC44LDAuOC0wLjljMS40LTAuMiwyLjgtMC41LDQuMi0wLjljMC4yLTAuMSwwLjUtMC4xLDAuNywwYzAuNiwwLjMsMS4yLDAuNCwxLjksMC40ICBjMi4zLDAsNC4yLTEuNyw0LjYtMy45YzAtMC4yLDAuMS0wLjQsMC4zLTAuNmM0LjctMy43LDcuOS05LjIsOC42LTE1LjRjMC4xLTAuNSwwLjQtMC44LDAuOS0wLjhoNi41YzAuNSwwLDAuOSwwLjQsMC45LDEgIEM2NS45LDU0LDU0LDY1LjksMzksNjcuNEMzOC40LDY3LjQsMzgsNjcsMzgsNjYuNXoiLz48L3N2Zz4=';
-        icons[ContextMenuActions.Enemies] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgOTYgOTYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDk2IDk2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7fQoJLnN0MXtmaWxsOiMwMDAwMDA7fQo8L3N0eWxlPjxnPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik05LDM2LjhsNy4yLTguOGMwLjYtMC44LDEuNS0xLjIsMi41LTEuMmwxMy4xLDBjMC44LDAsMS43LDAuMSwyLjUsMC40bDAuMiwwYzIuMiwwLjcsNCwyLjEsNSw0LjFsMC4yLDAuMyAgIGMwLjMsMC41LDAuNCwxLjEsMC4zLDEuN2wtMC43LDcuNGMtMC4xLDAuNywwLjIsMS4zLDAuOCwxLjdsNy4xLDUuMWMxLDAuNSwxLjMsMS43LDAuOCwyLjdsMCwwYy0wLjUsMC45LTEuNiwxLjMtMi41LDFsLTEwLjgtNC45ICAgYy0wLjUtMC4yLTAuOS0wLjctMS0xLjJjLTAuMi0wLjktMC42LTItMC44LTEuN2wtNiw4LjJsLTYuNiwxMy40Yy0wLjUsMS4xLTEuNiwxLjctMi44LDEuOEwyLjIsNjcuMWMtMC45LDAtMS43LTAuNy0xLjctMS43VjYzICAgYzAtMC44LDAuNi0xLjYsMS41LTEuN0wxMy4yLDYwYzAuMywwLDAuNS0wLjIsMC42LTAuNWwzLTExLjljMC4xLTAuOCwwLjQtMS41LDAuOS0yLjFMMjQsMzZjMC40LTAuNiwwLjEtMS40LTAuNi0xLjZsLTMuMi0xICAgYy0wLjUtMC4yLTEuMSwwLTEuNSwwLjRMMTIuNSw0MGMtMC45LDAuOS0yLjQsMC45LTMuMywwbDAsMEM4LjMsMzkuMSw4LjIsMzcuNyw5LDM2Ljh6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTI4LjUsNTQuNWMwLjEtMC4zLDAuNS0wLjMsMC43LTAuMWw1LDUuOGMwLjUsMC42LDAuNywxLjMsMC41LDJsLTMuNSwxMy45Yy0wLjMsMS4yLTEuNSwyLTIuNywxLjhsLTEuMi0wLjIgICBjLTEuMy0wLjItMi4yLTEuNS0yLTIuOGwxLjctOC44YzAuMS0wLjYsMC0xLjItMC40LTEuN2wtMS41LTIuMmMtMC4yLTAuMy0wLjItMC43LTAuMS0xLjFMMjguNSw1NC41eiIvPjxjaXJjbGUgY2xhc3M9InN0MCIgY3g9IjQyIiBjeT0iMjIuNCIgcj0iNi4yIi8+PGNpcmNsZSBjbGFzcz0ic3QwIiBjeD0iODkuMyIgY3k9IjIyLjMiIHI9IjYuMiIvPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02Mi4zLDU0LjNsLTEuMyw1LjFjLTAuMSwwLjMtMC4zLDAuNS0wLjYsMC41bC0xMS4yLDEuNGMtMC44LDAuMS0xLjUsMC44LTEuNSwxLjd2Mi40YzAsMC45LDAuOCwxLjcsMS43LDEuNyAgIGwxNS4yLTAuM2MxLjIsMCwyLjItMC43LDIuOC0xLjhsMS40LTIuOWMwLjItMC4zLDAuMS0wLjgtMC4xLTEuMWwtNS44LTYuOUM2Mi44LDUzLjksNjIuNCw1NCw2Mi4zLDU0LjN6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTk0LjUsNDcuNWwtNy4xLTUuMWMtMC42LTAuNC0wLjktMS4xLTAuOC0xLjdsMC43LTcuNGMwLjEtMC42LTAuMS0xLjItMC4zLTEuN2wtMC4yLTAuM2MtMS4xLTItMi45LTMuNS01LTQuMSAgIGwtMC4yLTAuMWMtMC44LTAuMi0xLjYtMC40LTIuNS0wLjRsLTEzLjEsMGMtMSwwLTEuOSwwLjQtMi41LDEuMmwtNy4xLDguN2MtMC43LDAuOS0wLjgsMi4zLDAsMy4yYzAuOSwxLDIuNSwxLjEsMy40LDAuMWw2LjMtNi4yICAgYzAuNC0wLjQsMC45LTAuNSwxLjUtMC40bDMuMiwxYzAuNywwLjIsMC45LDEsMC42LDEuNmwtNi40LDkuNGMtMC40LDAuNi0wLjcsMS40LTAuOSwyLjFsLTAuMiwwLjdjLTAuNCwxLjcsMCwzLjYsMS4xLDVsNS4yLDYuMyAgIGwwLDBsMy44LDQuOWMwLjQsMC41LDAuNSwxLjEsMC40LDEuN2wtMS43LDguOGMtMC4zLDEuMywwLjYsMi42LDIsMi44bDEuMiwwLjJjMS4yLDAuMiwyLjQtMC42LDIuNy0xLjhsMy41LTEzLjkgICBjMC4yLTAuNywwLTEuNS0wLjUtMmwtNy41LTguNWw1LjktOC4xYzAuMi0wLjQsMC42LDAuOCwwLjgsMS43YzAuMiwwLjUsMC41LDEsMSwxLjJsMTAuOCw0LjljMSwwLjQsMi4xLDAsMi41LTEgICBDOTUuOCw0OS4yLDk1LjQsNDgsOTQuNSw0Ny41eiIvPjxnPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0zOS45LDUxLjFMMzksNTIuNWMtMC4xLDAuMi0wLjEsMC40LDAuMSwwLjZsMi40LDEuNWMwLjIsMC4xLDAuNCwwLjEsMC42LTAuMWwxLjEtMS44YzAuMS0wLjIsMC0wLjUtMC4yLTAuNiAgICBMNDAuNCw1MUM0MC4yLDUwLjksNDAsNTAuOSwzOS45LDUxLjF6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTQ1LjMsNDMuNmw0LjYsMy40bDAuMy0wLjZjMS43LTQuMiwyLjctOC42LDIuOC0xMy4xbDAtMC45YzAtMC4yLTAuMy0wLjMtMC40LTAuMWwtNy40LDEwLjkgICAgQzQ1LDQzLjMsNDUuMSw0My41LDQ1LjMsNDMuNnoiLz48L2c+PC9nPjwvc3ZnPg==';
-        icons[ContextMenuActions.Food] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTQ0OC42LDI4MS40aC0zMC41Yy01LjQsMC05LjYsNC4zLTkuOSw5LjdDNDAzLDM4NS40LDMyNCw0NjAuNCwyMjguMSw0NTljLTk0LjMtMS40LTE3My42LTgwLjctMTc1LTE3NSAgIGMtMS40LTk1LjksNzMuNi0xNzQuOSwxNjcuOS0xODBjNS40LTAuMyw5LjctNC41LDkuNy05LjlWNjMuNWMwLTUuOC00LjktMTAuNi0xMC42LTEwLjNDOTYuOSw1OC45LTEuMSwxNjIuNiwyLjQsMjg4ICAgQzUuOCw0MDcuMSwxMDUsNTA2LjMsMjI0LjEsNTA5LjdjMTI1LjQsMy42LDIyOS4xLTk0LjUsMjM0LjgtMjE3LjdDNDU5LjIsMjg2LjIsNDU0LjMsMjgxLjQsNDQ4LjYsMjgxLjR6Ii8+PHBhdGggZD0iTTI4MS41LDIuMkwyODEuNSwyLjJWNTNsMCwwYzk0LjcsMCwxNzIuMyw3NC41LDE3Ny40LDE2Ny45YzAuMyw1LjQsNC41LDkuNywxMCw5LjdoMzAuNWM1LjgsMCwxMC42LTQuOCwxMC4zLTEwLjYgICBDNTA0LjEsOTksNDAzLjksMi4yLDI4MS41LDIuMnoiLz48cGF0aCBkPSJNMjIwLDE1NC45Yy02NSw1LjUtMTE2LjEsNjAtMTE2LjEsMTI2LjRjMCw2OC42LDU4LjMsMTI2LjksMTI2LjksMTI2LjljNjYuNCwwLDEyMS01MS4xLDEyNi40LTExNi4xICAgYzAuNS01LjgtNC41LTEwLjgtMTAuMy0xMC44SDIzMC43VjE2NS4yQzIzMC43LDE1OS40LDIyNS44LDE1NC40LDIyMCwxNTQuOXogTTE4MC4xLDI4MS42Yy0xNC4xLDAtMjUuNS0xMS40LTI1LjUtMjUuNSAgIGMwLTE0LjEsMTEuNC0yNS41LDI1LjUtMjUuNXMyNS41LDExLjQsMjUuNSwyNS41QzIwNS42LDI3MC4yLDE5NC4yLDI4MS42LDE4MC4xLDI4MS42eiBNMjU2LjIsMzU3LjVjMCwxNC4xLTExLjQsMjUuNS0yNS41LDI1LjUgICBjLTE0LjEsMC0yNS41LTExLjQtMjUuNS0yNS41YzAtMTQuMSwxMS40LTI1LjUsMjUuNS0yNS41QzI0NC44LDMzMiwyNTYuMiwzNDMuNCwyNTYuMiwzNTcuNXoiLz48cGF0aCBkPSJNMjkxLjYsMjMwLjZoMTA2LjFjNS44LDAsMTAuNy00LjksMTAuMi0xMC43Yy01LjQtNjUuMS02MC0xMTYuMi0xMjYuNS0xMTYuMmwwLDB2MTE2LjdDMjgxLjUsMjI2LjEsMjg2LDIzMC42LDI5MS42LDIzMC42ICAgeiBNMzMyLjMsMTU0LjRjMTQuMSwwLDI1LjUsMTEuNCwyNS41LDI1LjVjMCwxNC4xLTExLjQsMjUuNS0yNS41LDI1LjVjLTE0LjEsMC0yNS41LTExLjQtMjUuNS0yNS41ICAgQzMwNi44LDE2NS44LDMxOC4yLDE1NC40LDMzMi4zLDE1NC40eiIvPjwvZz48L3N2Zz4=';
-        */
-        icons[ContextMenuActions.Default] = 'fighter-jet';
-        icons[ContextMenuActions.Torque] = 'cogs';
-        icons[ContextMenuActions.Pursuit] = 'line-chart';
-        icons[ContextMenuActions.Enemies] = 'exclamation';
-        icons[ContextMenuActions.Food] = 'cutlery';
-        /**
-         * W.I.P.
-         */
-        var ContextMenu = (function () {
-            function ContextMenu() {
-                this.showFancyMenu = false;
-                this.destroyedByInvalidCtrlKey = undefined;
-                this.mouseClientPosition = {
-                    clientX: 0,
-                    clientY: 0
-                };
-                var itemTemplate__0 = "\n<li class='menu-item'>\n\t<a class='fa fa-{0}' href='{1}' target='_blank' data-context-menu-action='{2}'></a>\n</li>\n";
-                var itemTemplate__1 = "\n<li class='menu-item'>\n\t<a href='#' target='_blank' data-context-menu-action='{0}'>\n\t\t<img src='{1}' />\n\t</a>\n</li>\n";
-                var itemTemplate = "\n<li class='menu-item'>\n\t<a class='fa fa-{1}' href='#' target='_blank' data-context-menu-action='{0}'></a>\n</li>\n";
-                var items = '';
-                for (var idx = ContextMenuActions.First; idx <= ContextMenuActions.Last; idx++) {
-                    //items += itemTemplate.format('github', 'https://github.com/', ContextMenuActions[idx]);
-                    items += itemTemplate.format(ContextMenuActions[idx], icons[idx]);
-                }
-                var content = "\n<nav class='menu'>\n\t<input class='menu-toggler' id='menu-toggler' type='checkbox'>\n\t<label for='menu-toggler'></label>\n\t<ul id='menu-ul-list'>{0}</ul>\n</nav>\n".format(items);
-                var contextMenuOverlay = document.createElement('div');
-                contextMenuOverlay.className = 'menu-wrapper';
-                contextMenuOverlay.id = 'menu-wrapper';
-                contextMenuOverlay.style.visibility = 'hidden';
-                contextMenuOverlay.innerHTML = content;
-                document.body.appendChild(contextMenuOverlay);
-                contextMenuOverlay.oncontextmenu = function (e) {
-                    e.preventDefault();
-                };
-                this.domMenuWrapperElement = document.getElementById('menu-wrapper');
-                this.domMenuTogglerElement = document.getElementById('menu-toggler');
-            }
-            Object.defineProperty(ContextMenu.prototype, "isActive", {
-                get: function () {
-                    return this.showFancyMenu;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            ContextMenu.prototype.init = function (gameWrapper, canvas, userInterface, bot, developerInterface, webSocketInterface) {
-                this.gameWrapper = gameWrapper;
-                this.canvas = canvas;
-                this.userInterface = userInterface;
-                this.bot = bot;
-                this.developerInterface = developerInterface;
-                this.webSocketInterface = webSocketInterface;
-                this.domMenuTogglerElement.disabled = true;
-                //let canvas = this.gameWrapper.input.canvas.getContext().canvas;
-                var self = this;
-                this.gameWrapper.input.canvas.registerEvent(function (canvas) {
-                    canvas.addEventListener('contextmenu', self.onContextMouseDown, !0);
-                    canvas.addEventListener('mousedown', self.onMouseDown, !0);
-                    canvas.addEventListener('mouseup', self.onMouseUp, !0);
-                    canvas.addEventListener('mousemove', self.onMouseMove, !0);
-                    document.addEventListener('keydown', self.onKeyDown, !0);
-                    document.addEventListener('keyup', self.onKeyUp, !0);
-                });
-                //canvas.addEventListener('contextmenu', this.onContextMouseDown);
-                //canvas.addEventListener('mousedown', this.onMouseDown);
-                //canvas.addEventListener('mouseup', this.onMouseUp);
-                //document.addEventListener('keydown', this.onKeyDown);
-                //document.addEventListener('keyup', this.onKeyUp);
-            };
-            ContextMenu.prototype.setMenuVisibility = function (visible) {
-                this.showFancyMenu = visible;
-                this.domMenuTogglerElement.checked = this.showFancyMenu;
-                this.domMenuWrapperElement.style.visibility = this.showFancyMenu ? 'visible' : 'hidden';
-                //console.log(`toggle Status = ${this.showFancyMenu}`);
-            };
-            ContextMenu.prototype.toggleMenuVisibility = function () {
-                this.setMenuVisibility(!this.showFancyMenu);
-            };
-            ContextMenu.prototype.getElementFromPoint = function (e) {
-                //let selectedElement = (document.elementFromPoint(e.clientX, e.clientY) as HTMLAnchorElement);
-                var hovers = document.querySelectorAll(':hover');
-                var selectedElement = hovers[hovers.length - 1];
-                //let selectedElement = (hovers[hovers.length - 2] as HTMLAnchorElement);
-                //selectedElement.click();
-                var dataContextMenuActionValue = selectedElement.getAttribute('data-context-menu-action');
-                switch (ContextMenuActions[dataContextMenuActionValue]) {
-                    case ContextMenuActions.Default:
-                        {
-                            this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.Default;
+        var Utils;
+        (function (Utils) {
+            var Interface;
+            (function (Interface) {
+                var ContextMenuActions;
+                (function (ContextMenuActions) {
+                    ContextMenuActions[ContextMenuActions["First"] = 0] = "First";
+                    ContextMenuActions[ContextMenuActions["Default"] = 0] = "Default";
+                    ContextMenuActions[ContextMenuActions["Torque"] = 1] = "Torque";
+                    ContextMenuActions[ContextMenuActions["Pursuit"] = 2] = "Pursuit";
+                    ContextMenuActions[ContextMenuActions["Enemies"] = 3] = "Enemies";
+                    ContextMenuActions[ContextMenuActions["Food"] = 4] = "Food";
+                    ContextMenuActions[ContextMenuActions["Last"] = 4] = "Last";
+                })(ContextMenuActions = Interface.ContextMenuActions || (Interface.ContextMenuActions = {}));
+                // let actions: IDictionary<ContextMenuAction> = {};
+                //actions[ContextMenuActions.Facebook] = {
+                //	type: ContextMenuActions.Facebook,
+                //	icon: '',
+                //	href: ''
+                //};
+                var icons = {};
+                /*
+                icons[ContextMenuActions.Default] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMzM5LjA5MSAyNzUuOTI4IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMzkuMDkxIDI3NS45Mjg7IiB4bWw6c3BhY2U9InByZXNlcnZlIj48Zz48cGF0aCBkPSJNNC45MjIsMTAyLjg4NmMyNy41OTksMTEuNTA1LDQ3LjcyMiwxNS4yNTYsNjIuNDQyLDE1LjI2NWMwLjAxOSwwLDAuMDQsMCwwLjA2LDBjMTEuNTM0LDAsMTkuNzM0LTIuMzczLDI1LjE3Ni01LjA3OSAgIGMxLjcwOC0wLjg0NCwzLjEzOC0xLjcxNiw0LjMxNS0yLjU0bDE0OC40MjMsNjEuOTA2YzYuMzAyLDIuNjI5LDEzLjU0Mi0wLjM1MiwxNi4xNy02LjY1MWMyLjYyOC02LjMwMi0wLjM0OS0xMy41NDMtNi42NS0xNi4xNzIgICBsLTgzLjMxNy0zNC43NWwxLjc4NC00LjI3N2w4My4zMTYsMzQuNzVjNi4zMDMsMi42MjksMTMuNTQzLTAuMzUxLDE2LjE3LTYuNjUxYzIuNjI5LTYuMzAyLTAuMzQ5LTEzLjU0My02LjY1LTE2LjE3MSAgIEwxMTcuNzM5LDYwLjYwOWMtMC44NzItNS0zLjU0NS0xMi42MzktMTAuNzg4LTIxLjMxYy05LjY5NS0xMS42NjItMjcuMjQ5LTI1LjI3NC01OS4zNzQtMzguNjggICBDNDMuNS0xLjA4MywzOC44MTUsMC44NDYsMzcuMTEzLDQuOTI0Yy0xLjY5OSw0LjA3OCwwLjIyNyw4Ljc2Myw0LjMwNSwxMC40NjJjMjEuOTk1LDkuMTY5LDM2LjA1OCwxOC4xNzQsNDQuOTg5LDI1Ljg2MSAgIGMwLjM5OC0wLjAxOSwwLjc5Ny0wLjA0NCwxLjE5OS0wLjA0NGMzLjIzOCwwLDYuNDEsMC42MzgsOS40MjQsMS44OTRjNi4wMzksMi41MiwxMC43MzUsNy4yMzgsMTMuMjI1LDEzLjI5MSAgIGMyLjQ5MSw2LjA1NSwyLjQ3NCwxMi43MTMtMC4wNDQsMTguNzUyYy0zLjM2Niw4LjA2OC0xMC42NiwxMy42MTUtMTkuMTMzLDE0LjgyMmwtMy4wMDcsNy4yMDkgICBjLTEuOTUsMS40OTQtNy42NzcsNC45MDktMjAuNzA3LDQuOThjLTExLjk1NywwLjAwNi0zMC4wOTEtMy4xMDItNTYuMjg0LTE0LjAzYy00LjA3OS0xLjctOC43NjIsMC4yMjctMTAuNDYyLDQuMzA0ICAgQy0xLjA4Miw5Ni41LDAuODQ1LDEwMS4xODUsNC45MjIsMTAyLjg4NnoiLz48ZWxsaXBzZSB0cmFuc2Zvcm09Im1hdHJpeCgwLjM4NSAtMC45MjI5IDAuOTIyOSAwLjM4NSAtNi43NjcyIDEyMS4yNTg4KSIgY3g9Ijg3LjU5OCIgY3k9IjY1LjcwNyIgcng9IjIyLjUiIHJ5PSIyMi40OTkiLz48cGF0aCBkPSJNMjk5LjQ2NiwxNDQuNDc5YzAuNjE4LDAuNzI3LDEuMjcxLDEuNDM0LDEuOTk1LDIuMDkyYzkuMTg4LDguMzYsMjMuNDE2LDcuNjg4LDMxLjc3Ni0xLjUwMiAgIGM4LjM1OC05LjE5LDcuNjg1LTIzLjQxOC0xLjUwNS0zMS43NzdjLTguNjI2LTcuODQ4LTIxLjY5LTcuNzM1LTMwLjE3My0wLjA5Yy0xLjkyMiw2LjU4OS0yLjkwOCwxMy4zNTgtMi45MjEsMjAuMjczICAgQzI5OC42MzIsMTM3LjQwOSwyOTguOTU3LDE0MS4xMDYsMjk5LjQ2NiwxNDQuNDc5eiIvPjxwYXRoIGQ9Ik0zMDYuMTMzLDE3MS43NzhjLTAuNzU4LDIuNTY0LTIuNDY3LDQuNjc4LTQuODE1LDUuOTUzYy0xLjQ2MiwwLjc5OC0zLjExMiwxLjIxOS00Ljc3MSwxLjIxOSAgIGMtMy42NjcsMC03LjAzNS0xLjk5OS04Ljc5MS01LjIxOWwtMC4wNzQtMC4xNDJjLTEuMDE3LTEuOTU3LTMuMTQxLTYuNDMyLTUuMDc1LTEyLjg5OGMtMC42NjksMC42NDctMS4zMTUsMS4zMTktMS45MDYsMi4wNCAgIGMtOS45NTksMTAuMTk3LTIzLjcxNCwyNS41ODMtMzkuMTYzLDMzLjQ1M2MtNS43MTYsMS40NjgtMTUuNjg5LDQuNTE5LTI3LjU4MywxMC4yNjljLTE4LjE4Myw4Ljc5OC00MC45OTQsMjQuMDQ3LTU5LjA3OCw0OS43ODkgICBjLTMuOTY3LDUuNjUxLTIuNjA0LDEzLjQ0OCwzLjA0OCwxNy40MTRjMi4xODQsMS41MzUsNC42OSwyLjI3Miw3LjE3MiwyLjI3MmMzLjkzNiwwLDcuODA5LTEuODUzLDEwLjI0Mi01LjMxOCAgIGMxNS4wMDctMjEuMzgzLDM0LjA3OS0zNC4xODQsNDkuNTA4LTQxLjY1NGM2LjcxNy0zLjI1MSwxMi43MS01LjQ3MiwxNy4yNzEtNi45MjZjNC45MDEsNC4yOSwxMS42NzMsNi41NjgsMjEuODI1LDIuMTMzICAgYzE5Ljc1My0xMC40ODYsMjkuNzMyLTE5LjE0Niw0Mi40NzMtMzYuMjA0YzkuMTk1LTEyLjQ1OSw1Ljk4NC0yNS4yNzgtMC42MTYtMzEuMDk3Yy0xLjIwNy0xLjA2NC0yLjU5Ni0xLjgwNC00LjA5NS0yLjI2NSAgIGMxLjczOSw1LjkyMywzLjU3OCw5LjQ5NywzLjYxMiw5LjU2MUMzMDYuNjAyLDE2Ni41MTQsMzA2Ljg4OCwxNjkuMjE4LDMwNi4xMzMsMTcxLjc3OHoiLz48cGF0aCBkPSJNMjg5LjUxMywxNzIuNzczYzEuNDUyLDIuNjY2LDQuMTk4LDQuMTc3LDcuMDM0LDQuMTc3YzEuMjkyLDAsMi42MDMtMC4zMTMsMy44MTYtMC45NzYgICBjMy44ODMtMi4xMTEsNS4zMTYtNi45NywzLjIwNS0xMC44NTFsLTAuMDAyLDAuMDAxYy0wLjM2NS0wLjY1Ny02Ljk2LTEzLjY3LTYuOTI3LTMxLjY1NGMwLjAyMy0xMi42NzMsMy4xMDYtMjcuNzY5LDEzLjg5MS00My43MzIgICBjMi40NzctMy42NTksMS41MTgtOC42MzItMi4xMzktMTEuMTA5Yy0zLjY1OS0yLjQ3Ny04LjYzMy0xLjUyLTExLjEwOSwyLjEzOWMtMTIuNzExLDE4LjczMi0xNi42NjYsMzcuMzgxLTE2LjY0Myw1Mi43MDIgICBDMjgwLjY3OCwxNTYuNDY2LDI4OS4xNTcsMTcyLjA2NywyODkuNTEzLDE3Mi43NzN6Ii8+PHBvbHlnb24gcG9pbnRzPSIyNDIuOTA1LDE3Ni45MiAxNjcuOTA1LDE4MS45MiAxNjkuOTA2LDE5Ni41ODcgMjQzLjkwNiwxODEuOTIgICIvPjxwb2x5Z29uIHBvaW50cz0iMjc2LjUwNiwxMTUuMzM4IDIyOS44MjgsNTYuNzk3IDIxOS42NjIsNjcuNTU2IDI3My4yNCwxMTkuMjU0ICAiLz48L2c+PC9zdmc+';
+                icons[ContextMenuActions.Torque] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTMyMC4zLDIxOC4ybDE1LjItMTUuMmwtMjYuNS0yNi41bC0xNS4yLDE1LjJjLTUuOS0zLjUtMTIuMy02LjItMTkuMS04di0yMS40aC0zNy41djIxLjRjLTYuOCwxLjgtMTMuMiw0LjUtMTkuMSw4ICAgbC0xNS4yLTE1LjJMMTc2LjQsMjAzbDE1LjIsMTUuMmMtMy41LDUuOS02LjIsMTIuMy04LDE5LjFoLTIxLjR2MzcuNWgyMS40YzEuOCw2LjgsNC41LDEzLjIsOCwxOS4xbC0xNS4yLDE1LjJsMjYuNSwyNi41ICAgbDE1LjItMTUuMmM1LjksMy41LDEyLjMsNi4yLDE5LjEsOHYyMS40aDM3LjV2LTIxLjRjNi44LTEuOCwxMy4yLTQuNSwxOS4xLThsMTUuMiwxNS4ybDI2LjUtMjYuNWwtMTUuMi0xNS4yICAgYzMuNS01LjksNi4yLTEyLjMsOC0xOS4xaDIxLjR2LTM3LjVoLTIxLjRDMzI2LjUsMjMwLjUsMzIzLjgsMjI0LjEsMzIwLjMsMjE4LjJ6IE0yNTUuOSwyOTMuNWMtMjAuNywwLTM3LjUtMTYuOC0zNy41LTM3LjUgICBjMC0yMC43LDE2LjgtMzcuNSwzNy41LTM3LjVjMjAuNywwLDM3LjUsMTYuOCwzNy41LDM3LjVDMjkzLjQsMjc2LjcsMjc2LjYsMjkzLjUsMjU1LjksMjkzLjV6Ii8+PHBhdGggZD0iTTMyNS42LDgybC0xNCwzNC44QzM2OSwxMzkuOSw0MDYsMTk0LjUsNDA2LDI1NmMwLDQwLjEtMTUuNiw3Ny44LTQ0LDEwNmwyNi40LDI2LjZjMzUuNS0zNS4zLDU1LTgyLjQsNTUtMTMyLjYgICBDNDQzLjUsMTc5LjEsMzk3LjIsMTEwLjgsMzI1LjYsODJ6Ii8+PHBhdGggZD0iTTI1Niw0MDZjLTgyLjcsMC0xNTAtNjcuMy0xNTAtMTUwYzAtMTguNywzLjQtMzYuOCwxMC01My44TDgxLDE4OC42Yy04LjMsMjEuMy0xMi41LDQ0LTEyLjUsNjcuNCAgIGMwLDEwMy40LDg0LjEsMTg3LjUsMTg3LjUsMTg3LjVjMjQuOSwwLDQ4LjktNC44LDcxLjQtMTQuMmwtMTQuNS0zNC42QzI5NSw0MDIuMiwyNzUuOSw0MDYsMjU2LDQwNnoiLz48cGF0aCBkPSJNMjU2LDEwNlY2OC41Yy01MC4xLDAtOTcuMiwxOS41LTEzMi43LDU1bDI2LjUsMjYuNUMxNzguMiwxMjEuNiwyMTUuOSwxMDYsMjU2LDEwNnoiLz48L2c+PC9zdmc+';
+                icons[ContextMenuActions.Pursuit] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNzIgNzIiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDcyIDcyIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMzYsMC41QzE2LjQsMC41LDAuNSwxNi40LDAuNSwzNlMxNi40LDcxLjUsMzYsNzEuNVM3MS41LDU1LjYsNzEuNSwzNlM1NS42LDAuNSwzNiwwLjV6IE02Ni41LDM0aC02LjUgIGMtMC41LDAtMC44LTAuMy0wLjktMC44Yy0wLjMtMi43LTEuMS01LjMtMi4zLTcuNmMtMC4xLTAuMi0wLjEtMC41LDAtMC44YzAuMy0wLjYsMC41LTEuMywwLjUtMmMwLTIuNi0yLjEtNC42LTQuNi00LjYgIGMtMC4zLDAtMC43LDAtMSwwLjFjLTAuMywwLjEtMC42LDAtMC44LTAuMmMtMy4zLTIuOC03LjQtNC42LTEyLTUuMmMtMC41LTAuMS0wLjgtMC40LTAuOC0wLjlWNS41YzAtMC41LDAuNC0wLjksMS0wLjkgIEM1NCw2LjEsNjUuOSwxOCw2Ny40LDMzQzY3LjQsMzMuNiw2NywzNCw2Ni41LDM0eiBNNDkuMSw1MGMtMC4zLDAuMy0wLjgsMC4zLTEuMSwwLjFjLTAuNy0wLjUtMS42LTAuOC0yLjUtMC44ICBjLTIuNiwwLTQuNiwyLjEtNC42LDQuNmMwLDAuMiwwLDAuNCwwLjEsMC42Yy0wLjYsMC4yLTEuMywwLjMtMS45LDAuNGMtMC41LDAuMS0xLTAuMy0xLTAuOXYtNmMwLTAuNCwwLjMtMC44LDAuNy0wLjkgIGM0LjItMSw3LjUtNC4zLDguNS04LjVjMC4xLTAuNCwwLjUtMC43LDAuOS0wLjdoNmMwLjYsMCwxLDAuNSwwLjksMS4xQzU0LjMsNDMuMyw1Mi4yLDQ3LjEsNDkuMSw1MHogTTM0LDM4LjlWNDIgIGMwLDAuNy0wLjcsMS4xLTEuMywwLjhjLTEuNS0wLjctMi43LTItMy41LTMuNUMyOC45LDM4LjcsMjkuNCwzOCwzMCwzOGgzLjFDMzMuNiwzOCwzNCwzOC40LDM0LDM4Ljl6IE0yOS4yLDMyLjcgIGMwLjgtMS42LDIuMS0yLjksMy44LTMuNmMwLjUtMC4yLDEsMC4xLDEsMC42djMuNGMwLDAuNS0wLjQsMC45LTAuOSwwLjlIMzBDMjkuNCwzNCwyOC45LDMzLjMsMjkuMiwzMi43eiBNMzguOSwzOEg0MiAgYzAuNywwLDEuMSwwLjcsMC44LDEuM2MtMC43LDEuNS0yLDIuNy0zLjUsMy41QzM4LjcsNDMuMSwzOCw0Mi42LDM4LDQydi0zLjFDMzgsMzguNCwzOC40LDM4LDM4LjksMzh6IE0zOCwzMy4xdi0zLjQgIGMwLTAuNSwwLjUtMC44LDEtMC42YzEuNywwLjcsMywyLDMuOCwzLjZjMC4zLDAuNi0wLjEsMS4zLTAuOCwxLjNoLTMuMUMzOC40LDM0LDM4LDMzLjYsMzgsMzMuMXogTTM0LDI0LjV2MC4yICBjLTQuNSwwLjgtOC4yLDQuMi05LjIsOC43Yy0wLjEsMC40LTAuNSwwLjctMC45LDAuN2gtNmMtMC42LDAtMS0wLjUtMC45LTFjMS4zLTcuOCw3LjItMTQsMTQuOS0xNS43YzAuMiwwLDAuNCwwLjIsMC4zLDAuNCAgYy0wLjUsMC44LTAuOCwxLjctMC44LDIuN0MzMS40LDIyLjEsMzIuNCwyMy43LDM0LDI0LjV6IE0yNC44LDM4LjdjMSw0LjIsNC4zLDcuNSw4LjUsOC41YzAuNCwwLjEsMC43LDAuNSwwLjcsMC45djYgIGMwLDAuNi0wLjUsMS0xLjEsMC45Yy04LjItMS4zLTE0LjYtNy44LTE1LjktMTUuOWMtMC4xLTAuNSwwLjMtMS4xLDAuOS0xLjFoNkMyNC4zLDM4LDI0LjcsMzguMywyNC44LDM4Ljd6IE00OC4xLDM0ICBjLTAuNCwwLTAuOC0wLjMtMC45LTAuN2MtMS4xLTQuNC00LjctNy45LTkuMi04Ljd2LTAuMmMxLjYtMC43LDIuNi0yLjMsMi42LTQuMmMwLTEtMC4zLTEuOS0wLjgtMi43Yy0wLjEtMC4yLDAtMC40LDAuMy0wLjQgIGMyLjgsMC42LDUuNSwxLjgsNy43LDMuNmMwLjMsMC4yLDAuNCwwLjYsMC4zLDAuOWMtMC4xLDAuMy0wLjEsMC43LTAuMSwxLjFjMCwyLjYsMi4xLDQuNiw0LjYsNC42aDBjMC40LDAsMC43LDAuMiwwLjksMC41ICBjMC43LDEuNSwxLjIsMy4yLDEuNSw0LjljMC4xLDAuNi0wLjMsMS4xLTAuOSwxLjFINDguMXogTTM0LDUuNXY2LjVjMCwwLjUtMC40LDAuOC0wLjgsMC45QzIyLjYsMTQuMiwxNC4yLDIyLjYsMTMsMzMuMiAgYy0wLjEsMC41LTAuNCwwLjgtMC45LDAuOEg1LjVjLTAuNSwwLTAuOS0wLjQtMC45LTFDNi4xLDE4LDE4LDYuMSwzMyw0LjZDMzMuNiw0LjYsMzQsNSwzNCw1LjV6IE01LjUsMzhoNi41YzAuNSwwLDAuOCwwLjQsMC45LDAuOCAgYzEuMywxMC42LDkuNywxOC45LDIwLjIsMjAuMmMwLjUsMC4xLDAuOCwwLjQsMC44LDAuOXY2LjVjMCwwLjUtMC40LDAuOS0xLDAuOUMxOCw2NS45LDYuMSw1NCw0LjYsMzlDNC42LDM4LjQsNSwzOCw1LjUsMzh6ICAgTTM4LDY2LjV2LTYuNWMwLTAuNSwwLjMtMC44LDAuOC0wLjljMS40LTAuMiwyLjgtMC41LDQuMi0wLjljMC4yLTAuMSwwLjUtMC4xLDAuNywwYzAuNiwwLjMsMS4yLDAuNCwxLjksMC40ICBjMi4zLDAsNC4yLTEuNyw0LjYtMy45YzAtMC4yLDAuMS0wLjQsMC4zLTAuNmM0LjctMy43LDcuOS05LjIsOC42LTE1LjRjMC4xLTAuNSwwLjQtMC44LDAuOS0wLjhoNi41YzAuNSwwLDAuOSwwLjQsMC45LDEgIEM2NS45LDU0LDU0LDY1LjksMzksNjcuNEMzOC40LDY3LjQsMzgsNjcsMzgsNjYuNXoiLz48L3N2Zz4=';
+                icons[ContextMenuActions.Enemies] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgOTYgOTYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDk2IDk2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7fQoJLnN0MXtmaWxsOiMwMDAwMDA7fQo8L3N0eWxlPjxnPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik05LDM2LjhsNy4yLTguOGMwLjYtMC44LDEuNS0xLjIsMi41LTEuMmwxMy4xLDBjMC44LDAsMS43LDAuMSwyLjUsMC40bDAuMiwwYzIuMiwwLjcsNCwyLjEsNSw0LjFsMC4yLDAuMyAgIGMwLjMsMC41LDAuNCwxLjEsMC4zLDEuN2wtMC43LDcuNGMtMC4xLDAuNywwLjIsMS4zLDAuOCwxLjdsNy4xLDUuMWMxLDAuNSwxLjMsMS43LDAuOCwyLjdsMCwwYy0wLjUsMC45LTEuNiwxLjMtMi41LDFsLTEwLjgtNC45ICAgYy0wLjUtMC4yLTAuOS0wLjctMS0xLjJjLTAuMi0wLjktMC42LTItMC44LTEuN2wtNiw4LjJsLTYuNiwxMy40Yy0wLjUsMS4xLTEuNiwxLjctMi44LDEuOEwyLjIsNjcuMWMtMC45LDAtMS43LTAuNy0xLjctMS43VjYzICAgYzAtMC44LDAuNi0xLjYsMS41LTEuN0wxMy4yLDYwYzAuMywwLDAuNS0wLjIsMC42LTAuNWwzLTExLjljMC4xLTAuOCwwLjQtMS41LDAuOS0yLjFMMjQsMzZjMC40LTAuNiwwLjEtMS40LTAuNi0xLjZsLTMuMi0xICAgYy0wLjUtMC4yLTEuMSwwLTEuNSwwLjRMMTIuNSw0MGMtMC45LDAuOS0yLjQsMC45LTMuMywwbDAsMEM4LjMsMzkuMSw4LjIsMzcuNyw5LDM2Ljh6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTI4LjUsNTQuNWMwLjEtMC4zLDAuNS0wLjMsMC43LTAuMWw1LDUuOGMwLjUsMC42LDAuNywxLjMsMC41LDJsLTMuNSwxMy45Yy0wLjMsMS4yLTEuNSwyLTIuNywxLjhsLTEuMi0wLjIgICBjLTEuMy0wLjItMi4yLTEuNS0yLTIuOGwxLjctOC44YzAuMS0wLjYsMC0xLjItMC40LTEuN2wtMS41LTIuMmMtMC4yLTAuMy0wLjItMC43LTAuMS0xLjFMMjguNSw1NC41eiIvPjxjaXJjbGUgY2xhc3M9InN0MCIgY3g9IjQyIiBjeT0iMjIuNCIgcj0iNi4yIi8+PGNpcmNsZSBjbGFzcz0ic3QwIiBjeD0iODkuMyIgY3k9IjIyLjMiIHI9IjYuMiIvPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02Mi4zLDU0LjNsLTEuMyw1LjFjLTAuMSwwLjMtMC4zLDAuNS0wLjYsMC41bC0xMS4yLDEuNGMtMC44LDAuMS0xLjUsMC44LTEuNSwxLjd2Mi40YzAsMC45LDAuOCwxLjcsMS43LDEuNyAgIGwxNS4yLTAuM2MxLjIsMCwyLjItMC43LDIuOC0xLjhsMS40LTIuOWMwLjItMC4zLDAuMS0wLjgtMC4xLTEuMWwtNS44LTYuOUM2Mi44LDUzLjksNjIuNCw1NCw2Mi4zLDU0LjN6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTk0LjUsNDcuNWwtNy4xLTUuMWMtMC42LTAuNC0wLjktMS4xLTAuOC0xLjdsMC43LTcuNGMwLjEtMC42LTAuMS0xLjItMC4zLTEuN2wtMC4yLTAuM2MtMS4xLTItMi45LTMuNS01LTQuMSAgIGwtMC4yLTAuMWMtMC44LTAuMi0xLjYtMC40LTIuNS0wLjRsLTEzLjEsMGMtMSwwLTEuOSwwLjQtMi41LDEuMmwtNy4xLDguN2MtMC43LDAuOS0wLjgsMi4zLDAsMy4yYzAuOSwxLDIuNSwxLjEsMy40LDAuMWw2LjMtNi4yICAgYzAuNC0wLjQsMC45LTAuNSwxLjUtMC40bDMuMiwxYzAuNywwLjIsMC45LDEsMC42LDEuNmwtNi40LDkuNGMtMC40LDAuNi0wLjcsMS40LTAuOSwyLjFsLTAuMiwwLjdjLTAuNCwxLjcsMCwzLjYsMS4xLDVsNS4yLDYuMyAgIGwwLDBsMy44LDQuOWMwLjQsMC41LDAuNSwxLjEsMC40LDEuN2wtMS43LDguOGMtMC4zLDEuMywwLjYsMi42LDIsMi44bDEuMiwwLjJjMS4yLDAuMiwyLjQtMC42LDIuNy0xLjhsMy41LTEzLjkgICBjMC4yLTAuNywwLTEuNS0wLjUtMmwtNy41LTguNWw1LjktOC4xYzAuMi0wLjQsMC42LDAuOCwwLjgsMS43YzAuMiwwLjUsMC41LDEsMSwxLjJsMTAuOCw0LjljMSwwLjQsMi4xLDAsMi41LTEgICBDOTUuOCw0OS4yLDk1LjQsNDgsOTQuNSw0Ny41eiIvPjxnPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0zOS45LDUxLjFMMzksNTIuNWMtMC4xLDAuMi0wLjEsMC40LDAuMSwwLjZsMi40LDEuNWMwLjIsMC4xLDAuNCwwLjEsMC42LTAuMWwxLjEtMS44YzAuMS0wLjIsMC0wLjUtMC4yLTAuNiAgICBMNDAuNCw1MUM0MC4yLDUwLjksNDAsNTAuOSwzOS45LDUxLjF6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTQ1LjMsNDMuNmw0LjYsMy40bDAuMy0wLjZjMS43LTQuMiwyLjctOC42LDIuOC0xMy4xbDAtMC45YzAtMC4yLTAuMy0wLjMtMC40LTAuMWwtNy40LDEwLjkgICAgQzQ1LDQzLjMsNDUuMSw0My41LDQ1LjMsNDMuNnoiLz48L2c+PC9nPjwvc3ZnPg==';
+                icons[ContextMenuActions.Food] = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTQ0OC42LDI4MS40aC0zMC41Yy01LjQsMC05LjYsNC4zLTkuOSw5LjdDNDAzLDM4NS40LDMyNCw0NjAuNCwyMjguMSw0NTljLTk0LjMtMS40LTE3My42LTgwLjctMTc1LTE3NSAgIGMtMS40LTk1LjksNzMuNi0xNzQuOSwxNjcuOS0xODBjNS40LTAuMyw5LjctNC41LDkuNy05LjlWNjMuNWMwLTUuOC00LjktMTAuNi0xMC42LTEwLjNDOTYuOSw1OC45LTEuMSwxNjIuNiwyLjQsMjg4ICAgQzUuOCw0MDcuMSwxMDUsNTA2LjMsMjI0LjEsNTA5LjdjMTI1LjQsMy42LDIyOS4xLTk0LjUsMjM0LjgtMjE3LjdDNDU5LjIsMjg2LjIsNDU0LjMsMjgxLjQsNDQ4LjYsMjgxLjR6Ii8+PHBhdGggZD0iTTI4MS41LDIuMkwyODEuNSwyLjJWNTNsMCwwYzk0LjcsMCwxNzIuMyw3NC41LDE3Ny40LDE2Ny45YzAuMyw1LjQsNC41LDkuNywxMCw5LjdoMzAuNWM1LjgsMCwxMC42LTQuOCwxMC4zLTEwLjYgICBDNTA0LjEsOTksNDAzLjksMi4yLDI4MS41LDIuMnoiLz48cGF0aCBkPSJNMjIwLDE1NC45Yy02NSw1LjUtMTE2LjEsNjAtMTE2LjEsMTI2LjRjMCw2OC42LDU4LjMsMTI2LjksMTI2LjksMTI2LjljNjYuNCwwLDEyMS01MS4xLDEyNi40LTExNi4xICAgYzAuNS01LjgtNC41LTEwLjgtMTAuMy0xMC44SDIzMC43VjE2NS4yQzIzMC43LDE1OS40LDIyNS44LDE1NC40LDIyMCwxNTQuOXogTTE4MC4xLDI4MS42Yy0xNC4xLDAtMjUuNS0xMS40LTI1LjUtMjUuNSAgIGMwLTE0LjEsMTEuNC0yNS41LDI1LjUtMjUuNXMyNS41LDExLjQsMjUuNSwyNS41QzIwNS42LDI3MC4yLDE5NC4yLDI4MS42LDE4MC4xLDI4MS42eiBNMjU2LjIsMzU3LjVjMCwxNC4xLTExLjQsMjUuNS0yNS41LDI1LjUgICBjLTE0LjEsMC0yNS41LTExLjQtMjUuNS0yNS41YzAtMTQuMSwxMS40LTI1LjUsMjUuNS0yNS41QzI0NC44LDMzMiwyNTYuMiwzNDMuNCwyNTYuMiwzNTcuNXoiLz48cGF0aCBkPSJNMjkxLjYsMjMwLjZoMTA2LjFjNS44LDAsMTAuNy00LjksMTAuMi0xMC43Yy01LjQtNjUuMS02MC0xMTYuMi0xMjYuNS0xMTYuMmwwLDB2MTE2LjdDMjgxLjUsMjI2LjEsMjg2LDIzMC42LDI5MS42LDIzMC42ICAgeiBNMzMyLjMsMTU0LjRjMTQuMSwwLDI1LjUsMTEuNCwyNS41LDI1LjVjMCwxNC4xLTExLjQsMjUuNS0yNS41LDI1LjVjLTE0LjEsMC0yNS41LTExLjQtMjUuNS0yNS41ICAgQzMwNi44LDE2NS44LDMxOC4yLDE1NC40LDMzMi4zLDE1NC40eiIvPjwvZz48L3N2Zz4=';
+                */
+                icons[ContextMenuActions.Default] = 'fighter-jet';
+                icons[ContextMenuActions.Torque] = 'cogs';
+                icons[ContextMenuActions.Pursuit] = 'line-chart';
+                icons[ContextMenuActions.Enemies] = 'exclamation';
+                icons[ContextMenuActions.Food] = 'cutlery';
+                /**
+                 * W.I.P.
+                 */
+                var ContextMenu = (function () {
+                    function ContextMenu() {
+                        this.showFancyMenu = false;
+                        this.destroyedByInvalidCtrlKey = undefined;
+                        this.mouseClientPosition = {
+                            clientX: 0,
+                            clientY: 0
+                        };
+                        var itemTemplate__0 = "\n<li class='menu-item'>\n\t<a class='fa fa-{0}' href='{1}' target='_blank' data-context-menu-action='{2}'></a>\n</li>\n";
+                        var itemTemplate__1 = "\n<li class='menu-item'>\n\t<a href='#' target='_blank' data-context-menu-action='{0}'>\n\t\t<img src='{1}' />\n\t</a>\n</li>\n";
+                        var itemTemplate = "\n<li class='menu-item'>\n\t<a class='fa fa-{1}' href='#' target='_blank' data-context-menu-action='{0}'></a>\n</li>\n";
+                        var items = '';
+                        for (var idx = ContextMenuActions.First; idx <= ContextMenuActions.Last; idx++) {
+                            //items += itemTemplate.format('github', 'https://github.com/', ContextMenuActions[idx]);
+                            items += itemTemplate.format(ContextMenuActions[idx], icons[idx]);
                         }
-                        break;
-                    case ContextMenuActions.Torque:
-                        {
-                            this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.CalculateTorque;
-                        }
-                        break;
-                    case ContextMenuActions.Pursuit:
-                        {
-                            this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.BasicPursuit;
-                        }
-                        break;
-                    case ContextMenuActions.Enemies:
-                        {
-                            this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.DrawEnemies;
-                        }
-                        break;
-                    case ContextMenuActions.Food:
-                        {
-                            this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.InterconnectFood;
-                        }
-                        break;
-                }
-            };
-            ContextMenu.prototype.onContextMouseDown = function (e) {
-                if (this.destroyedByInvalidCtrlKey || (e.ctrlKey && e.button == 2 && e.buttons == 0 && (!e.altKey && !e.shiftKey))) {
-                    e.preventDefault();
-                    this.destroyedByInvalidCtrlKey = false;
-                    window.log((+new Date()), '----------> onContextMouseDown');
-                }
-            };
-            ContextMenu.prototype.onMouseDown = function (e) {
-                if (this.bot.isBotInGame()) {
-                    //console.log((+new Date()), `Which: ${e.which}; Buttons: ${e.buttons}`, e);
-                    // Ensure no other key is being pressed
-                    if (e.ctrlKey && e.button == 2 && e.buttons == 2 && (!e.altKey && !e.shiftKey)) {
-                        e.preventDefault();
-                        window.log((+new Date()), '----------> onMouseDown');
-                        this.toggleMenuVisibility();
+                        var content = "\n<nav class='menu'>\n\t<input class='menu-toggler' id='menu-toggler' type='checkbox'>\n\t<label for='menu-toggler'></label>\n\t<ul id='menu-ul-list'>{0}</ul>\n</nav>\n".format(items);
+                        var contextMenuOverlay = document.createElement('div');
+                        contextMenuOverlay.className = 'menu-wrapper';
+                        contextMenuOverlay.id = 'menu-wrapper';
+                        contextMenuOverlay.style.visibility = 'hidden';
+                        contextMenuOverlay.innerHTML = content;
+                        document.body.appendChild(contextMenuOverlay);
+                        contextMenuOverlay.oncontextmenu = function (e) {
+                            e.preventDefault();
+                        };
+                        this.domMenuWrapperElement = document.getElementById('menu-wrapper');
+                        this.domMenuTogglerElement = document.getElementById('menu-toggler');
                     }
-                }
-            };
-            ContextMenu.prototype.onMouseUp = function (e) {
-                // window.log((+new Date()), `----------> onMouseUp XXX; this.showFancyMenu = ${this.showFancyMenu}`);
-                if (this.showFancyMenu) {
-                    //console.log((+new Date()), `Which: ${e.which}; Buttons: ${e.buttons}`, e);
-                    this.getElementFromPoint(e);
-                    window.log((+new Date()), '----------> onMouseUp');
-                    this.setMenuVisibility(false);
-                }
-            };
-            ContextMenu.prototype.onMouseMove = function (e) {
-                if (this.showFancyMenu) {
-                    this.mouseClientPosition.clientX = e.clientX;
-                    this.mouseClientPosition.clientY = e.clientY;
-                }
-            };
-            ContextMenu.prototype.onKeyDown = function (e) {
-                if (this.showFancyMenu && (e.ctrlKey && (e.altKey || e.shiftKey))) {
-                    this.destroyedByInvalidCtrlKey = true;
-                    window.log((+new Date()), '----------> onKeyDown');
-                    this.setMenuVisibility(false);
-                }
-            };
-            ContextMenu.prototype.onKeyUp = function (e) {
-                if (this.showFancyMenu && (!e.ctrlKey && (!e.altKey && !e.shiftKey))) {
-                    //console.log((+new Date()), e);
-                    this.destroyedByInvalidCtrlKey = true;
-                    window.log((+new Date()), '----------> onKeyUp');
-                    this.getElementFromPoint();
-                    this.setMenuVisibility(false);
-                }
-            };
-            return ContextMenu;
-        }());
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "setMenuVisibility", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "toggleMenuVisibility", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "getElementFromPoint", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "onContextMouseDown", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "onMouseDown", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "onMouseUp", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "onMouseMove", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "onKeyDown", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], ContextMenu.prototype, "onKeyUp", null);
-        KartwarsBot.ContextMenu = ContextMenu;
-    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
-})(DracoolaArt || (DracoolaArt = {}));
-
-/// <reference path="_references.ts" />
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var DracoolaArt;
-(function (DracoolaArt) {
-    var KartwarsBot;
-    (function (KartwarsBot) {
-        /**
-         * User Interface Helper.
-         */
-        var UserInterface = (function () {
-            // Constructor
-            function UserInterface(gameWrapper, contextMenu, canvas, bot) {
-                this.gameWrapper = gameWrapper;
-                this.contextMenu = contextMenu;
-                this.canvas = canvas;
-                this.bot = bot;
-                this.originalEvents = {
-                    fadeIn: null,
-                    onKeyUp: null,
-                    onMouseDown: null,
-                    onMouseUp: null,
-                    onMouseMove: null,
-                    onRequestAnimationFrameLoop: null,
-                };
-                this.overlays = {
-                    botOverlay: null,
-                    serverOverlay: null,
-                    prefOverlay: null,
-                    statsOverlay: null,
-                    fizzyOverlay: null,
-                    rageOverlay: null,
-                };
-                // Save the original jQuery functions so we can modify them, or reenable them later.
-                this.originalEvents.fadeIn = $.fn.fadeIn;
-                var $this = this;
-                $.fn.fadeIn = function () {
-                    var self = this;
-                    $this.originalEvents.fadeIn.apply(self, arguments).promise().done(function () {
-                        self.trigger('fadeIn');
+                    Object.defineProperty(ContextMenu.prototype, "isActive", {
+                        get: function () {
+                            return this.showFancyMenu;
+                        },
+                        enumerable: true,
+                        configurable: true
                     });
+                    ContextMenu.prototype.init = function (gameWrapper, canvas, userInterface, bot, developerInterface, webSocketInterface) {
+                        this.gameWrapper = gameWrapper;
+                        this.canvas = canvas;
+                        this.userInterface = userInterface;
+                        this.bot = bot;
+                        this.developerInterface = developerInterface;
+                        this.webSocketInterface = webSocketInterface;
+                        this.domMenuTogglerElement.disabled = true;
+                        //let canvas = this.gameWrapper.input.canvas.getContext().canvas;
+                        var self = this;
+                        this.gameWrapper.input.canvas.registerEvent(function (canvas) {
+                            canvas.addEventListener('contextmenu', self.onContextMouseDown, !0);
+                            canvas.addEventListener('mousedown', self.onMouseDown, !0);
+                            canvas.addEventListener('mouseup', self.onMouseUp, !0);
+                            canvas.addEventListener('mousemove', self.onMouseMove, !0);
+                            document.addEventListener('keydown', self.onKeyDown, !0);
+                            document.addEventListener('keyup', self.onKeyUp, !0);
+                        });
+                        //canvas.addEventListener('contextmenu', this.onContextMouseDown);
+                        //canvas.addEventListener('mousedown', this.onMouseDown);
+                        //canvas.addEventListener('mouseup', this.onMouseUp);
+                        //document.addEventListener('keydown', this.onKeyDown);
+                        //document.addEventListener('keyup', this.onKeyUp);
+                    };
+                    ContextMenu.prototype.setMenuVisibility = function (visible) {
+                        this.showFancyMenu = visible;
+                        this.domMenuTogglerElement.checked = this.showFancyMenu;
+                        this.domMenuWrapperElement.style.visibility = this.showFancyMenu ? 'visible' : 'hidden';
+                        //console.log(`toggle Status = ${this.showFancyMenu}`);
+                    };
+                    ContextMenu.prototype.toggleMenuVisibility = function () {
+                        this.setMenuVisibility(!this.showFancyMenu);
+                    };
+                    ContextMenu.prototype.getElementFromPoint = function (e) {
+                        //let selectedElement = (document.elementFromPoint(e.clientX, e.clientY) as HTMLAnchorElement);
+                        var hovers = document.querySelectorAll(':hover');
+                        var selectedElement = hovers[hovers.length - 1];
+                        //let selectedElement = (hovers[hovers.length - 2] as HTMLAnchorElement);
+                        //selectedElement.click();
+                        var dataContextMenuActionValue = selectedElement.getAttribute('data-context-menu-action');
+                        switch (ContextMenuActions[dataContextMenuActionValue]) {
+                            case ContextMenuActions.Default:
+                                {
+                                    this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.Default;
+                                }
+                                break;
+                            case ContextMenuActions.Torque:
+                                {
+                                    this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.CalculateTorque;
+                                }
+                                break;
+                            case ContextMenuActions.Pursuit:
+                                {
+                                    this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.BasicPursuit;
+                                }
+                                break;
+                            case ContextMenuActions.Enemies:
+                                {
+                                    this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.DrawEnemies;
+                                }
+                                break;
+                            case ContextMenuActions.Food:
+                                {
+                                    this.bot.selectedStrategy = KartwarsBot.Strategy.Strategies.InterconnectFood;
+                                }
+                                break;
+                        }
+                    };
+                    ContextMenu.prototype.onContextMouseDown = function (e) {
+                        if (this.destroyedByInvalidCtrlKey || (e.ctrlKey && e.button == 2 && e.buttons == 0 && (!e.altKey && !e.shiftKey))) {
+                            e.preventDefault();
+                            this.destroyedByInvalidCtrlKey = false;
+                            if (window.botFactory.developerInterface.opt.individual.experimentalContextMenu) {
+                                window.log((+new Date()), '----------> onContextMouseDown');
+                            }
+                            //console.log('onContextMouseDown');
+                            //console.log(`destroyedByCtrlKeyRelease = ${destroyedByCtrlKeyRelease}`);
+                        }
+                    };
+                    ContextMenu.prototype.onMouseDown = function (e) {
+                        if (this.bot.isBotInGame()) {
+                            //console.log((+new Date()), `Which: ${e.which}; Buttons: ${e.buttons}`, e);
+                            // Ensure no other key is being pressed
+                            if (e.ctrlKey && e.button == 2 && e.buttons == 2 && (!e.altKey && !e.shiftKey)) {
+                                e.preventDefault();
+                                if (window.botFactory.developerInterface.opt.individual.experimentalContextMenu) {
+                                    window.log((+new Date()), '----------> onMouseDown');
+                                }
+                                this.toggleMenuVisibility();
+                            }
+                        }
+                    };
+                    ContextMenu.prototype.onMouseUp = function (e) {
+                        // window.log((+new Date()), `----------> onMouseUp XXX; this.showFancyMenu = ${this.showFancyMenu}`);
+                        if (this.showFancyMenu) {
+                            //console.log((+new Date()), `Which: ${e.which}; Buttons: ${e.buttons}`, e);
+                            this.getElementFromPoint(e);
+                            if (window.botFactory.developerInterface.opt.individual.experimentalContextMenu) {
+                                window.log((+new Date()), '----------> onMouseUp');
+                            }
+                            this.setMenuVisibility(false);
+                        }
+                    };
+                    ContextMenu.prototype.onMouseMove = function (e) {
+                        if (this.showFancyMenu) {
+                            this.mouseClientPosition.clientX = e.clientX;
+                            this.mouseClientPosition.clientY = e.clientY;
+                        }
+                    };
+                    ContextMenu.prototype.onKeyDown = function (e) {
+                        if (this.showFancyMenu && (e.ctrlKey && (e.altKey || e.shiftKey))) {
+                            this.destroyedByInvalidCtrlKey = true;
+                            if (window.botFactory.developerInterface.opt.individual.experimentalContextMenu) {
+                                window.log((+new Date()), '----------> onKeyDown');
+                            }
+                            this.setMenuVisibility(false);
+                        }
+                    };
+                    ContextMenu.prototype.onKeyUp = function (e) {
+                        if (this.showFancyMenu && (!e.ctrlKey && (!e.altKey && !e.shiftKey))) {
+                            //console.log((+new Date()), e);
+                            this.destroyedByInvalidCtrlKey = true;
+                            if (window.botFactory.developerInterface.opt.individual.experimentalContextMenu) {
+                                window.log((+new Date()), '----------> onKeyUp');
+                            }
+                            this.getElementFromPoint();
+                            this.setMenuVisibility(false);
+                        }
+                    };
+                    return ContextMenu;
+                }());
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "setMenuVisibility", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "toggleMenuVisibility", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "getElementFromPoint", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "onContextMouseDown", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "onMouseDown", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "onMouseUp", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "onMouseMove", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "onKeyDown", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], ContextMenu.prototype, "onKeyUp", null);
+                Interface.ContextMenu = ContextMenu;
+            })(Interface = Utils.Interface || (Utils.Interface = {}));
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
+    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
+})(DracoolaArt || (DracoolaArt = {}));
+
+/// <reference path="../_references.ts" />
+var DracoolaArt;
+(function (DracoolaArt) {
+    var KartwarsBot;
+    (function (KartwarsBot) {
+        var Utils;
+        (function (Utils) {
+            var ScoreHolster = (function () {
+                function ScoreHolster() {
+                    this.scores = [];
+                }
+                ScoreHolster.prototype.addScore = function (playTime, top3Time, hexagons, kills, score, maxStreak) {
+                    var thisScore = new KartwarsBot.Structures.Score(playTime, top3Time, parseInt(hexagons), parseInt(kills), parseInt(score), parseInt(maxStreak));
+                    this.scores.push(thisScore);
+                    return this.scores;
                 };
-                //
-                // Overlays
-                this.initOverlays();
-                //
-                // Load preferences
-                window.logDebugging = true;
-                window.visualDebugging = false;
-                window.autoRespawn = false;
-                var jModalDownloadApp = $('#modal-downloadapp'), playButton = document.getElementById('play-btn'), mouseButtonControlSelection = document.getElementById('mouseBtn');
-                // Ensure mouse control is selected
-                mouseButtonControlSelection.click();
-                //playButton.addEventListener('click', this.playButtonClickListener);
-                jModalDownloadApp.bind('fadeIn', this.bypassModalPopupBlocker);
-                this.bindToPlayButton();
-                //
-                // Unlocks all skins without the need for FB sharing.
-                this.unlockSkins();
-                //
-                // Remove social
-                document.getElementsByClassName('social')[0].style.display = 'none';
-                //
-                // Listener for mouse wheel scroll - used for setZoom function
-                document.body.addEventListener('mousewheel', this.canvas.setZoom);
-                document.body.addEventListener('DOMMouseScroll', this.canvas.setZoom);
-                this.onPrefChange();
-            }
-            UserInterface.prototype.boot = function () {
-                //
-                // Save the original kartwars.io functions so we can modify them, or reenable them later.
-                this.originalEvents.onKeyUp = window.game.input.keyboard._onKeyUp;
-                this.originalEvents.onMouseDown = window.game.input.mouse._onMouseDown;
-                this.originalEvents.onMouseUp = window.game.input.mouse._onMouseUp;
-                this.originalEvents.onMouseMove = window.game.input.mouse._onMouseMove;
-                this.originalEvents.onRequestAnimationFrameLoop = window.game.raf._onLoop;
-                //
-                // Reset Keyboard and Mouse events
-                window.game.input.keyboard._onKeyUp = this.onKeyUp;
-                window.game.input.mouse._onMouseDown = this.onMouseDown;
-                window.game.input.mouse._onMouseUp = this.onMouseUp;
-                window.game.input.mouse._onMouseMove = this.onMouseMove;
-                //
-                // Reset Request Animation Frame Loop event
-                window.game.raf._onLoop = this.updateRequestAnimationFrame;
-                //window.addEventListener('mouseup', this.onmouseup);
-                window.addEventListener('keydown', this.onKeyUp, !1);
-                window.addEventListener('resize', this.onResize, !1);
-                setInterval(this.get100SuperCoins, 10 * 60 * 1000);
-                this.get100SuperCoins();
-                this.injectShowFlowButton();
-            };
-            /**
-             * Injects Show Flow Button.
-             */
-            UserInterface.prototype.injectShowFlowButton = function () {
-                var xButton = "<div class=\"footer\" style=\"z-index: 99999; bottom: 60px;\">\n\t<div class=\"quality\">\n\t\t<a href=\"#\" id=\"popup-button\" class=\"btn btn-fs\">SHOW FLOW</a>\n\t</div>\n</div>";
-                $('#init-screen').after(xButton);
-                $('#popup-button').click(function (e) {
-                    e.preventDefault();
-                    window.botFactory.externalGraph.createPopup();
-                });
-            };
-            /**
-             * Resize Event.
-             */
-            UserInterface.prototype.onResize = function () {
-                var canvas = this.gameWrapper.input.canvas.getContext().canvas;
-                canvas.width = window.game.canvas.width;
-                canvas.height = window.game.canvas.height;
-            };
-            /**
-             * Attach event to Play Button.
-             */
-            UserInterface.prototype.bindToPlayButton = function () {
-                $('#play-btn').click(this.playButtonClickListener);
-                var events = $._data($('#play-btn')[0], 'events');
-                if (events) {
-                    var clickHandlers = events.click;
-                    if (clickHandlers) {
-                        clickHandlers.reverse();
-                    }
-                }
-            };
-            /**
-             * On Player Death's event.
-             */
-            UserInterface.prototype.onPlayerDeath = function () {
-                window.log('Called [onPlayerDeath]');
-                this.bindToPlayButton();
-                this.bot.isBotRunning = false;
-                this.fizzyText.play = true;
-                this.fizzyText.loop();
-                // TODO
-                /*
-                if (window.lastscore && window.lastscore.childNodes[1]) {
-                    bot.scores.push(parseInt(window.lastscore.childNodes[1].innerHTML));
-                    bot.scores.sort(function (a, b) { return b - a; });
-                    this.updateStats();
-                }
-                */
-                if (this.bot.isBotEnabled) {
-                    var deathTriggeredCheckPlayedTimeIntervalId_1 = window.setInterval(function () {
-                        var jTimePlayed = $('#top-time-played span');
-                        if (jTimePlayed.is(':visible')) {
-                            var formattedTimePlayed = jTimePlayed.text();
-                            var timePlayed = (parseInt(formattedTimePlayed.split('m')[0]) * 60) + parseInt(formattedTimePlayed.split('m')[1].split(' ')[1].split('s')[0]);
-                            kga('send', {
-                                hitType: 'event',
-                                eventCategory: 'InGame Bot',
-                                eventAction: 'Time alive',
-                                eventValue: timePlayed
+                ScoreHolster.prototype.printResults = function () {
+                    var scoreMapper = function (thisScore) {
+                        return {
+                            'Play Time': thisScore.playTime,
+                            'Top 3 Time': thisScore.top3Time,
+                            'Hexagons': thisScore.hexagons,
+                            'Kills': thisScore.kills,
+                            'Score': thisScore.score,
+                            'Max Streak': thisScore.maxStreak
+                        };
+                    };
+                    var bestScore = this.scores.reduce(function (prev, current) {
+                        return (prev.score > current.score) ? prev : current;
+                    });
+                    var bestScoreTable = [bestScore];
+                    var table = this.scores.map(function (thisScore) {
+                        return {
+                            'Play Time': thisScore.playTime,
+                            'Top 3 Time': thisScore.top3Time,
+                            'Hexagons': thisScore.hexagons,
+                            'Kills': thisScore.kills,
+                            'Score': thisScore.score,
+                            'Max Streak': thisScore.maxStreak
+                        };
+                    }); //.filter(function (h) { return h.Value !== undefined; });
+                    console.group("Scores");
+                    console.table(bestScoreTable);
+                    console.table(table);
+                    console.groupEnd();
+                };
+                return ScoreHolster;
+            }());
+            Utils.ScoreHolster = ScoreHolster;
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
+    })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
+})(DracoolaArt || (DracoolaArt = {}));
+
+/// <reference path="../../_references.ts" />
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var DracoolaArt;
+(function (DracoolaArt) {
+    var KartwarsBot;
+    (function (KartwarsBot) {
+        var Utils;
+        (function (Utils) {
+            var Interface;
+            (function (Interface) {
+                /**
+                 * User Interface Helper.
+                 */
+                var UserInterface = (function () {
+                    // Constructor
+                    function UserInterface(gameWrapper, contextMenu, canvas, bot
+                        /*, stats: Stats*/
+                    ) {
+                        this.gameWrapper = gameWrapper;
+                        this.contextMenu = contextMenu;
+                        this.canvas = canvas;
+                        this.bot = bot;
+                        this.scoreHolster = new Utils.ScoreHolster();
+                        this.originalEvents = {
+                            fadeIn: null,
+                            onKeyUp: null,
+                            onMouseDown: null,
+                            onMouseUp: null,
+                            onMouseMove: null,
+                            onRequestAnimationFrameLoop: null,
+                        };
+                        this.overlays = {
+                            botOverlay: null,
+                            serverOverlay: null,
+                            prefOverlay: null,
+                            statsOverlay: null,
+                            fizzyOverlay: null,
+                            rageOverlay: null,
+                        };
+                        // Save the original jQuery functions so we can modify them, or reenable them later.
+                        this.originalEvents.fadeIn = $.fn.fadeIn;
+                        var $this = this;
+                        $.fn.fadeIn = function () {
+                            var self = this;
+                            $this.originalEvents.fadeIn.apply(self, arguments).promise().done(function () {
+                                self.trigger('fadeIn');
                             });
-                            window.clearInterval(deathTriggeredCheckPlayedTimeIntervalId_1);
-                        }
-                    }, 250);
-                }
-            };
-            /**
-             * Unlocks ALL skins.
-             */
-            UserInterface.prototype.unlockSkins = function () {
-                var allElements = Array.from(document.querySelectorAll('.blocked, .buy'));
-                var shareFacebookElements = document.getElementsByClassName('share-facebook');
-                for (var blockedElementIdx in allElements) {
-                    var element = allElements[blockedElementIdx];
-                    element.innerHTML = 'Unlocked';
-                    element.style.backgroundColor = '#2FC92F';
-                }
-                for (var shareFacebookElementIdx in shareFacebookElements) {
-                    delete (shareFacebookElements[shareFacebookElementIdx]);
-                }
-                for (var carIdx in window.carList) {
-                    window.carList[carIdx].b = 'BLOCK.none';
-                    window.carList[carIdx].section = 'free';
-                }
-            };
-            /**
-             * Init overlays.
-             */
-            UserInterface.prototype.initOverlays = function () {
-                var botOverlay = this.overlays.botOverlay = document.createElement('div');
-                botOverlay.className = 'nsi bot';
-                document.body.appendChild(botOverlay);
-                var serverOverlay = this.overlays.serverOverlay = document.createElement('div');
-                serverOverlay.className = 'nsi server';
-                document.body.appendChild(serverOverlay);
-                var prefOverlay = this.overlays.prefOverlay = document.createElement('div');
-                prefOverlay.className = 'nsi pref';
-                document.body.appendChild(prefOverlay);
-                var statsOverlay = this.overlays.statsOverlay = document.createElement('div');
-                statsOverlay.className = 'nsi stats';
-                document.body.appendChild(statsOverlay);
-                var rageOverlay = this.overlays.rageOverlay = document.createElement('div');
-                rageOverlay.className = 'nsi rage';
-                var rageImage = document.createElement('img');
-                rageImage.src = window.botSettings.baseURL + "images/rage-logo-red-com.png";
-                rageOverlay.appendChild(rageImage);
-                document.body.appendChild(rageOverlay);
-                var fizzyOverlay = this.overlays.fizzyOverlay = document.createElement('div');
-                fizzyOverlay.className = 'nsi fizzy';
-                fizzyOverlay.id = 'fizzytext';
-                document.getElementById('login-modal').appendChild(fizzyOverlay);
-                //
-                var fizzyText = this.fizzyText = new ReverseEngineering.FizzyText('MegaBot.js', 800, 350, false, 100);
-                fizzyText.insertInTo(fizzyOverlay);
-                fizzyText.loop();
-                //
-                //
-                var fizzyTextMessagesIdx = 0;
-                var fizzyTextMessages = [
-                    'you are',
-                    'not',
-                    'what you think'
-                ];
-                window.setInterval(function () {
-                    if (fizzyTextMessagesIdx == fizzyTextMessages.length) {
-                        fizzyTextMessagesIdx = 0;
+                        };
+                        //
+                        // Overlays
+                        this.initOverlays();
+                        var jModalDownloadApp = $('#modal-downloadapp'), playButton = document.getElementById('play-btn'), mouseButtonControlSelection = document.getElementById('mouseBtn');
+                        // Ensure mouse control is selected
+                        mouseButtonControlSelection.click();
+                        //playButton.addEventListener('click', this.playButtonClickListener);
+                        jModalDownloadApp.bind('fadeIn', this.bypassModalPopupBlocker);
+                        this.bindToPlayButton();
+                        //
+                        // Unlocks all skins without the need for FB sharing.
+                        this.unlockSkins();
+                        //
+                        // Remove social
+                        document.getElementsByClassName('social')[0].style.display = 'none';
+                        //
+                        // Listener for mouse wheel scroll - used for setZoom function
+                        document.body.addEventListener('mousewheel', this.canvas.setZoom);
+                        document.body.addEventListener('DOMMouseScroll', this.canvas.setZoom);
+                        this.onPrefChange();
                     }
-                    fizzyText.message = fizzyTextMessages[fizzyTextMessagesIdx++];
-                }, 2500);
-            };
-            UserInterface.prototype.setRageVisible = function (visible) {
-                //let rageOverlaystyle = this.overlays.rageOverlay.style;
-                this.overlays.rageOverlay.style.visibility = (visible ? 'visible' : 'hidden');
-            };
-            /**
-             * Toggles overlays visibility.
-             */
-            UserInterface.prototype.toggleOverlays = function () {
-                var overlays = this.overlays;
-                Object.keys(overlays).forEach(function (okey) {
-                    if (okey == 'rageOverlay' || okey == 'fizzyOverlay') {
-                        return;
-                    }
-                    var thisOverlay = overlays[okey];
-                    if (thisOverlay.style) {
-                        var oVis = thisOverlay.style.visibility !== 'hidden' ? 'hidden' : 'visible';
-                        thisOverlay.style.visibility = oVis;
-                    }
-                });
-            };
-            /**
-             * Bypass modal pop-up advert.
-             */
-            UserInterface.prototype.bypassModalPopupBlocker = function () {
-                window.setTimeout(function () {
-                    var modalDownloadAppIsVisible = $('#modal-downloadapp').is(':visible');
-                    if (modalDownloadAppIsVisible) {
-                        $('#modal-downloadapp .close-modal').click();
-                    }
-                }, 350);
-            };
-            /**
-             * Collects 100 Super coins.
-             * Triggered at boot time and at 10 minutes interval.
-             */
-            UserInterface.prototype.get100SuperCoins = function () {
-                $('.btn.btn-getcoin').click();
-            };
-            /**
-             * Game Ready Delegate.
-             */
-            UserInterface.prototype.onGameReadyDelegate = function () {
-                var _this = this;
-                // Fixes the case when the game goes low with the fps. Maybe a game bug.
-                window.esto.updateItems();
-                // Set view distance
-                // Initial : 1661 x 950
-                window.distanciaMaximaX = window.game.world.bounds.width;
-                window.distanciaMaximaY = window.game.world.bounds.height;
-                window.game.time.watch('fps', function (id, oldValue, newValue) {
-                    _this.onFrameUpdate();
-                    return newValue;
-                });
-            };
-            /**
-             * Play button event.
-             * @param event
-             */
-            UserInterface.prototype.playButtonClickListener = function (event) {
-                var target = event.target;
-                // Detach this event from the play button.
-                $('#play-btn').off('click', this.playButtonClickListener);
-                $(target).addClass('disabled');
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                window.log('Triggered [playButtonClickListener]');
-                this.fizzyText.explode();
-                //this.get100Coins();
-                this.saveNick();
-                this.onPrefChange();
-                kga('send', {
-                    hitType: 'event',
-                    eventCategory: 'InGame',
-                    eventAction: 'Play',
-                    eventLabel: 'Play'
-                });
-                // Retrigger button click after timeout.
-                // This makes the explosion more visible before starting the game.
-                setTimeout(function () {
-                    target.dispatchEvent(event.originalEvent);
-                }, 750);
-            };
-            /**
-             * Preserve nickname.
-             */
-            // TODO : Review
-            UserInterface.prototype.saveNick = function () {
-                var nick = document.getElementById('nick-input').value;
-                //this.savePreference('savedNick', nick);
-            };
-            /**
-             * Hide top score.
-             */
-            UserInterface.prototype.hideTop = function () {
-                var nsidivs = document.querySelectorAll('div.nsi');
-                for (var i = 0; i < nsidivs.length; i++) {
-                    if (nsidivs[i].style.top === '4px' && nsidivs[i].style.width === '300px') {
-                        nsidivs[i].style.visibility = 'hidden';
-                        this.bot.isTopHidden = true;
-                        window.topscore = nsidivs[i];
-                    }
-                }
-            };
-            /**
-             * Reset Zoom.
-             */
-            UserInterface.prototype.resetZoom = function () {
-                this.canvas.resetZoom();
-            };
-            /**
-             * Calls original kartwars.io onkeyup function + whatever is under it
-             * Useful stuff: http://keycode.info/
-             * @param e
-             */
-            UserInterface.prototype.onKeyUp = function (e) {
-                this.originalEvents.onKeyUp(e);
-                if (this.gameWrapper.util.isPlaying) {
-                    // `Ctrl + B` to toggle bot
-                    if (e.ctrlKey && e.keyCode === 66 && (!e.shiftKey && !e.altKey)) {
-                        this.bot.isBotEnabled = !this.bot.isBotEnabled;
-                        this.gameWrapper.input.canvas.forceClear();
-                    }
-                }
-            };
-            /**
-             * Mouse Move event overrider.
-             * @param e
-             */
-            UserInterface.prototype.onMouseMove = function (e) {
-                if (this.bot.isBotInGame()) {
-                }
-                else {
-                    this.originalEvents.onMouseMove(e);
-                }
-            };
-            /**
-             * Mouse Down event overrider.
-             * @param e
-             */
-            UserInterface.prototype.onMouseDown = function (e) {
-                var triggerChainedEvent = false;
-                if (this.contextMenu.isActive) {
-                    return;
-                }
-                if (this.bot.isBotInGame()) {
-                    switch (e.buttons) {
-                        // "Left click" to manually trigger weapon
-                        case 1:
-                            {
-                                triggerChainedEvent = true;
+                    UserInterface.prototype.boot = function () {
+                        //
+                        // Save the original kartwars.io functions so we can modify them, or reenable them later.
+                        this.originalEvents.onKeyUp = window.game.input.keyboard._onKeyUp;
+                        this.originalEvents.onMouseDown = window.game.input.mouse._onMouseDown;
+                        this.originalEvents.onMouseUp = window.game.input.mouse._onMouseUp;
+                        this.originalEvents.onMouseMove = window.game.input.mouse._onMouseMove;
+                        this.originalEvents.onRequestAnimationFrameLoop = window.game.raf._onLoop;
+                        //
+                        // Reset Keyboard and Mouse events
+                        window.game.input.keyboard._onKeyUp = this.onKeyUp;
+                        window.game.input.mouse._onMouseDown = this.onMouseDown;
+                        window.game.input.mouse._onMouseUp = this.onMouseUp;
+                        window.game.input.mouse._onMouseMove = this.onMouseMove;
+                        //
+                        // Reset Request Animation Frame Loop event
+                        window.game.raf._onLoop = this.updateRequestAnimationFrame;
+                        //window.addEventListener('mouseup', this.onmouseup);
+                        window.addEventListener('keydown', this.onKeyUp, !1);
+                        window.addEventListener('resize', this.onResize, !1);
+                        setInterval(this.get100SuperCoins, 10 * 60 * 1000);
+                        this.get100SuperCoins();
+                        this.injectShowFlowButton();
+                    };
+                    /**
+                     * Injects Show Flow Button.
+                     */
+                    UserInterface.prototype.injectShowFlowButton = function () {
+                        var xButton = "<div class=\"footer\" style=\"z-index: 99999; bottom: 60px;\">\n\t<div class=\"quality\">\n\t\t<a href=\"#\" id=\"popup-button\" class=\"btn btn-fs\">SHOW FLOW</a>\n\t</div>\n</div>";
+                        $('#init-screen').after(xButton);
+                        $('#popup-button').click(function (e) {
+                            e.preventDefault();
+                            window.botFactory.externalGraph.createPopup();
+                        });
+                    };
+                    /**
+                     * Resize Event.
+                     */
+                    UserInterface.prototype.onResize = function () {
+                        var canvas = this.gameWrapper.input.canvas.getContext().canvas;
+                        canvas.width = window.game.canvas.width;
+                        canvas.height = window.game.canvas.height;
+                    };
+                    /**
+                     * Attach event to Play Button.
+                     */
+                    UserInterface.prototype.bindToPlayButton = function () {
+                        $('#play-btn').click(this.playButtonClickListener);
+                        var events = $._data($('#play-btn')[0], 'events');
+                        if (events) {
+                            var clickHandlers = events.click;
+                            if (clickHandlers) {
+                                clickHandlers.reverse();
                             }
-                            break;
-                        // "Right click" to manually speed up the kart
-                        case 2:
-                            {
-                                //window.mainCar.isAccelerating = true;
-                                this.bot.defaultAccel = 1; // TODO : Review
-                                triggerChainedEvent = true;
-                            }
-                            break;
-                    }
-                }
-                if (triggerChainedEvent) {
-                    this.originalEvents.onMouseDown(e);
-                }
-                this.onPrefChange();
-            };
-            /**
-             * Mouse Up event overrider.
-             * @param e
-             */
-            UserInterface.prototype.onMouseUp = function (e) {
-                // window.log('Mouse release triggered !');
-                // window.log((+new Date()), '----------> uuu');
-                if (this.contextMenu.isActive) {
-                    // window.log((+new Date()), '----------> VVV');
-                    return;
-                }
-                if (this.bot.isBotInGame()) {
-                    //switch (e.which) {
-                    switch (e.buttons) {
-                        // "Right click"
-                        //case 3: {
-                        case 2: {
-                            //window.mainCar.isAccelerating = false;
-                            this.bot.defaultAccel = 0;
-                            break;
                         }
-                    }
-                }
-                this.originalEvents.onMouseUp(e);
-            };
-            /**
-             * Update stats overlay.
-             */
-            UserInterface.prototype.updateStats = function () {
-                var oContent = [];
-                var median;
-                if (this.bot.scores.length === 0)
-                    return;
-                median = Math.round((this.bot.scores[Math.floor((this.bot.scores.length - 1) / 2)] +
-                    this.bot.scores[Math.ceil((this.bot.scores.length - 1) / 2)]) / 2);
-                oContent.push('games played: ' + this.bot.scores.length);
-                oContent.push('a: ' + Math.round(this.bot.scores.reduce(function (a, b) { return a + b; }) / (this.bot.scores.length)) + ' m: ' + median);
-                for (var i = 0; i < this.bot.scores.length && i < 10; i++) {
-                    oContent.push(i + 1 + '. ' + this.bot.scores[i]);
-                }
-                this.overlays.statsOverlay.innerHTML = oContent.join('<br/>');
-            };
-            /**
-             * Update stats overlay.
-             */
-            UserInterface.prototype.updateStatsEx = function () {
-                var oContent = [];
-                oContent.push('Frames:');
-                oContent.push('');
-                var frames = window.botFactory.clock.getFrames();
-                window.botFactory.clock.clearFrames();
-                for (var frameIdx in frames) {
-                    oContent.push(frameIdx + ": " + frames[frameIdx] + "ms");
-                }
-                //
-                //
-                /*
-                if (window.stack != undefined) {
-                    oContent.push('');
-                    oContent.push('Frames X:');
-        
-                    for (let stackIdx in window.stack) {
-                        let sf = window.stack[stackIdx];
-        
-                        //oContent.push(`${stackIdx} => ${sf}`);
-                        oContent.push(`${stackIdx} => ${sf.functionName}`);
-                    }
-        
-                    //window.stack.forEach(function (sf) {
-                    //	//return sf.toString();
-                    //	oContent.push(sf.functionName);
-                    //});
-                }
-                */
-                //
-                //
-                this.overlays.statsOverlay.innerHTML = oContent.join('<br/>');
-            };
-            /**
-             * Set static display options.
-             */
-            UserInterface.prototype.onPrefChange = function () {
-                var oContent = [];
-                var ht = this.handleTextColor;
-                oContent.push('Game version: ' + window.version);
-                oContent.push('Bot version: ' + window.GM_info.script.version);
-                oContent.push('[Ctrl + B]    : Toggle bot');
-                oContent.push('[Mouse Wheel] : Zoom');
-                this.overlays.prefOverlay.innerHTML = oContent.join('<br/>');
-            };
-            /**
-             * Game status overlay.
-             */
-            UserInterface.prototype.onFrameUpdate = function () {
-                if (this.gameWrapper.util.isPlaying) {
-                    var oContent = [];
-                    oContent.push('Latency: ' + window.ping + 'ms');
-                    oContent.push('FPS: ' + window.game.time.fps);
-                    this.overlays.botOverlay.innerHTML = oContent.join('<br/>');
-                }
-                this.updateStatsEx();
-            };
-            /**
-             * Original Game Update.
-             * @param time
-             */
-            UserInterface.prototype.originalGameUpdate = function (time) {
-                window.botFactory.clock.startFrame();
-                //this.stats.update();
-                window.game.update(time);
-                window.botFactory.clock.endFrame();
-            };
-            /**
-             * Bot Game Update Overrider.
-             * @param time
-             */
-            UserInterface.prototype.gameUpdate = function (time) {
-                window.botFactory.clock.startFrame();
-                this.canvas.maintainZoom();
-                if (!this.bot.isBotInGame()) {
-                    this.gameWrapper.input.canvas.forceClear();
-                    this.originalGameUpdate(time);
-                    return;
-                }
-                var start = Date.now();
-                //
-                // Clean up residual data.
-                this.gameWrapper.items.reset();
-                //
-                // !!
-                this.originalGameUpdate(time);
-                // !!
-                //
-                if (this.bot.isBotInGame()) {
-                    this.bot.isBotRunning = true;
-                    this.fizzyText.play = false;
-                    this.bot.go();
-                }
-                if (!this.bot.isBotEnabled || !this.bot.isBotRunning) {
-                    window.game.input.mouse._onMouseDown = this.onMouseDown;
-                }
-                this.canvas.drawAllInterceptedWrappedCalls();
-                window.botFactory.clock.endFrame();
-            };
-            /**
-             * Looper.
-             * @param time
-             */
-            UserInterface.prototype.updateRequestAnimationFrame = function (time) {
-                window.game.raf.isRunning && (this.gameUpdate(Math.floor(time)),
-                    window.game.raf._timeOutID = window.requestAnimationFrame(window.game.raf._onLoop));
-            };
-            /**
-             * Quit to menu.
-             */
-            UserInterface.prototype.quit = function () {
-                // TODO : Close socket before calling `reiniciar`.
-                if (this.bot.isBotInGame()) {
-                    window.esto.reiniciar();
-                }
-            };
-            UserInterface.prototype.handleTextColor = function (enabled) {
-                return '<span style=\"color:' + (enabled ? 'green;\">enabled' : 'red;\">disabled') + '</span>';
-            };
-            return UserInterface;
-        }());
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onResize", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "bindToPlayButton", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onPlayerDeath", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onGameReadyDelegate", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "playButtonClickListener", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "hideTop", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onKeyUp", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onMouseMove", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onMouseDown", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onMouseUp", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "updateStats", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onPrefChange", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "onFrameUpdate", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "originalGameUpdate", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "gameUpdate", null);
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], UserInterface.prototype, "updateRequestAnimationFrame", null);
-        KartwarsBot.UserInterface = UserInterface;
+                    };
+                    /**
+                     * On Player Death's event.
+                     */
+                    UserInterface.prototype.onPlayerDeath = function () {
+                        this.bindToPlayButton();
+                        this.bot.isBotRunning = false;
+                        this.fizzyText.play = true;
+                        this.fizzyText.loop();
+                        // TODO
+                        /*
+                        if (window.lastscore && window.lastscore.childNodes[1]) {
+                            bot.scores.push(parseInt(window.lastscore.childNodes[1].innerHTML));
+                            bot.scores.sort(function (a, b) { return b - a; });
+                            this.updateStats();
+                        }
+                        */
+                        if (this.bot.isBotEnabled) {
+                            var $this_1 = this;
+                            var deathTriggeredCheckPlayedTimeIntervalId_1 = window.setInterval(function () {
+                                var jTimePlayed = $('#top-time-played span');
+                                if (jTimePlayed.is(':visible')) {
+                                    var formattedTimePlayed = jTimePlayed.text();
+                                    var timePlayed = (parseInt(formattedTimePlayed.split('m')[0]) * 60) + parseInt(formattedTimePlayed.split('m')[1].split(' ')[1].split('s')[0]);
+                                    if (window.botFactory.developerInterface.opt.individual.scoreTable) {
+                                        var playTime = formattedTimePlayed;
+                                        var top3Time = $('#top-result span').text();
+                                        var hexagons = $('#coins-result span').text();
+                                        var kills = $('#kills-result span').text();
+                                        var score = $('#score-result span').text();
+                                        var maxStreak = $('#streak-result span').text();
+                                        $this_1.scoreHolster.addScore(playTime, top3Time, hexagons, kills, score, maxStreak);
+                                        $this_1.scoreHolster.printResults();
+                                    }
+                                    kga('send', {
+                                        hitType: 'event',
+                                        eventCategory: 'InGame Bot',
+                                        eventAction: 'Time alive',
+                                        eventValue: timePlayed
+                                    });
+                                    window.clearInterval(deathTriggeredCheckPlayedTimeIntervalId_1);
+                                }
+                            }, 250);
+                        }
+                    };
+                    /**
+                     * Unlocks ALL skins.
+                     */
+                    UserInterface.prototype.unlockSkins = function () {
+                        var allElements = Array.from(document.querySelectorAll('.blocked, .buy'));
+                        var shareFacebookElements = document.getElementsByClassName('share-facebook');
+                        for (var blockedElementIdx in allElements) {
+                            var element = allElements[blockedElementIdx];
+                            element.innerHTML = 'Unlocked';
+                            element.style.backgroundColor = '#2FC92F';
+                        }
+                        for (var shareFacebookElementIdx in shareFacebookElements) {
+                            delete (shareFacebookElements[shareFacebookElementIdx]);
+                        }
+                        for (var carIdx in window.carList) {
+                            window.carList[carIdx].b = 'BLOCK.none';
+                            window.carList[carIdx].section = 'free';
+                        }
+                    };
+                    /**
+                     * Init overlays.
+                     */
+                    UserInterface.prototype.initOverlays = function () {
+                        var botOverlay = this.overlays.botOverlay = document.createElement('div');
+                        botOverlay.className = 'nsi bot';
+                        document.body.appendChild(botOverlay);
+                        var serverOverlay = this.overlays.serverOverlay = document.createElement('div');
+                        serverOverlay.className = 'nsi server';
+                        document.body.appendChild(serverOverlay);
+                        var prefOverlay = this.overlays.prefOverlay = document.createElement('div');
+                        prefOverlay.className = 'nsi pref';
+                        document.body.appendChild(prefOverlay);
+                        var statsOverlay = this.overlays.statsOverlay = document.createElement('div');
+                        statsOverlay.className = 'nsi stats';
+                        document.body.appendChild(statsOverlay);
+                        var rageOverlay = this.overlays.rageOverlay = document.createElement('div');
+                        rageOverlay.className = 'nsi rage';
+                        var rageImage = document.createElement('img');
+                        rageImage.src = window.botSettings.baseURL + "images/rage-logo-red-com.png";
+                        rageOverlay.appendChild(rageImage);
+                        document.body.appendChild(rageOverlay);
+                        var fizzyOverlay = this.overlays.fizzyOverlay = document.createElement('div');
+                        fizzyOverlay.className = 'nsi fizzy';
+                        fizzyOverlay.id = 'fizzytext';
+                        document.getElementById('login-modal').appendChild(fizzyOverlay);
+                        //
+                        var fizzyText = this.fizzyText = new ReverseEngineering.FizzyText('MegaBot.js', 800, 350, false, 100);
+                        fizzyText.insertInTo(fizzyOverlay);
+                        fizzyText.loop();
+                        //
+                        //
+                        var fizzyTextMessagesIdx = 0;
+                        var fizzyTextMessages = [
+                            'you are',
+                            'not',
+                            'what you think'
+                        ];
+                        window.setInterval(function () {
+                            if (fizzyTextMessagesIdx == fizzyTextMessages.length) {
+                                fizzyTextMessagesIdx = 0;
+                            }
+                            fizzyText.message = fizzyTextMessages[fizzyTextMessagesIdx++];
+                        }, 2500);
+                    };
+                    UserInterface.prototype.setRageVisible = function (visible) {
+                        //let rageOverlaystyle = this.overlays.rageOverlay.style;
+                        this.overlays.rageOverlay.style.visibility = (visible ? 'visible' : 'hidden');
+                    };
+                    /**
+                     * Toggles overlays visibility.
+                     */
+                    UserInterface.prototype.toggleOverlays = function () {
+                        var overlays = this.overlays;
+                        Object.keys(overlays).forEach(function (okey) {
+                            if (okey == 'rageOverlay' || okey == 'fizzyOverlay') {
+                                return;
+                            }
+                            var thisOverlay = overlays[okey];
+                            if (thisOverlay.style) {
+                                var oVis = thisOverlay.style.visibility !== 'hidden' ? 'hidden' : 'visible';
+                                thisOverlay.style.visibility = oVis;
+                            }
+                        });
+                    };
+                    /**
+                     * Bypass modal pop-up advert.
+                     */
+                    UserInterface.prototype.bypassModalPopupBlocker = function () {
+                        window.setTimeout(function () {
+                            var modalDownloadAppIsVisible = $('#modal-downloadapp').is(':visible');
+                            if (modalDownloadAppIsVisible) {
+                                $('#modal-downloadapp .close-modal').click();
+                            }
+                        }, 350);
+                    };
+                    /**
+                     * Collects 100 Super coins.
+                     * Triggered at boot time and at 10 minutes interval.
+                     */
+                    UserInterface.prototype.get100SuperCoins = function () {
+                        $('.btn.btn-getcoin').click();
+                    };
+                    /**
+                     * Game Ready Delegate.
+                     */
+                    UserInterface.prototype.onGameReadyDelegate = function () {
+                        var _this = this;
+                        // Fixes the case when the game goes low with the fps. Maybe a game bug.
+                        window.esto.updateItems();
+                        // Set view distance
+                        // Initial : 1661 x 950
+                        window.distanciaMaximaX = window.game.world.bounds.width;
+                        window.distanciaMaximaY = window.game.world.bounds.height;
+                        window.game.time.watch('fps', function (id, oldValue, newValue) {
+                            _this.onFrameUpdate();
+                            return newValue;
+                        });
+                    };
+                    /**
+                     * Play button event.
+                     * @param event
+                     */
+                    UserInterface.prototype.playButtonClickListener = function (event) {
+                        var target = event.target;
+                        // Detach this event from the play button.
+                        $('#play-btn').off('click', this.playButtonClickListener);
+                        $(target).addClass('disabled');
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        this.fizzyText.explode();
+                        //this.get100Coins();
+                        this.saveNick();
+                        this.onPrefChange();
+                        kga('send', {
+                            hitType: 'event',
+                            eventCategory: 'InGame',
+                            eventAction: 'Play',
+                            eventLabel: 'Play'
+                        });
+                        // Retrigger button click after timeout.
+                        // This makes the explosion more visible before starting the game.
+                        setTimeout(function () {
+                            target.dispatchEvent(event.originalEvent);
+                        }, 750);
+                    };
+                    /**
+                     * Preserve nickname.
+                     */
+                    // TODO : Review
+                    UserInterface.prototype.saveNick = function () {
+                        var nick = document.getElementById('nick-input').value;
+                        //this.savePreference('savedNick', nick);
+                    };
+                    /**
+                     * Hide top score.
+                     */
+                    UserInterface.prototype.hideTop = function () {
+                        var nsidivs = document.querySelectorAll('div.nsi');
+                        for (var i = 0; i < nsidivs.length; i++) {
+                            if (nsidivs[i].style.top === '4px' && nsidivs[i].style.width === '300px') {
+                                nsidivs[i].style.visibility = 'hidden';
+                                this.bot.isTopHidden = true;
+                                window.topscore = nsidivs[i];
+                            }
+                        }
+                    };
+                    /**
+                     * Reset Zoom.
+                     */
+                    UserInterface.prototype.resetZoom = function () {
+                        this.canvas.resetZoom();
+                    };
+                    /**
+                     * Calls original kartwars.io onkeyup function + whatever is under it.
+                     * Useful stuff: http://keycode.info/
+                     * @param e
+                     */
+                    UserInterface.prototype.onKeyUp = function (e) {
+                        this.originalEvents.onKeyUp(e);
+                        if (this.gameWrapper.util.isPlaying) {
+                            // `Ctrl + B` to toggle bot
+                            if (e.ctrlKey && e.keyCode === 66 && (!e.shiftKey && !e.altKey)) {
+                                this.bot.isBotEnabled = !this.bot.isBotEnabled;
+                                this.gameWrapper.input.canvas.forceClear();
+                            }
+                        }
+                    };
+                    /**
+                     * Mouse Move event overrider.
+                     * @param e
+                     */
+                    UserInterface.prototype.onMouseMove = function (e) {
+                        if (this.bot.isBotInGame()) {
+                            //
+                        }
+                        else {
+                            this.originalEvents.onMouseMove(e);
+                        }
+                    };
+                    /**
+                     * Mouse Down event overrider.
+                     * @param e
+                     */
+                    UserInterface.prototype.onMouseDown = function (e) {
+                        var triggerChainedEvent = false;
+                        if (this.contextMenu.isActive) {
+                            return;
+                        }
+                        if (this.bot.isBotInGame()) {
+                            switch (e.buttons) {
+                                // "Left click" to manually trigger weapon
+                                case 1:
+                                    {
+                                        triggerChainedEvent = true;
+                                    }
+                                    break;
+                                // "Right click" to manually speed up the kart
+                                case 2:
+                                    {
+                                        //window.mainCar.isAccelerating = true;
+                                        this.bot.defaultAccel = 1; // TODO : Review
+                                        triggerChainedEvent = true;
+                                    }
+                                    break;
+                            }
+                        }
+                        if (triggerChainedEvent) {
+                            this.originalEvents.onMouseDown(e);
+                        }
+                        this.onPrefChange();
+                    };
+                    /**
+                     * Mouse Up event overrider.
+                     * @param e
+                     */
+                    UserInterface.prototype.onMouseUp = function (e) {
+                        // window.log('Mouse release triggered !');
+                        // window.log((+new Date()), '----------> uuu');
+                        if (this.contextMenu.isActive) {
+                            // window.log((+new Date()), '----------> VVV');
+                            return;
+                        }
+                        if (this.bot.isBotInGame()) {
+                            //switch (e.which) {
+                            switch (e.buttons) {
+                                // "Right click"
+                                //case 3: {
+                                case 2: {
+                                    //window.mainCar.isAccelerating = false;
+                                    this.bot.defaultAccel = 0;
+                                    break;
+                                }
+                            }
+                        }
+                        this.originalEvents.onMouseUp(e);
+                    };
+                    /**
+                     * Update stats overlay.
+                     */
+                    UserInterface.prototype.updateStats = function () {
+                        var oContent = [];
+                        var median;
+                        if (this.bot.scores.length === 0)
+                            return;
+                        median = Math.round((this.bot.scores[Math.floor((this.bot.scores.length - 1) / 2)] +
+                            this.bot.scores[Math.ceil((this.bot.scores.length - 1) / 2)]) / 2);
+                        oContent.push('games played: ' + this.bot.scores.length);
+                        oContent.push('a: ' + Math.round(this.bot.scores.reduce(function (a, b) { return a + b; }) / (this.bot.scores.length)) + ' m: ' + median);
+                        for (var i = 0; i < this.bot.scores.length && i < 10; i++) {
+                            oContent.push(i + 1 + '. ' + this.bot.scores[i]);
+                        }
+                        this.overlays.statsOverlay.innerHTML = oContent.join('<br/>');
+                    };
+                    /**
+                     * Update stats overlay.
+                     */
+                    UserInterface.prototype.updateStatsEx = function () {
+                        var oContent = [];
+                        oContent.push('Frames:');
+                        oContent.push('');
+                        var frames = window.botFactory.clock.getFrames();
+                        window.botFactory.clock.clearFrames();
+                        for (var frameIdx in frames) {
+                            oContent.push(frameIdx + ": " + frames[frameIdx] + "ms");
+                        }
+                        //
+                        //
+                        /*
+                        if (window.stack != undefined) {
+                            oContent.push('');
+                            oContent.push('Frames X:');
+                
+                            for (let stackIdx in window.stack) {
+                                let sf = window.stack[stackIdx];
+                
+                                //oContent.push(`${stackIdx} => ${sf}`);
+                                oContent.push(`${stackIdx} => ${sf.functionName}`);
+                            }
+                
+                            //window.stack.forEach(function (sf) {
+                            //	//return sf.toString();
+                            //	oContent.push(sf.functionName);
+                            //});
+                        }
+                        */
+                        //
+                        //
+                        this.overlays.statsOverlay.innerHTML = oContent.join('<br/>');
+                    };
+                    /**
+                     * Set static display options.
+                     */
+                    UserInterface.prototype.onPrefChange = function () {
+                        var oContent = [];
+                        var ht = this.handleTextColor;
+                        oContent.push('Game version: ' + window.version);
+                        oContent.push('Bot version: ' + window.GM_info.script.version);
+                        oContent.push('[Ctrl + B]    : Toggle bot');
+                        oContent.push('[Mouse Wheel] : Zoom');
+                        this.overlays.prefOverlay.innerHTML = oContent.join('<br/>');
+                    };
+                    /**
+                     * Game status overlay.
+                     */
+                    UserInterface.prototype.onFrameUpdate = function () {
+                        if (this.gameWrapper.util.isPlaying) {
+                            var oContent = [];
+                            oContent.push('Latency: ' + window.ping + 'ms');
+                            oContent.push('FPS: ' + window.game.time.fps);
+                            this.overlays.botOverlay.innerHTML = oContent.join('<br/>');
+                            // TODO
+                            /*
+                            if (window.bso !== undefined && this.overlays.serverOverlay.innerHTML !==
+                                window.bso.ip + ':' + window.bso.po) {
+                                this.overlays.serverOverlay.innerHTML =
+                                    window.bso.ip + ':' + window.bso.po;
+                            }
+                            */
+                        }
+                        this.updateStatsEx();
+                    };
+                    /**
+                     * Original Game Update.
+                     * @param time
+                     */
+                    UserInterface.prototype.originalGameUpdate = function (time) {
+                        window.botFactory.clock.startFrame();
+                        //this.stats.update();
+                        window.game.update(time);
+                        window.botFactory.clock.endFrame();
+                    };
+                    /**
+                     * Bot Game Update Overrider.
+                     * @param time
+                     */
+                    UserInterface.prototype.gameUpdate = function (time) {
+                        window.botFactory.clock.startFrame();
+                        this.canvas.maintainZoom();
+                        if (!this.bot.isBotInGame()) {
+                            this.gameWrapper.input.canvas.forceClear();
+                            this.originalGameUpdate(time);
+                            return;
+                        }
+                        var start = Date.now();
+                        //
+                        // Clean up residual data.
+                        this.gameWrapper.items.reset();
+                        //
+                        // !!
+                        this.originalGameUpdate(time);
+                        // !!
+                        //
+                        if (this.bot.isBotInGame()) {
+                            this.bot.isBotRunning = true;
+                            this.fizzyText.play = false;
+                            this.bot.go();
+                        }
+                        if (!this.bot.isBotEnabled || !this.bot.isBotRunning) {
+                            window.game.input.mouse._onMouseDown = this.onMouseDown;
+                        }
+                        this.canvas.drawAllInterceptedWrappedCalls();
+                        window.botFactory.clock.endFrame();
+                    };
+                    /**
+                     * Looper.
+                     * @param time
+                     */
+                    UserInterface.prototype.updateRequestAnimationFrame = function (time) {
+                        window.game.raf.isRunning && (this.gameUpdate(Math.floor(time)),
+                            window.game.raf._timeOutID = window.requestAnimationFrame(window.game.raf._onLoop));
+                    };
+                    /**
+                     * Quit to menu.
+                     */
+                    UserInterface.prototype.quit = function () {
+                        // TODO : Close socket before calling `reiniciar`.
+                        if (this.bot.isBotInGame()) {
+                            window.esto.reiniciar();
+                        }
+                    };
+                    UserInterface.prototype.handleTextColor = function (enabled) {
+                        return '<span style=\"color:' + (enabled ? 'green;\">enabled' : 'red;\">disabled') + '</span>';
+                    };
+                    return UserInterface;
+                }());
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onResize", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "bindToPlayButton", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onPlayerDeath", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onGameReadyDelegate", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "playButtonClickListener", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "hideTop", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onKeyUp", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onMouseMove", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onMouseDown", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onMouseUp", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "updateStats", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onPrefChange", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "onFrameUpdate", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "originalGameUpdate", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "gameUpdate", null);
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], UserInterface.prototype, "updateRequestAnimationFrame", null);
+                Interface.UserInterface = UserInterface;
+            })(Interface = Utils.Interface || (Utils.Interface = {}));
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -12831,64 +12987,182 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        var DeveloperInterface = (function () {
-            // Constructor
-            function DeveloperInterface(gameWrapper, bot, userInterface) {
-                this.gameWrapper = gameWrapper;
-                this.bot = bot;
-                this.userInterface = userInterface;
-            }
-            DeveloperInterface.prototype.boot = function () {
-                // Note! This Will pollute the console.
-                //*
-                this.bot.watch('stage', function (id, oldValue, newValue) {
-                    if (oldValue != newValue) {
-                        window.log("Bot Stage: " + KartwarsBot.BotStageEnum[+oldValue] + " -> " + KartwarsBot.BotStageEnum[+newValue]);
+        var Utils;
+        (function (Utils) {
+            var Interface;
+            (function (Interface) {
+                var DeveloperInterfaceIndividualOptions = (function () {
+                    function DeveloperInterfaceIndividualOptions(developerInterfaceOptions) {
+                        this.developerInterfaceOptions = developerInterfaceOptions;
+                        //
+                        // stageChange property
+                        this._stageChange = false;
+                        // !stageChange property
+                        //
+                        //
+                        // playerAliveChange property
+                        this._playerAliveChange = false;
+                        // !playerAliveChange property
+                        //
+                        //
+                        // chaseNewEnemy property
+                        this._chaseNewEnemy = false;
+                        // !chaseNewEnemy property
+                        //
+                        //
+                        // scoreTable property
+                        this._scoreTable = true;
+                        // !scoreTable property
+                        //
+                        //
+                        // experimentalContextMenu property
+                        this._experimentalContextMenu = false;
+                        // !experimentalContextMenu property
+                        //
+                        //
+                        // acceleration property
+                        this._acceleration = false;
                     }
-                    return newValue;
-                });
-                //*/
-            };
-            DeveloperInterface.prototype.onGameReadyDelegate = function () {
-                var _this = this;
-                window.mainCar.img.watch('alive', function (id, oldValue, newValue) {
-                    if (oldValue != newValue) {
-                        window.log('Player Alive:', newValue);
-                        _this.bot.onPlayerDeath();
-                        _this.bot.Strategy.onPlayerDeath();
-                        _this.userInterface.onPlayerDeath();
-                        if (window.autoRespawn) {
-                            setTimeout(_this.gameWrapper.util.delayedConnect, 5000);
-                        }
+                    Object.defineProperty(DeveloperInterfaceIndividualOptions.prototype, "stageChange", {
+                        get: function () {
+                            return this.developerInterfaceOptions.logDebugging && this._stageChange;
+                        },
+                        set: function (value) {
+                            this._stageChange = value;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(DeveloperInterfaceIndividualOptions.prototype, "playerAliveChange", {
+                        get: function () {
+                            return this.developerInterfaceOptions.logDebugging && this._playerAliveChange;
+                        },
+                        set: function (value) {
+                            this._playerAliveChange = value;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(DeveloperInterfaceIndividualOptions.prototype, "chaseNewEnemy", {
+                        get: function () {
+                            return this.developerInterfaceOptions.logDebugging && this._chaseNewEnemy;
+                        },
+                        set: function (value) {
+                            this._chaseNewEnemy = value;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(DeveloperInterfaceIndividualOptions.prototype, "scoreTable", {
+                        get: function () {
+                            return this.developerInterfaceOptions.logDebugging && this._scoreTable;
+                        },
+                        set: function (value) {
+                            this._scoreTable = value;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(DeveloperInterfaceIndividualOptions.prototype, "experimentalContextMenu", {
+                        get: function () {
+                            return this.developerInterfaceOptions.logDebugging && this._experimentalContextMenu;
+                        },
+                        set: function (value) {
+                            this._experimentalContextMenu = value;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    Object.defineProperty(DeveloperInterfaceIndividualOptions.prototype, "acceleration", {
+                        get: function () {
+                            return this.developerInterfaceOptions.logDebugging && this._acceleration;
+                        },
+                        set: function (value) {
+                            this._acceleration = value;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    return DeveloperInterfaceIndividualOptions;
+                }());
+                Interface.DeveloperInterfaceIndividualOptions = DeveloperInterfaceIndividualOptions;
+                var DeveloperInterfaceOptions = (function () {
+                    function DeveloperInterfaceOptions() {
+                        /**
+                         * Log debugging.
+                         */
+                        this.logDebugging = true;
+                        /**
+                         * Individual logging options.
+                         */
+                        this.individual = new DeveloperInterfaceIndividualOptions(this);
                     }
-                    return newValue;
-                });
-            };
-            return DeveloperInterface;
-        }());
-        __decorate([
-            KartwarsBot.MethodDecoration.bound
-        ], DeveloperInterface.prototype, "onGameReadyDelegate", null);
-        KartwarsBot.DeveloperInterface = DeveloperInterface;
-        var AdsInterface = (function () {
-            function AdsInterface() {
-                (function (i, s, o, g, r, a, m) {
-                    i['GoogleAnalyticsObject'] = r;
-                    i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments);
-                    }, i[r].l = +(new Date());
-                    a = s.createElement(o),
-                        m = s.getElementsByTagName(o)[0];
-                    a.async = 1;
-                    a.src = g;
-                    m.parentNode.insertBefore(a, m);
-                })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'kga');
-                kga('create', 'UA-64079204-4', 'auto');
-                kga('send', 'pageview');
-            }
-            return AdsInterface;
-        }());
-        KartwarsBot.AdsInterface = AdsInterface;
+                    return DeveloperInterfaceOptions;
+                }());
+                Interface.DeveloperInterfaceOptions = DeveloperInterfaceOptions;
+                var DeveloperInterface = (function () {
+                    // Constructor
+                    function DeveloperInterface(gameWrapper, bot, userInterface) {
+                        this.gameWrapper = gameWrapper;
+                        this.bot = bot;
+                        this.userInterface = userInterface;
+                        this.opt = new DeveloperInterfaceOptions();
+                    }
+                    DeveloperInterface.prototype.boot = function () {
+                        var _this = this;
+                        this.bot.watch('stage', function (id, oldValue, newValue) {
+                            if (_this.opt.individual.stageChange) {
+                                if (oldValue != newValue) {
+                                    window.log("Bot Stage: " + KartwarsBot.BotStageEnum[+oldValue] + " -> " + KartwarsBot.BotStageEnum[+newValue]);
+                                }
+                            }
+                            return newValue;
+                        });
+                    };
+                    DeveloperInterface.prototype.onGameReadyDelegate = function () {
+                        var _this = this;
+                        window.mainCar.img.watch('alive', function (id, oldValue, newValue) {
+                            if (oldValue != newValue) {
+                                if (_this.opt.individual.playerAliveChange) {
+                                    window.log('Player Alive:', newValue);
+                                }
+                                _this.bot.onPlayerDeath();
+                                _this.bot.Strategy.onPlayerDeath();
+                                _this.userInterface.onPlayerDeath();
+                                if (_this.bot.opt.autoRespawn) {
+                                    setTimeout(_this.gameWrapper.util.delayedConnect, 5000);
+                                }
+                            }
+                            return newValue;
+                        });
+                    };
+                    return DeveloperInterface;
+                }());
+                __decorate([
+                    KartwarsBot.MethodDecoration.bound
+                ], DeveloperInterface.prototype, "onGameReadyDelegate", null);
+                Interface.DeveloperInterface = DeveloperInterface;
+                var AdsInterface = (function () {
+                    function AdsInterface() {
+                        (function (i, s, o, g, r, a, m) {
+                            i['GoogleAnalyticsObject'] = r;
+                            i[r] = i[r] || function () {
+                                (i[r].q = i[r].q || []).push(arguments);
+                            }, i[r].l = +(new Date());
+                            a = s.createElement(o),
+                                m = s.getElementsByTagName(o)[0];
+                            a.async = 1;
+                            a.src = g;
+                            m.parentNode.insertBefore(a, m);
+                        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'kga');
+                        kga('create', 'UA-64079204-4', 'auto');
+                        kga('send', 'pageview');
+                    }
+                    return AdsInterface;
+                }());
+                Interface.AdsInterface = AdsInterface;
+            })(Interface = Utils.Interface || (Utils.Interface = {}));
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -12896,102 +13170,172 @@ var DracoolaArt;
 (function (DracoolaArt) {
     var KartwarsBot;
     (function (KartwarsBot) {
-        var DatGuiThemes;
-        (function (DatGuiThemes) {
-            DatGuiThemes[DatGuiThemes["Default"] = 0] = "Default";
-            DatGuiThemes[DatGuiThemes["Lighter"] = 1] = "Lighter";
-        })(DatGuiThemes = KartwarsBot.DatGuiThemes || (KartwarsBot.DatGuiThemes = {}));
-        /**
-         * dat.GUI Wrapper.
-         */
-        var DatGUI = (function () {
-            function DatGUI() {
-                this._selectedTheme = DatGuiThemes.Default;
-                //
-                // Change position of existing elements
-                $('.best-users').css('right', 'calc(300px - 10px)');
-                $('#hud').css('left', 'initial').css('right', 'calc(300px - 10px)');
-                //
-                var gui = this.gui = new dat.GUI();
-                var guiDomParentElement = this.guiDomParentElement = gui.domElement.parentElement;
-                $(guiDomParentElement)
-                    .css('z-index', '1000')
-                    .mouseenter(function () {
-                    $(this).data('isInside', true);
-                })
-                    .mouseleave(function () {
-                    $(this).data('isInside', false);
-                });
-            }
-            Object.defineProperty(DatGUI.prototype, "selectedTheme", {
-                get: function () {
-                    this.checkTheme();
-                    return this._selectedTheme;
-                },
-                set: function (value) {
-                    this._selectedTheme = value;
-                    this.checkTheme();
-                },
-                enumerable: true,
-                configurable: true
-            });
-            DatGUI.prototype.checkTheme = function () {
-                var jDatGuiElement = $(this.guiDomParentElement);
-                if (this._selectedTheme == DatGuiThemes.Default) {
-                    jDatGuiElement.removeClass('light-theme');
-                }
-                else {
-                    jDatGuiElement.addClass('light-theme');
-                }
-            };
-            DatGUI.prototype.init = function (gameWrapper, canvas, userInterface, bot, developerInterface, webSocketInterface) {
-                var _this = this;
-                this.gameWrapper = gameWrapper;
-                this.canvas = canvas;
-                this.userInterface = userInterface;
-                this.bot = bot;
-                this.developerInterface = developerInterface;
-                this.webSocketInterface = webSocketInterface;
-                var gui = this.gui;
-                {
-                    var baseControlsOptions = gui.addFolder('Actions');
-                    baseControlsOptions.open();
-                    gui.remember(this);
-                    gui.remember(bot);
-                    gui.remember(window);
-                    /* tslint:disable:object-literal-sort-keys */
-                    var datGuiThemesConstrains = {
-                        'Darker': DatGuiThemes.Default,
-                        'Lighter': DatGuiThemes.Lighter,
+        var Utils;
+        (function (Utils) {
+            var Interface;
+            (function (Interface) {
+                var DatGuiThemes;
+                (function (DatGuiThemes) {
+                    DatGuiThemes[DatGuiThemes["Default"] = 0] = "Default";
+                    DatGuiThemes[DatGuiThemes["Lighter"] = 1] = "Lighter";
+                })(DatGuiThemes = Interface.DatGuiThemes || (Interface.DatGuiThemes = {}));
+                /**
+                 * dat.GUI Wrapper.
+                 */
+                var DatGUI = (function () {
+                    function DatGUI() {
+                        this._selectedTheme = DatGuiThemes.Default;
+                        //
+                        // Change position of existing elements
+                        $('.best-users').css('right', 'calc(300px - 10px)');
+                        $('#hud').css('left', 'initial').css('right', 'calc(300px - 10px)');
+                        //
+                        var gui = this.gui = new dat.GUI();
+                        var guiDomParentElement = this.guiDomParentElement = gui.domElement.parentElement;
+                        $(guiDomParentElement)
+                            .css('z-index', '1000')
+                            .mouseenter(function () {
+                            $(this).data('isInside', true);
+                        })
+                            .mouseleave(function () {
+                            $(this).data('isInside', false);
+                        });
+                    }
+                    Object.defineProperty(DatGUI.prototype, "selectedTheme", {
+                        get: function () {
+                            this.checkTheme();
+                            return this._selectedTheme;
+                        },
+                        set: function (value) {
+                            this._selectedTheme = value;
+                            this.checkTheme();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+                    DatGUI.prototype.checkTheme = function () {
+                        var jDatGuiElement = $(this.guiDomParentElement);
+                        if (this._selectedTheme == DatGuiThemes.Default) {
+                            jDatGuiElement.removeClass('light-theme');
+                        }
+                        else {
+                            jDatGuiElement.addClass('light-theme');
+                        }
                     };
-                    var strategiesConstrains = {
-                        'Default': KartwarsBot.Strategy.Strategies.Default,
-                        'Calculate Torque': KartwarsBot.Strategy.Strategies.CalculateTorque,
-                        'Basic Pursuit': KartwarsBot.Strategy.Strategies.BasicPursuit,
-                        'Pursuit & Shoot': KartwarsBot.Strategy.Strategies.PursuitAndShoot,
-                        'Draw Enemies': KartwarsBot.Strategy.Strategies.DrawEnemies,
-                        'Interconnect Food': KartwarsBot.Strategy.Strategies.InterconnectFood,
+                    DatGUI.prototype.init = function (gameWrapper, canvas, userInterface, bot, developerInterface, webSocketInterface) {
+                        var _this = this;
+                        this.gameWrapper = gameWrapper;
+                        this.canvas = canvas;
+                        this.userInterface = userInterface;
+                        this.bot = bot;
+                        this.developerInterface = developerInterface;
+                        this.webSocketInterface = webSocketInterface;
+                        var gui = this.gui;
+                        {
+                            var baseControlsOptions = gui.addFolder('Actions');
+                            baseControlsOptions.open();
+                            gui.remember(this);
+                            gui.remember(bot);
+                            gui.remember(bot.opt);
+                            /* tslint:disable:object-literal-sort-keys */
+                            var datGuiThemesConstrains = {
+                                'Darker': DatGuiThemes.Default,
+                                'Lighter': DatGuiThemes.Lighter,
+                            };
+                            var strategiesConstrains = {
+                                'Default': KartwarsBot.Strategy.Strategies.Default,
+                                'Calculate Torque': KartwarsBot.Strategy.Strategies.CalculateTorque,
+                                'Basic Pursuit': KartwarsBot.Strategy.Strategies.BasicPursuit,
+                                'Pursuit & Shoot': KartwarsBot.Strategy.Strategies.PursuitAndShoot,
+                                'Draw Enemies': KartwarsBot.Strategy.Strategies.DrawEnemies,
+                                'Interconnect Food': KartwarsBot.Strategy.Strategies.InterconnectFood,
+                            };
+                            var collisionManagersConstrains = {
+                                'Default': KartwarsBot.Manager.Collision.Managers.Default,
+                                'Advanced': KartwarsBot.Manager.Collision.Managers.Advanced,
+                            };
+                            /* tslint:enable:object-literal-sort-keys */
+                            baseControlsOptions.add(this, KartwarsBot.nameof(function () { return _this.selectedTheme; }), datGuiThemesConstrains).name('GUI Theme');
+                            baseControlsOptions.add(bot, KartwarsBot.nameof(function () { return bot.isBotEnabled; })).name('Enable Bot');
+                            baseControlsOptions.add(bot, KartwarsBot.nameof(function () { return bot.selectedStrategy; }), strategiesConstrains).name('Strategy');
+                            baseControlsOptions.add(bot, KartwarsBot.nameof(function () { return bot.selectedCollisionManager; }), collisionManagersConstrains).name('Collision Manager');
+                            baseControlsOptions.add(bot.opt, KartwarsBot.nameof(function () { return bot.opt.autoRespawn; })).name('Auto Respawn');
+                            baseControlsOptions.add(userInterface, KartwarsBot.nameof(function () { return userInterface.toggleOverlays; })).name('Toggle Overlays');
+                            baseControlsOptions.add(userInterface, KartwarsBot.nameof(function () { return userInterface.resetZoom; })).name('Reset Zoom');
+                            baseControlsOptions.add(userInterface, KartwarsBot.nameof(function () { return userInterface.quit; })).name('Quit');
+                        }
+                        // Important !!
+                        var forcedatGUIInitialization = bot.Strategy;
+                        {
+                            var debuggingOptions = gui.addFolder('Debugging');
+                            debuggingOptions.open();
+                            gui.remember(developerInterface.opt);
+                            gui.remember(developerInterface.opt.individual);
+                            debuggingOptions.add(developerInterface.opt, KartwarsBot.nameof(function () { return developerInterface.opt.logDebugging; }));
+                            {
+                                var debuggingIndividualOptions = debuggingOptions.addFolder('Individual');
+                                debuggingIndividualOptions.open();
+                                debuggingIndividualOptions.add(developerInterface.opt.individual, KartwarsBot.nameof(function () { return developerInterface.opt.individual.stageChange; })).name('State');
+                                debuggingIndividualOptions.add(developerInterface.opt.individual, KartwarsBot.nameof(function () { return developerInterface.opt.individual.playerAliveChange; })).name('Player alive');
+                                debuggingIndividualOptions.add(developerInterface.opt.individual, KartwarsBot.nameof(function () { return developerInterface.opt.individual.chaseNewEnemy; })).name('Chase new Enemy');
+                                debuggingIndividualOptions.add(developerInterface.opt.individual, KartwarsBot.nameof(function () { return developerInterface.opt.individual.scoreTable; })).name('Score');
+                                debuggingIndividualOptions.add(developerInterface.opt.individual, KartwarsBot.nameof(function () { return developerInterface.opt.individual.experimentalContextMenu; })).name('Context Menu');
+                                debuggingIndividualOptions.add(developerInterface.opt.individual, KartwarsBot.nameof(function () { return developerInterface.opt.individual.acceleration; })).name('Acceleration');
+                            }
+                        }
+                        {
+                            var visualDebuggingOptions = gui.addFolder('Visual Debugging');
+                            visualDebuggingOptions.open();
+                            gui.remember(canvas.opt);
+                            gui.remember(canvas.opt.draw);
+                            gui.remember(canvas.opt.colors);
+                            visualDebuggingOptions.add(canvas.opt, KartwarsBot.nameof(function () { return canvas.opt.visualDebugging; }));
+                            visualDebuggingOptions.add(canvas.opt, KartwarsBot.nameof(function () { return canvas.opt.shadowBlur; })).name('Shadow Blur');
+                            {
+                                var visualDebuggingIndividualOptions = visualDebuggingOptions.addFolder('Individual');
+                                visualDebuggingIndividualOptions.open();
+                                visualDebuggingIndividualOptions.add(canvas.opt.draw, KartwarsBot.nameof(function () { return canvas.opt.draw.player; }));
+                                visualDebuggingIndividualOptions.add(canvas.opt.draw, KartwarsBot.nameof(function () { return canvas.opt.draw.dangers; }));
+                                visualDebuggingIndividualOptions.add(canvas.opt.draw, KartwarsBot.nameof(function () { return canvas.opt.draw.food; }));
+                            }
+                            {
+                                var visualDebuggingColorsOptions = visualDebuggingOptions.addFolder('Colors');
+                                //visualDebuggingIndividualOptions.open();
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.goalLine; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.goalDot; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.goalCross; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.collidedPoint; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.collidedElement; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.collisionAvoidancePointA; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.collisionAvoidancePointB; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.foodCluster; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.foodClusterText; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.foodClusterLine; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.foodClusterBoundary; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.inRangeResource; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.collectableResource; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.predictionLine; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.predictionCircle; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.encircledPlayerWarning; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.encircledPlayerDanger; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.collisionElement; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.collisionLine; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.playerRadius; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.closeToImminentDangerRadius; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.playerSideDetector; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.playerHeadDetector; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.playerTailDetector; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.frontResourceGatherArc; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.frontDangerArc; }));
+                                visualDebuggingColorsOptions.add(canvas.opt.colors, KartwarsBot.nameof(function () { return canvas.opt.colors.tailDangerArc; }));
+                            }
+                        }
                     };
-                    var collisionManagersConstrains = {
-                        'Default': KartwarsBot.Manager.Collision.Managers.Default,
-                        'Advanced': KartwarsBot.Manager.Collision.Managers.Advanced,
-                        'Über': KartwarsBot.Manager.Collision.Managers.Über,
-                    };
-                    /* tslint:enable:object-literal-sort-keys */
-                    baseControlsOptions.add(this, KartwarsBot.nameof(function () { return _this.selectedTheme; }), datGuiThemesConstrains).name('GUI Theme');
-                    baseControlsOptions.add(bot, KartwarsBot.nameof(function () { return bot.isBotEnabled; })).name('Enable Bot');
-                    baseControlsOptions.add(bot, KartwarsBot.nameof(function () { return bot.selectedStrategy; }), strategiesConstrains).name('Strategy');
-                    baseControlsOptions.add(bot, KartwarsBot.nameof(function () { return bot.selectedCollisionManager; }), collisionManagersConstrains).name('Collision Manager');
-                    baseControlsOptions.add(window, KartwarsBot.nameof(function () { return window.autoRespawn; })).name('Auto Respawn');
-                    baseControlsOptions.add(userInterface, KartwarsBot.nameof(function () { return userInterface.toggleOverlays; })).name('Toggle Overlays');
-                    baseControlsOptions.add(userInterface, KartwarsBot.nameof(function () { return userInterface.resetZoom; })).name('Reset Zoom');
-                    baseControlsOptions.add(userInterface, KartwarsBot.nameof(function () { return userInterface.quit; })).name('Quit');
-                }
-                var forcedatGUIInitialization = bot.Strategy;
-            };
-            return DatGUI;
-        }());
-        KartwarsBot.DatGUI = DatGUI;
+                    return DatGUI;
+                }());
+                Interface.DatGUI = DatGUI;
+            })(Interface = Utils.Interface || (Utils.Interface = {}));
+        })(Utils = KartwarsBot.Utils || (KartwarsBot.Utils = {}));
     })(KartwarsBot = DracoolaArt.KartwarsBot || (DracoolaArt.KartwarsBot = {}));
 })(DracoolaArt || (DracoolaArt = {}));
 
@@ -13101,14 +13445,14 @@ var DracoolaArt;
         var BotFactory = (function () {
             function BotFactory() {
                 this.isInitialized = false;
-                var datGUI = this.datGUI = new KartwarsBot.DatGUI();
+                var datGUI = this.datGUI = new KartwarsBot.Utils.Interface.DatGUI();
                 var gameWrapper = this.gameWrapper = new KartwarsBot.GameWrapper();
-                var canvas = this.canvas = new KartwarsBot.CanvasUtils(gameWrapper);
+                var canvas = this.canvas = new KartwarsBot.Utils.CanvasUtils(gameWrapper);
                 var bot = this.bot = new KartwarsBot.Bot(gameWrapper, canvas, datGUI);
-                var contextMenu = this.contextMenu = new KartwarsBot.ContextMenu();
-                var userInterface = this.userInterface = new KartwarsBot.UserInterface(gameWrapper, contextMenu, canvas, bot);
-                var developerInterface = this.developerInterface = new KartwarsBot.DeveloperInterface(gameWrapper, bot, userInterface);
-                var adsInterface = this.adsInterface = new KartwarsBot.AdsInterface();
+                var contextMenu = this.contextMenu = new KartwarsBot.Utils.Interface.ContextMenu();
+                var userInterface = this.userInterface = new KartwarsBot.Utils.Interface.UserInterface(gameWrapper, contextMenu, canvas, bot);
+                var developerInterface = this.developerInterface = new KartwarsBot.Utils.Interface.DeveloperInterface(gameWrapper, bot, userInterface);
+                var adsInterface = this.adsInterface = new KartwarsBot.Utils.Interface.AdsInterface();
                 var webSocketInterface = this.webSocketInterface = new KartwarsBot.WebSocketInterface();
                 var clock = this.clock = new KartwarsBot.Manager.Time.TimerFrame();
                 var externalGraph = this.externalGraph = new KartwarsBot.ExternalGraph();
@@ -13128,7 +13472,6 @@ var DracoolaArt;
                 //
                 window.autobotSayHello();
                 var gameReadyDelegate = function () {
-                    window.log('Call: [gameReadyDelegate]');
                     userInterface.onGameReadyDelegate();
                     developerInterface.onGameReadyDelegate();
                     webSocketInterface.onGameReadyDelegate();
