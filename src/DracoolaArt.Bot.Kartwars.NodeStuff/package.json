@@ -6,6 +6,7 @@
     "dat.gui": "^0.6.1",
     "definitely-typed-requirejs": "^1.0.0",
     "del": "^2.2.2",
+    "git-hooks-win": "^1.1.9",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.2.2",
