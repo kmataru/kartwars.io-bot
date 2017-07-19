@@ -174,6 +174,8 @@ gulp.task("generate-typedoc", ['typedoc'], function () {
 		.pipe(gulp.dest(destination));
 });
 
+console.log(`Current directory: '${process.cwd()}'`);
+
 //Set a default tasks
 gulp.task('default', ['scripts', 'generate-typedoc'], function () { });
 
