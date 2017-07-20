@@ -19,6 +19,7 @@ namespace DracoolaArt.KartwarsBot {
 	class BotMathWrapper {
 		// Constructor
 		constructor(protected readonly gameWrapper: GameWrapper, protected readonly canvas: Utils.CanvasUtils) {
+			//
 		}
 
 		/**
