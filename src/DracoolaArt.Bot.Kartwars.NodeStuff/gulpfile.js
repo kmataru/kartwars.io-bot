@@ -13,7 +13,7 @@ var concat = require('gulp-concat');
 
 const baseFolder = '../DracoolaArt.Bot.Kartwars/';
 const baseBuildFolder = '../../build/';
-const baseDocFolder = '../../doc/';
+const baseDocFolder = '../../docs/';
 const projectBuildFolder = `${baseFolder}build/`;
 const baseScriptPath = `${baseFolder}lib/`;
 

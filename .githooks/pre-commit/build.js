@@ -19,7 +19,7 @@ var concat = require(`${nodeModulesFolder}gulp-concat`);
 
 const baseFolder = 'src/DracoolaArt.Bot.Kartwars/';
 const baseBuildFolder = 'build/';
-const baseDocFolder = 'doc/';
+const baseDocFolder = 'docs/';
 const projectBuildFolder = `${baseFolder}build/`;
 const baseScriptPath = `${baseFolder}lib/`;
 
@@ -186,7 +186,7 @@ gulp.task('git-add', function () {
 
 	return gulp.src([
 		'./build/*',
-		'./doc/*'
+		'./docs/*'
 	])
 		.pipe(git.add());
 });
