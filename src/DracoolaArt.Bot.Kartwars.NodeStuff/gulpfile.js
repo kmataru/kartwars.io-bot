@@ -139,7 +139,7 @@ gulp.task("typedoc", function () {
 			// Base
 			mode: 'file',
 			out: baseDocFolder,
-			json: `${baseDocFolder}to-file.json`,
+			//json: `${baseDocFolder}to-file.json`,
 
 			// TypeScript compiler
 			module: "commonjs",

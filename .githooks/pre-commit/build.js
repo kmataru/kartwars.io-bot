@@ -10,6 +10,8 @@ var uglify = require(`${nodeModulesFolder}gulp-uglify`);
 var typedoc = require(`${nodeModulesFolder}gulp-typedoc`);
 var tslint = require(`${nodeModulesFolder}gulp-tslint`);
 var del = require(`${nodeModulesFolder}del`);
+var git = require(`${nodeModulesFolder}gulp-git`);
+var gulpsync = require(`${nodeModulesFolder}gulp-sync`)(gulp);
 
 // File output
 var map = require(`${nodeModulesFolder}map-stream`);
@@ -112,6 +114,9 @@ gulp.task('clean', function () {
 gulp.task('scripts', [/*'clean'*/], function () {
 	console.log('Building...');
 
+	console.log(`baseBuildFolder: '${baseBuildFolder}'`);
+	console.log(`projectBuildFolder: '${projectBuildFolder}'`);
+
 	return gulp.src(config.src)
 		.pipe(concat('kartwars.io-bot.js'))
 		// This will output the non-minified version
@@ -136,7 +141,7 @@ gulp.task("typedoc", function () {
 			// Base
 			mode: 'file',
 			out: baseDocFolder,
-			json: `${baseDocFolder}to-file.json`,
+			//json: `${baseDocFolder}to-file.json`,
 
 			// TypeScript compiler
 			module: "commonjs",
@@ -174,11 +179,21 @@ gulp.task("generate-typedoc", ['typedoc'], function () {
 		.pipe(gulp.dest(destination));
 });
 
-console.log(`Current directory: '${process.cwd()}'`);
+// Run git add 
+// src is the file(s) to add (or ./*) 
+gulp.task('git-add', function () {
+	console.log('Adding files to commit...');
+
+	return gulp.src([
+		'./build/*',
+		'./doc/*'
+	])
+		.pipe(git.add());
+});
 
 //Set a default tasks
-gulp.task('default', ['scripts', 'generate-typedoc'], function () { });
+gulp.task('default', ['scripts', 'generate-typedoc', 'git-add'], function () { });
 
-gulp.start('default');
+gulp.task('default-sync', gulpsync.sync(['scripts', 'generate-typedoc', 'git-add']));
 
-process.exit(0);
+gulp.start('default-sync');

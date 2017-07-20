@@ -261,10 +261,6 @@ __pycache__/
 *.pyc
 
 # Project Specific
-doc/to-file.json
-
 src/DracoolaArt.Bot.Kartwars/build/*.js
 
 src/DracoolaArt.Bot.Kartwars.NodeStuff/tslint-report.txt
-
-.commit

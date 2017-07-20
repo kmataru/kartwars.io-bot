@@ -23,13 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hooks", "Hooks", "{1702DF16
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pre-commit", "pre-commit", "{67DA429F-D37E-49DA-A000-4894BC68AA6B}"
 	ProjectSection(SolutionItems) = preProject
-		..\.githooks\pre-commit\pre-commit.js = ..\.githooks\pre-commit\pre-commit.js
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "post-commit", "post-commit", "{B1E19275-8A19-4A45-97BD-724CE63D9217}"
-	ProjectSection(SolutionItems) = preProject
-		..\.githooks\post-commit\post-commit-win.sh = ..\.githooks\post-commit\post-commit-win.sh
-		..\.githooks\post-commit\post-commit.js = ..\.githooks\post-commit\post-commit.js
+		..\.githooks\pre-commit\build.js = ..\.githooks\pre-commit\build.js
 	EndProjectSection
 EndProject
 Global
@@ -54,6 +48,5 @@ Global
 		{313C0EF3-A82A-4E18-936C-79CEDFA9DDAC} = {41B4B265-4875-44C8-AE40-49672D962E82}
 		{1702DF16-6DF5-417E-A7AB-71528E3FCCEE} = {41B4B265-4875-44C8-AE40-49672D962E82}
 		{67DA429F-D37E-49DA-A000-4894BC68AA6B} = {1702DF16-6DF5-417E-A7AB-71528E3FCCEE}
-		{B1E19275-8A19-4A45-97BD-724CE63D9217} = {1702DF16-6DF5-417E-A7AB-71528E3FCCEE}
 	EndGlobalSection
 EndGlobal
