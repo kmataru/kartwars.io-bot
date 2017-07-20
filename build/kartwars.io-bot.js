@@ -11373,7 +11373,6 @@ var DracoolaArt;
             function BotMathWrapper(gameWrapper, canvas) {
                 this.gameWrapper = gameWrapper;
                 this.canvas = canvas;
-                //
             }
             /**
              * Checks if two circles intersects.
