@@ -1,5 +1,5 @@
 ﻿<p align="center">
-    <img src="./images/logo.png" height="150">
+    <img src="https://raw.githubusercontent.com/kmataru/kartwars.io-bot/refs/heads/pre-release/images/logo.png" height="150">
 </p>
 
 <p>&nbsp;</p>
