@@ -2,12 +2,6 @@
     <img src="./images/logo.png" height="150">
 </p>
 
-<p align="center">
-    <a href="https://www.gratipay.com/Shields/">
-        <img src="https://ga-beacon.appspot.com/UA-64079204-6/welcome-page" alt="Analytics">
-    </a>
-</p>
-
 <p>&nbsp;</p>
 
 > ### Kartwars.io Bot Championship Edition
